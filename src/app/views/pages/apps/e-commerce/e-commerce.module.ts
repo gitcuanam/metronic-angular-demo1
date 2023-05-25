@@ -196,14 +196,14 @@ const routes: Routes = [
 		TypesUtilsService,
 		LayoutUtilsService
 	],
-	entryComponents: [
-		ActionNotificationComponent,
-		CustomerEditDialogComponent,
-		DeleteEntityDialogComponent,
-		FetchEntityDialogComponent,
-		UpdateStatusDialogComponent,
-		SpecificationEditDialogComponent
-	],
+	// entryComponents: [
+	// 	ActionNotificationComponent,
+	// 	CustomerEditDialogComponent,
+	// 	DeleteEntityDialogComponent,
+	// 	FetchEntityDialogComponent,
+	// 	UpdateStatusDialogComponent,
+	// 	SpecificationEditDialogComponent
+	// ],
 	declarations: [
 		ECommerceComponent,
 		// Customers

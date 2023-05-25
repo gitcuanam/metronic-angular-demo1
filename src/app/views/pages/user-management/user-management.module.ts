@@ -147,10 +147,10 @@ const routes: Routes = [
 		TypesUtilsService,
 		LayoutUtilsService
 	],
-	entryComponents: [
-		ActionNotificationComponent,
-		RoleEditDialogComponent
-	],
+	// entryComponents: [
+	// 	ActionNotificationComponent,
+	// 	RoleEditDialogComponent
+	// ],
 	declarations: [
 		UserManagementComponent,
 		UsersListComponent,
