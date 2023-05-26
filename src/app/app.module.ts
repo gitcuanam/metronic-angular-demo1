@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { GestureConfig } from '@angular/material/core';
+// import { GestureConfig } from '@angular/material/core';
 import { OverlayModule } from '@angular/cdk/overlay';
 // Angular in memory
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -139,10 +139,10 @@ export function getHighlightLanguages() {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     },
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: GestureConfig
-    },
+    // {
+    //   provide: HAMMER_GESTURE_CONFIG,
+    //   useClass: GestureConfig
+    // },
     {
       // layout config initializer
       provide: APP_INITIALIZER,
