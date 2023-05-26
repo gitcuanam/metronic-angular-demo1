@@ -3,7 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 // Layout
 import { LayoutConfigService } from '../../../../../core/_base/layout';
 // Charts
-import { Chart } from 'chart.js/dist/Chart.min.js';
+import { Chart } from 'chart.js';
 
 @Component({
 	selector: 'kt-widget14',
@@ -66,33 +66,64 @@ export class Widget14Component implements OnInit {
 			type: 'bar',
 			data: this.data,
 			options: {
-				title: {
-					display: false,
+				plugins: {
+					legend: {
+						display: false,
+						title: {
+							display: false,
+						}
+					},
+					tooltip: {
+						intersect: true,
+						mode: 'nearest',
+						// 	xPadding: 10,
+						// 	yPadding: 10,
+						caretPadding: 5,
+					}
 				},
-				tooltips: {
-					intersect: false,
-					mode: 'nearest',
-					xPadding: 10,
-					yPadding: 10,
-					caretPadding: 10
-				},
-				legend: {
-					display: false
-				},
+				// title: {
+				// 	display: false,
+				// },
+				// tooltips: {
+				// 	intersect: false,
+				// 	mode: 'nearest',
+				// 	xPadding: 10,
+				// 	yPadding: 10,
+				// 	caretPadding: 10
+				// // },
+				// legend: {
+				// 	display: false
+				// },
 				responsive: true,
 				maintainAspectRatio: false,
-				barRadius: 4,
+				// barRadius: 4,
 				scales: {
-					xAxes: [{
+					x: {
+						type: 'time',
 						display: false,
-						gridLines: false,
-						stacked: true
-					}],
-					yAxes: [{
-						display: false,
+						grid: {
+							display: false,
+						},
 						stacked: true,
-						gridLines: false
-					}]
+					},
+					y: {
+						type: 'time',
+						display: false,
+						grid: {
+							display: false,
+						},
+						stacked: true,
+					}
+					// xAxis: [{
+					// 	display: false,
+					// 	gridLines: false,
+					// 	stacked: true
+					// }],
+					// yAxes: [{
+					// 	display: false,
+					// 	stacked: true,
+					// 	gridLines: false
+					// }]
 				},
 				layout: {
 					padding: {
