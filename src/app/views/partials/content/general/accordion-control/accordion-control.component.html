@@ -5,7 +5,7 @@
 			[class]="'card-header ' + (panel.type ? 'bg-'+panel.type: type ? 'bg-'+type : '')" 
 			[class.collapsed]="!panel.isOpen" 
 			data-toggle="collapse" 
-			(click)="!!toggle(panel.id)" 
+			(click)="toggle(panel.id)" 
 			[class.text-muted]="panel.disabled" 
 			[attr.tabindex]="(panel.disabled ? '-1' : null)" 
 			[attr.aria-expanded]="panel.isOpen" 

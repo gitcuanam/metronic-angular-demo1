@@ -1,5 +1,11 @@
 // Angular
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Component({
 	selector: 'kt-alert',
@@ -7,7 +13,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class AlertComponent implements OnInit {
 	// Public properties
-	@Input() type: 'primary | accent | warn';
+	@Input() type: 'primary' | 'accent' | 'warn';
 	@Input() duration = 0;
 	@Input() showCloseButton = true;
 	@Output() close = new EventEmitter<boolean>();

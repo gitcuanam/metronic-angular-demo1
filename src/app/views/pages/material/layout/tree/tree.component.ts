@@ -1,9 +1,33 @@
-import { CollectionViewer, SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import {
+  CollectionViewer,
+  DataSource,
+  SelectionChange,
+  SelectionModel,
+} from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import {MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { Component, Injectable, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
-import {BehaviorSubject, merge, Observable,  of as observableOf} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Injectable,
+  OnInit,
+} from '@angular/core';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
+
+import {
+  BehaviorSubject,
+  merge,
+  Observable,
+  of as observableOf,
+  Subject,
+} from 'rxjs';
+import {
+  map,
+  takeUntil,
+} from 'rxjs/operators';
 
 const treeWithDynamicData = {
 		beforeCodeTitle: 'Tree with dynamic data',
@@ -927,9 +951,9 @@ export class DynamicDatabase {
  * structure.
  */
 @Injectable()
-export class DynamicDataSource {
-
+export class DynamicDataSource extends DataSource<DynamicFlatNode> {
 	dataChange = new BehaviorSubject<DynamicFlatNode[]>([]);
+	_unsubscribeAll$ = new Subject();
 
 	get data(): DynamicFlatNode[] { return this.dataChange.value; }
 	set data(value: DynamicFlatNode[]) {
@@ -937,9 +961,12 @@ export class DynamicDataSource {
 		this.dataChange.next(value);
 	}
 
-	constructor(private treeControl: FlatTreeControl<DynamicFlatNode>,
-             private database: DynamicDatabase,
-             private cdr: ChangeDetectorRef) { }
+	constructor(
+    private treeControl: FlatTreeControl<DynamicFlatNode>,
+    private database: DynamicDatabase,
+    private cdr: ChangeDetectorRef) {
+    super();
+  }
 
 	connect(collectionViewer: CollectionViewer): Observable<DynamicFlatNode[]> {
 		// tslint:disable-next-line:no-non-null-assertion
@@ -950,8 +977,16 @@ export class DynamicDataSource {
 			}
 		});
 
-		return merge(collectionViewer.viewChange, this.dataChange).pipe(map(() => this.data));
+		return merge(collectionViewer.viewChange, this.dataChange).pipe(takeUntil(this._unsubscribeAll$)).pipe(map(() => this.data));
 	}
+
+  
+  disconnect(collectionViewer: CollectionViewer): void {
+    this._unsubscribeAll$.next();
+    this._unsubscribeAll$.complete();
+    this.dataChange.complete();
+  }
+
 
 	/** Handle expand/collapse behaviors */
 	handleTreeControl(change: SelectionChange<DynamicFlatNode>) {

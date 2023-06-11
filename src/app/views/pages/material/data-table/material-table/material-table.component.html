@@ -130,7 +130,7 @@
 			<div class="example-container mat-elevation-z8">
 				<div class="example-header">
 					<mat-form-field class="mat-form-field">
-						<input matInput (keyup)="applyFilter4($event.target.value)" placeholder="Filter">
+						<input matInput (keyup)="applyFilter4($any($event).target.value)" placeholder="Filter">
 					</mat-form-field>
 				</div>
 				<mat-table #table4 [dataSource]="dataSource4">
@@ -254,7 +254,7 @@
 	<div class="example-preview">
 		<div class="example-header">
 			<mat-form-field>
-				<input matInput (keyup)="applyFilter7($event.target.value)" placeholder="Filter">
+				<input matInput (keyup)="applyFilter7($any($event.target).value)" placeholder="Filter">
 			</mat-form-field>
 		</div>
 		<div class="example-container mat-elevation-z8">

@@ -1,5 +1,15 @@
-import { AfterContentChecked, Component, ContentChildren, Directive, EventEmitter, Input, Output, QueryList,
-	TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  TemplateRef,
+} from '@angular/core';
 
 let nextId = 0;
 /**
@@ -168,7 +178,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	/**
 	 * Programmatically toggle a panel with a given id.
 	 */
-	toggle(panelId: string, accordionBodyScrollHeight) {
+	toggle(panelId: string, accordionBodyScrollHeight?: any) {
 		const panel = this.panels.find(p => p.id === panelId);
 
 		if (panel && !panel.disabled) {

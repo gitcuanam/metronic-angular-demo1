@@ -1,18 +1,36 @@
 // Angular
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { AbstractControl, Validators, FormBuilder } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+
 // RxJS
 import { BehaviorSubject } from 'rxjs';
+
+import { Update } from '@ngrx/entity';
 // NGRX
 import { Store } from '@ngrx/store';
-import { Update } from '@ngrx/entity';
+
+// Layout
+import {
+  LayoutUtilsService,
+  MessageType,
+} from '../../../../../../core/_base/crud';
 // Auth
-import { AuthService, UserUpdated, User } from '../../../../../../core/auth/';
+import {
+  AuthService,
+  User,
+  UserUpdated,
+} from '../../../../../../core/auth/';
 // State
 import { AppState } from '../../../../../../core/reducers';
-// Layout
-import { LayoutUtilsService, MessageType } from '../../../../../../core/_base/crud';
 
 export class PasswordValidation {
 	/**
@@ -41,6 +59,7 @@ export class ChangePasswordComponent implements OnInit {
 	@Input() userId: number;
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
 	hasFormErrors = false;
+	viewLoading = false;
 	user: User;
 	changePasswordForm: FormGroup;
 

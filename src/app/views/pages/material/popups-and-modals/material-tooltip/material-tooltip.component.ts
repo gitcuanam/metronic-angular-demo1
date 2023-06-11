@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 const basic = {
 		beforeCodeTitle: 'Basic table',
@@ -197,7 +202,7 @@ export class MaterialTooltipComponent implements OnInit {
 	exampleDelay;
 	exampleManually;
 
-	position = 'before';
+	position: TooltipPosition = 'before';
 
 	ngOnInit() {
 

@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
 
 const basicCheckboxes = {
 	beforeCodeTitle: 'Basic checkboxes',
@@ -166,7 +170,7 @@ export class CheckboxComponent implements OnInit {
 	indeterminate = false;
 	align = 'start';
 	disabled = false;
-	labelPosition = 'before';
+	labelPosition: 'before' | 'after' = 'before';
 	myValue = true;
 
 	constructor() { }

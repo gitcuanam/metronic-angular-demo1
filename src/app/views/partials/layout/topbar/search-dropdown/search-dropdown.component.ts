@@ -1,5 +1,12 @@
 // Angular
-import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
 const documents = {
   title: 'Documents',
@@ -99,7 +106,7 @@ export class SearchDropdownComponent implements OnInit {
 
   @ViewChild('searchInput', {static: true}) searchInput: ElementRef;
 
-  data: any[] = null;
+  data: any[] = [];
   loading: boolean;
 
   /**
@@ -121,7 +128,7 @@ export class SearchDropdownComponent implements OnInit {
    * @param e: Event
    */
   search(e) {
-    this.data = null;
+    this.data = [];
     if (e.target.value.length > 1) {
       this.loading = true;
       // simulate getting search result
@@ -141,7 +148,7 @@ export class SearchDropdownComponent implements OnInit {
    * @param e: Event
    */
   clear(e) {
-    this.data = null;
+    this.data = [];
     this.searchInput.nativeElement.value = '';
   }
 

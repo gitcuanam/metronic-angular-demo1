@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
 
 const basicRadios = {
 	beforeCodeTitle: 'Basic radios',
@@ -205,7 +209,7 @@ export class RadiobuttonComponent implements OnInit {
 	state = '';
 	selectedState = '';
 
-	labelPosition = 'before';
+	labelPosition: 'before' | 'after' = 'before';
 
 	changeLablesPositions() {
 		this.labelPosition = this.labelPosition === 'before' ? 'after' : 'before';

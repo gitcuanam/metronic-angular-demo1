@@ -1,18 +1,28 @@
 // Angular
 import { Injectable } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-// RxJS
-import { BehaviorSubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import {
+  NavigationEnd,
+  Params,
+  Router,
+} from '@angular/router';
+
 // Object-Path
 import * as objectPath from 'object-path';
+// RxJS
+import {
+  BehaviorSubject,
+  Subject,
+} from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+import { MenuConfigService } from './menu-config.service';
 // Services
 import { PageConfigService } from './page-config.service';
-import { MenuConfigService } from './menu-config.service';
 
 export interface Breadcrumb {
   title: string;
   page: string | any;
+  queryParams?: Params;
 }
 
 export interface BreadcrumbTitle {

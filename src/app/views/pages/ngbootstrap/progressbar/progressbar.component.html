@@ -28,13 +28,13 @@
 			<div class="example-preview">
 				<div>
 					<p>
-						<ngb-progressbar showValue="true" type="success" [value]="25" [max]="100"></ngb-progressbar>
+						<ngb-progressbar [showValue]="true" type="success" [value]="25" [max]="100"></ngb-progressbar>
 					</p>
 					<p>
 						<ngb-progressbar [showValue]="true" type="info" [value]="50" [max]="100"></ngb-progressbar>
 					</p>
 					<p>
-						<ngb-progressbar showValue="true" type="warning" [value]="150" [max]="200"></ngb-progressbar>
+						<ngb-progressbar [showValue]="true" type="warning" [value]="150" [max]="200"></ngb-progressbar>
 					</p>
 					<p>
 						<ngb-progressbar [showValue]="true" type="danger" [value]="150" [max]="150"></ngb-progressbar>
@@ -109,14 +109,14 @@
 			<p>This progress bar uses the customized default values.</p>
 			<div class="example-preview">
 				<p>
-					<ngb-progressbar value="250" max="1000" striped="true" animated="true" height="20px" type="success"></ngb-progressbar>
+					<ngb-progressbar [value]="250" [max]="1000" [striped]="true" [animated]="true" height="20px" type="success"></ngb-progressbar>
 				</p>
 			</div>
 
 			<p class="mt-6">This progress bar uses the customized default values, but changes the type using an input.</p>
 			<div class="example-preview">
 				<p>
-					<ngb-progressbar value="500" max="1000" striped="true" animated="true" height="20px" type="info"></ngb-progressbar>
+					<ngb-progressbar [value]="500" [max]="1000" [striped]="true" [animated]="true" height="20px" type="info"></ngb-progressbar>
 				</p>
 			</div>
 		</kt-code-preview>

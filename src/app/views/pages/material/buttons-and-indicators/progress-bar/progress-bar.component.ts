@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 const determinate = {
 	beforeCodeTitle: 'Determinate progress-bar',
@@ -197,7 +202,7 @@ export class ProgressBarComponent implements OnInit {
 	exmapleQuery;
 	exampleConfig;
 	color = 'primary';
-	mode = 'determinate';
+	mode: ProgressSpinnerMode | 'buffer' = 'determinate';
 	value = 50;
 	bufferValue = 75;
 

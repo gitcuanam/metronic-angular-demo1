@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
 
 const basicSlideToggles = {
 		beforeCodeTitle: 'Basic slide-toggles',
@@ -147,7 +151,7 @@ export class SlidertoggleComponent implements OnInit {
 	checked = false;
 	disabled = false;
 
-	labelPosition = 'before';
+	labelPosition: 'before' | 'after' = 'before';
 
 	constructor() { }
 

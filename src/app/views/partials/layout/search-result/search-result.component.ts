@@ -1,5 +1,8 @@
 // Angular
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+} from '@angular/core';
 
 @Component({
   selector: 'kt-search-result',
@@ -8,5 +11,5 @@ import { Component, Input } from '@angular/core';
 })
 export class SearchResultComponent {
   // Public properties
-  @Input() data: [];
+  @Input() data: any[];
 }
