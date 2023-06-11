@@ -60,6 +60,7 @@
     "ngx-highlightjs": "^4.1.4",
     "ngx-perfect-scrollbar": "9.0.0",
     "ngx-permissions": "^8.1.1",
+    "ngx-scrollbar": "7.6.1",
     "object-path": "0.11.8",
     "popper.js": "^1.16.1",
     "postcss-html": "^1.5.0",
