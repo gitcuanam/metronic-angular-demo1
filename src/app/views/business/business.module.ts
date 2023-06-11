@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgModule } from '@angular/core';
 
-
+import { UserListV2Component } from './user-list-v2/user-list-v2.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    UserListV2Component
   ],
   imports: [
     CommonModule
