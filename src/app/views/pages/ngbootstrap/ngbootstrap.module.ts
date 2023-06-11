@@ -138,9 +138,9 @@ const routes: Routes = [
 	],
 	providers: [
 		NgbAlertConfig, ],
-	entryComponents: [
-		NgbdModalContentComponent
-	]
+	// entryComponents: [
+	// 	NgbdModalContentComponent
+	// ]
 })
 export class NgbootstrapModule {
 }

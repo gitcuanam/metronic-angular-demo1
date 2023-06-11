@@ -1,5 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -30,7 +30,8 @@ import { PortletFooterComponent } from './portlet-footer.component';
 		PortletHeaderComponent,
 		PortletBodyComponent,
 		PortletFooterComponent,
-	]
+	],
+	schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class PortletModule {
 }

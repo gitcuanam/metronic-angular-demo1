@@ -281,16 +281,16 @@ const routes: Routes = [
 		RouterModule.forChild(routes)
 	],
 	exports: [RouterModule],
-	entryComponents: [
-		PizzaPartyComponent,
-		DialogComponent,
-		ModalComponent,
-		Modal2Component,
-		Modal3Component,
-		IconComponent,
-		TreeComponent,
-		BottomSheetExampleComponent
-	],
+	// entryComponents: [
+	// 	PizzaPartyComponent,
+	// 	DialogComponent,
+	// 	ModalComponent,
+	// 	Modal2Component,
+	// 	Modal3Component,
+	// 	IconComponent,
+	// 	TreeComponent,
+	// 	BottomSheetExampleComponent
+	// ],
 	providers: [
 		MatIconRegistry,
 		{ provide: MatBottomSheetRef, useValue: {} },

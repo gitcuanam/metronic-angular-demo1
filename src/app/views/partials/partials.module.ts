@@ -1,6 +1,6 @@
 // Angular
 import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -42,22 +42,6 @@ import {
   UserProfileComponent,
   UserProfile4Component
 } from './layout';
-import {
-  Widget1SalesStatComponent,
-  Widget9RecentActivitiesComponent,
-  Widget12NewUsersComponent,
-  Widget7WeeklySalesComponent,
-  Widget1TasksOverviewComponent,
-  Widget2NewArrivalsComponent,
-  Widget3NewArrivalsAuthorsComponent,
-  Widget4TodoComponent,
-  Widget8TrendsComponent,
-  Dropdown1Component,
-  Dropdown2Component,
-  Dropdown3Component,
-  Dropdown4Component,
-  Dropdown5Component
-} from './content/dashboard-widgets';
 // General
 import { NoticeComponent } from './content/general/notice/notice.component';
 import { PortletModule } from './content/general/portlet/portlet.module';
@@ -86,7 +70,20 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { Widget1SalesStatComponent } from './content/dashboard-widgets/widget1-sales-stat/widget1-sales-stat.component';
+import { Widget9RecentActivitiesComponent } from './content/dashboard-widgets/widget9-recent-activities/widget9-recent-activities.component';
+import { Widget12NewUsersComponent } from './content/dashboard-widgets/widget12-new-users/widget12-new-users.component';
+import { Widget7WeeklySalesComponent } from './content/dashboard-widgets/widget7-weekly-sales/widget7-weekly-sales.component';
+import { Widget1TasksOverviewComponent } from './content/dashboard-widgets/widget1-tasks-overview/widget1-tasks-overview.component';
+import { Widget2NewArrivalsComponent } from './content/dashboard-widgets/widget2-new-arrivals/widget2-new-arrivals.component';
+import { Widget4TodoComponent } from './content/dashboard-widgets/widget4-todo/widget4-todo.component';
+import { Widget3NewArrivalsAuthorsComponent } from './content/dashboard-widgets/widget3-authors/widget3-authors.component';
+import { Widget8TrendsComponent } from './content/dashboard-widgets/widget8-trends/widget8-trends.component';
+import { Dropdown1Component } from './content/dashboard-widgets/dropdowns/dropdown1/dropdown1.component';
+import { Dropdown2Component } from './content/dashboard-widgets/dropdowns/dropdown2/dropdown2.component';
+import { Dropdown3Component } from './content/dashboard-widgets/dropdowns/dropdown3/dropdown3.component';
+import { Dropdown4Component } from './content/dashboard-widgets/dropdowns/dropdown4/dropdown4.component';
+import { Dropdown5Component } from './content/dashboard-widgets/dropdowns/dropdown5/dropdown5.component';
 @NgModule({
   declarations: [
     ScrollTopComponent,
@@ -222,7 +219,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     NgbDropdownModule,
     NgbTabsetModule,
     NgbTooltipModule,
-  ],
+  ],  
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class PartialsModule {
 }

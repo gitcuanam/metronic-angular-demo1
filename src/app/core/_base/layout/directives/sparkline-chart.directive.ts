@@ -1,7 +1,8 @@
 // Angular
 import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 // Chart
-import { Chart } from 'chart.js/dist/Chart.min.js';
+import { Chart, ChartConfiguration, ChartType } from 'chart.js';
+import colorLib from '@kurkle/color';
 // LayoutConfig
 import { LayoutConfigService } from '../../layout/services/layout-config.service';
 
@@ -72,8 +73,9 @@ export class SparklineChartDirective implements AfterViewInit {
     fill = (typeof fill !== 'undefined') ? fill : false;
     tooltip = (typeof tooltip !== 'undefined') ? tooltip : false;
 
+    const type: ChartType = 'line'
     const config = {
-      type: 'line',
+      type: type,
       data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
         datasets: [{
@@ -83,10 +85,10 @@ export class SparklineChartDirective implements AfterViewInit {
 
           pointHoverRadius: 4,
           pointHoverBorderWidth: 12,
-          pointBackgroundColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
-          pointBorderColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
+          pointBackgroundColor: colorLib('#000000').alpha(0).rgbString(),
+          pointBorderColor: colorLib('#000000').alpha(0).rgbString(),
           pointHoverBackgroundColor: this.layoutConfigService.getConfig('colors.state.danger'),
-          pointHoverBorderColor: Chart.helpers.color('#000000').alpha(0.1).rgbString(),
+          pointHoverBorderColor: colorLib('#000000').alpha(0.1).rgbString(),
           fill: false,
           data,
         }]
@@ -154,7 +156,7 @@ export class SparklineChartDirective implements AfterViewInit {
       }
     };
 
-    this.chart = new Chart(src, config);
+    this.chart = new Chart(src, config as any);
   }
 
   /**

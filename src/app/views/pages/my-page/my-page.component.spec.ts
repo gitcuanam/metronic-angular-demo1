@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {} from 'jasmine';
 import { MyPageComponent } from './my-page.component';
 
 describe('MyPageComponent', () => {
@@ -16,7 +16,7 @@ describe('MyPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MyPageComponent);
     component = fixture.componentInstance;
-    fixture.markForCheck();
+    // fixture.markForCheck();
   });
 
   it('should create', () => {

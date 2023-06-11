@@ -1,5 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -196,14 +196,14 @@ const routes: Routes = [
 		TypesUtilsService,
 		LayoutUtilsService
 	],
-	entryComponents: [
-		ActionNotificationComponent,
-		CustomerEditDialogComponent,
-		DeleteEntityDialogComponent,
-		FetchEntityDialogComponent,
-		UpdateStatusDialogComponent,
-		SpecificationEditDialogComponent
-	],
+	// entryComponents: [
+	// 	ActionNotificationComponent,
+	// 	CustomerEditDialogComponent,
+	// 	DeleteEntityDialogComponent,
+	// 	FetchEntityDialogComponent,
+	// 	UpdateStatusDialogComponent,
+	// 	SpecificationEditDialogComponent
+	// ],
 	declarations: [
 		ECommerceComponent,
 		// Customers
@@ -218,6 +218,7 @@ const routes: Routes = [
 		RemarksListComponent,
 		SpecificationsListComponent,
 		SpecificationEditDialogComponent
-	]
+	],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class ECommerceModule { }

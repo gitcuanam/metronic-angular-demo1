@@ -3,10 +3,14 @@
     "compilerOptions": {
         "outDir": "./out-tsc/spec",
         // "baseUrl": "./",
-        // "module": "commonjs",
+        "module": "commonjs",
         "types": [
-            "jasmine",
-            "node"
+            // "jasmine",
+            // "node",
+            "jest",
+            "node",
+            // "@types/jasmine",
+            // "@types/node",
         ]
     },
     "files": [
@@ -15,6 +19,7 @@
     ],
     "include": [
         "src/**/*.spec.ts",
-        "src/**/*.d.ts"
+        "src/**/*.d.ts",
+        "src/**/*.ts",
     ]
 }

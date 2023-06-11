@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '../../../../core/core.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -52,7 +52,8 @@ import { MatSortModule } from '@angular/material/sort';
 		MatProgressSpinnerModule,
 		MatPaginatorModule,
 		MatSortModule,
-	]
+	],
+	schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class WidgetModule {
 }
