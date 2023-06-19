@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'kt-user-list-v2',
@@ -7,7 +12,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserListV2Component implements OnInit {
 
-  constructor() { }
+  constructor(
+    private translateService: TranslateService,
+  ) { }
 
   ngOnInit(): void {
   }

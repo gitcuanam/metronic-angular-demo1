@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgModule,
+} from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { UserListV2Component } from './user-list-v2/user-list-v2.component';
 
@@ -8,7 +14,15 @@ import { UserListV2Component } from './user-list-v2/user-list-v2.component';
     UserListV2Component
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild([
+			{
+				path: 'user',
+				component: UserListV2Component
+			}
+		]),
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class BusinessModule { }
