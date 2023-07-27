@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { UserListV2Component } from './user-list-v2/user-list-v2.component';
+import { CoreModule } from 'src/app/core/core.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { UserListV2Component } from './user-list-v2/user-list-v2.component';
   ],
   imports: [
     CommonModule,
+    CoreModule,
     SharedModule,
     RouterModule.forChild([
 			{

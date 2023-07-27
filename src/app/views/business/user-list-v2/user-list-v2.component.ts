@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
+import { DemoMenuTriggerDirective } from 'src/app/core/_base/layout';
 
 @Component({
   selector: 'kt-user-list-v2',
@@ -14,9 +15,15 @@ export class UserListV2Component implements OnInit {
 
   constructor(
     private translateService: TranslateService,
-  ) { }
+  ) {
+    console.log(translateService);
+  }
 
   ngOnInit(): void {
+  }
+
+  toggleButton(): void {
+    console.log('toggle menu clicked!');
   }
 
 }
