@@ -1,4 +1,5 @@
-import { Overlay } from '@angular/cdk/overlay';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 
 @Directive({
@@ -7,6 +8,8 @@ import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/cor
 export class DemoMenuTriggerDirective implements OnInit {
 
   @Input() appDemoMenuTrigger?: any;
+  private portal?: TemplatePortal;
+  private overlayRef?: OverlayRef;
 
   constructor(
     private el: ElementRef,
