@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 export interface FileOptions extends ValidateOptions {
     // The allowed extensions, separated by a comma
@@ -33,19 +38,19 @@ export default function file() {
             }
 
             let extension;
-            const extensions = input.options.extension ? input.options.extension.toLowerCase().split(',') : null;
-            const types = input.options.type ? input.options.type.toLowerCase().split(',') : null;
+            const extensions = input.options?.extension ? input.options?.extension.toLowerCase().split(',') : null;
+            const types = input.options?.type ? input.options?.type.toLowerCase().split(',') : null;
             // tslint:disable-next-line:no-string-literal
             const html5 = (window['File'] && window['FileList'] && window['FileReader']);
 
             if (html5) {
                 // Get FileList instance
                 const files = (input.element as HTMLInputElement).files;
-                const total = files.length;
+                const total = files?.length ?? 0;
                 let allSize = 0;
 
                 // Check the maxFiles
-                if (input.options.maxFiles && total > parseInt(`${input.options.maxFiles}`, 10)) {
+                if (input.options?.maxFiles && total > parseInt(`${input.options?.maxFiles}`, 10)) {
                     return {
                         meta: { error: 'INVALID_MAX_FILES' },
                         valid: false,
@@ -53,7 +58,7 @@ export default function file() {
                 }
 
                 // Check the minFiles
-                if (input.options.minFiles && total < parseInt(`${input.options.minFiles}`, 10)) {
+                if (input.options?.minFiles && total < parseInt(`${input.options?.minFiles}`, 10)) {
                     return {
                         meta: { error: 'INVALID_MIN_FILES' },
                         valid: false,
@@ -62,17 +67,17 @@ export default function file() {
 
                 let metaData = {};
                 for (let i = 0; i < total; i++) {
-                    allSize += files[i].size;
-                    extension = files[i].name.substr(files[i].name.lastIndexOf('.') + 1);
+                    allSize += files?.[i].size ?? 0;
+                    extension = files?.[i].name.substr(files[i].name.lastIndexOf('.') + 1);
                     metaData = {
                         ext: extension,
-                        file: files[i],
-                        size: files[i].size,
-                        type: files[i].type,
+                        file: files?.[i],
+                        size: files?.[i].size,
+                        type: files?.[i].type,
                     };
 
                     // Check the minSize
-                    if (input.options.minSize && files[i].size < parseInt(`${input.options.minSize}`, 10)) {
+                    if (input.options?.minSize && (files?.[i].size ?? 0) < parseInt(`${input.options?.minSize}`, 10)) {
                        return {
                            meta: Object.assign({}, { error: 'INVALID_MIN_SIZE' }, metaData),
                            valid: false,
@@ -80,7 +85,7 @@ export default function file() {
                     }
 
                     // Check the maxSize
-                    if (input.options.maxSize && files[i].size > parseInt(`${input.options.maxSize}`, 10)) {
+                    if (input.options?.maxSize && (files?.[i].size ?? 0) > parseInt(`${input.options?.maxSize}`, 10)) {
                         return {
                             meta: Object.assign({}, { error: 'INVALID_MAX_SIZE' }, metaData),
                             valid: false,
@@ -96,7 +101,7 @@ export default function file() {
                     }
 
                     // Check file type
-                    if (files[i].type && types && types.indexOf(files[i].type.toLowerCase()) === -1) {
+                    if (files?.[i].type && types && types.indexOf(files[i].type.toLowerCase()) === -1) {
                         return {
                             meta: Object.assign({}, { error: 'INVALID_TYPE' }, metaData),
                             valid: false,
@@ -105,7 +110,7 @@ export default function file() {
                 }
 
                 // Check the maxTotalSize
-                if (input.options.maxTotalSize && allSize > parseInt(`${input.options.maxTotalSize}`, 10)) {
+                if (input.options?.maxTotalSize && allSize > parseInt(`${input.options?.maxTotalSize}`, 10)) {
                     return {
                         meta: Object.assign({}, {
                             error: 'INVALID_MAX_TOTAL_SIZE',
@@ -116,7 +121,7 @@ export default function file() {
                 }
 
                 // Check the minTotalSize
-                if (input.options.minTotalSize && allSize < parseInt(`${input.options.minTotalSize}`, 10)) {
+                if (input.options?.minTotalSize && allSize < parseInt(`${input.options?.minTotalSize}`, 10)) {
                     return {
                         meta: Object.assign({}, {
                             error: 'INVALID_MIN_TOTAL_SIZE',

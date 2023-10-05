@@ -20,8 +20,8 @@ export interface StartEndDateOptions {
 }
 
 export default class StartEndDate extends Plugin<StartEndDateOptions> {
-    private startDateFieldOptions: FieldOptions;
-    private endDateFieldOptions: FieldOptions;
+    private startDateFieldOptions?: FieldOptions;
+    private endDateFieldOptions?: FieldOptions;
     private fieldValidHandler: (e: string) => void;
     private fieldInvalidHandler: (e: string) => void;
 
@@ -37,33 +37,33 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
     public install(): void {
         // Backup the original options
         const fieldOptions = this.core.getFields();
-        this.startDateFieldOptions = fieldOptions[this.opts.startDate.field];
-        this.endDateFieldOptions = fieldOptions[this.opts.endDate.field];
+        this.startDateFieldOptions = this.opts?.startDate.field ? fieldOptions[this.opts?.startDate.field] : undefined;
+        this.endDateFieldOptions = this.opts?.endDate.field ? fieldOptions[this.opts?.endDate.field] : undefined;
 
         const form = this.core.getFormElement();
 
         this.core
             .on('core.field.valid', this.fieldValidHandler)
             .on('core.field.invalid', this.fieldInvalidHandler)
-            .addField(this.opts.startDate.field, {
+            .addField(this.opts?.startDate.field ?? '', {
                 validators: {
                     date: {
-                        format: this.opts.format,
+                        format: this.opts?.format,
                         max: () => {
-                            const endDateField = form.querySelector(`[name="${this.opts.endDate.field}"]`);
+                            const endDateField = form.querySelector(`[name="${this.opts?.endDate.field}"]`);
                             return (endDateField as HTMLInputElement).value;
                         },
-                        message: this.opts.startDate.message,
+                        message: this.opts?.startDate.message,
                     },
                 },
             })
-            .addField(this.opts.endDate.field, {
+            .addField(this.opts?.endDate.field ?? '', {
                 validators: {
                     date: {
-                        format: this.opts.format,
-                        message: this.opts.endDate.message,
+                        format: this.opts?.format,
+                        message: this.opts?.endDate.message,
                         min: () => {
-                            const startDateField = form.querySelector(`[name="${this.opts.startDate.field}"]`);
+                            const startDateField = form.querySelector(`[name="${this.opts?.startDate.field}"]`);
                             return (startDateField as HTMLInputElement).value;
                         },
                     },
@@ -72,14 +72,14 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
     }
 
     public uninstall(): void {
-        this.core.removeField(this.opts.startDate.field);
+        this.core.removeField(this.opts?.startDate.field ?? '');
         if (this.startDateFieldOptions) {
-            this.core.addField(this.opts.startDate.field, this.startDateFieldOptions);
+            this.core.addField(this.opts?.startDate.field ?? '', this.startDateFieldOptions);
         }
 
-        this.core.removeField(this.opts.endDate.field);
+        this.core.removeField(this.opts?.endDate.field ?? '');
         if (this.endDateFieldOptions) {
-            this.core.addField(this.opts.endDate.field, this.endDateFieldOptions);
+            this.core.addField(this.opts?.endDate.field ?? '', this.endDateFieldOptions);
         }
 
         this.core
@@ -89,11 +89,11 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
 
     private onFieldInvalid(field: string): void {
         switch (field) {
-            case this.opts.startDate.field:
+            case this.opts?.startDate.field ?? '':
                 this.startDateValid = false;
                 break;
 
-            case this.opts.endDate.field:
+            case this.opts?.endDate.field:
                 this.endDateValid = false;
                 break;
 
@@ -104,17 +104,17 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
 
     private onFieldValid(field: string): void {
         switch (field) {
-            case this.opts.startDate.field:
+            case this.opts?.startDate.field:
                 this.startDateValid = true;
                 if (this.endDateValid === false) {
-                    this.core.revalidateField(this.opts.endDate.field);
+                    this.core.revalidateField(this.opts?.endDate.field ?? '');
                 }
                 break;
 
-            case this.opts.endDate.field:
+            case this.opts?.endDate.field:
                 this.endDateValid = true;
                 if (this.startDateValid === false) {
-                    this.core.revalidateField(this.opts.startDate.field);
+                    this.core.revalidateField(this.opts?.startDate.field ?? '');
                 }
                 break;
 

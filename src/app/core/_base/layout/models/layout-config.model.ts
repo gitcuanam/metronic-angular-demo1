@@ -34,7 +34,7 @@ export interface LayoutConfigModel {
         mobile: boolean
       }
     };
-    menu?: {
+    menu: {
       self: {
         display: boolean;
         layout?: 'default' | 'tab';
@@ -57,7 +57,7 @@ export interface LayoutConfigModel {
       }
     }
   };
-  subheader?: {
+  subheader: {
     display: boolean;
     displayDesc?: boolean;
     displayDaterangepicker?: boolean;
@@ -68,20 +68,20 @@ export interface LayoutConfigModel {
     layouts?: any;
     style?: 'light' | 'solid' | 'transparent';
   };
-  content?: {
+  content: {
     width?: 'fluid' | 'fixed'
   };
-  brand?: {
+  brand: {
     self: {
       theme: 'light' | 'dark'
     }
   };
-  aside?: {
+  aside: {
     self: {
       theme?: 'dark' | 'light';
       display: boolean;
       fixed?: boolean | any;
-      minimize?: {
+      minimize: {
         toggle: boolean;
         default: boolean;
         hoverable: boolean;
@@ -105,7 +105,7 @@ export interface LayoutConfigModel {
       }
     }
   };
-  footer?: {
+  footer: {
     width?: 'fluid' | 'fixed';
     fixed?: boolean
   };

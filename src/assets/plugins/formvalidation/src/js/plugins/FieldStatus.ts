@@ -5,11 +5,11 @@
  */
 
 import {
-    DynamicFieldEvent,
-    ElementIgnoredEvent,
-    ElementNotValidatedEvent,
-    ElementValidatedEvent,
-    ElementValidatingEvent,
+  DynamicFieldEvent,
+  ElementIgnoredEvent,
+  ElementNotValidatedEvent,
+  ElementValidatedEvent,
+  ElementValidatingEvent,
 } from '../core/Core';
 import Plugin from '../core/Plugin';
 
@@ -80,30 +80,30 @@ export default class FieldStatus extends Plugin<FieldStatusOptions> {
         if (this.statuses.has(e.field)) {
             this.statuses.delete(e.field);
         }
-        this.opts.onStatusChanged(this.areFieldsValid());
+        this.opts?.onStatusChanged && this.opts.onStatusChanged(this.areFieldsValid());
     }
 
     private onElementValidating(e: ElementValidatingEvent): void {
         this.statuses.set(e.field, 'Validating');
-        this.opts.onStatusChanged(false);
+        this.opts?.onStatusChanged && this.opts.onStatusChanged(false);
     }
 
     private onElementValidated(e: ElementValidatedEvent): void {
         this.statuses.set(e.field, e.valid ? 'Valid' : 'Invalid');
         if (e.valid) {
-            this.opts.onStatusChanged(this.areFieldsValid());
+            this.opts?.onStatusChanged && this.opts.onStatusChanged(this.areFieldsValid());
         } else {
-            this.opts.onStatusChanged(false);
+            this.opts?.onStatusChanged && this.opts.onStatusChanged(false);
         }
     }
 
     private onElementNotValidated(e: ElementNotValidatedEvent): void {
         this.statuses.set(e.field, 'NotValidated');
-        this.opts.onStatusChanged(false);
+        this.opts?.onStatusChanged && this.opts.onStatusChanged(false);
     }
 
     private onElementIgnored(e: ElementIgnoredEvent): void {
         this.statuses.set(e.field, 'Ignored');
-        this.opts.onStatusChanged(this.areFieldsValid());
+        this.opts?.onStatusChanged && this.opts.onStatusChanged(this.areFieldsValid());
     }
 }

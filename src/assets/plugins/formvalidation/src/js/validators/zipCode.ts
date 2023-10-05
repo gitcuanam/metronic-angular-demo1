@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import format from '../utils/format';
 
 export interface ZipCodeOptions extends ValidateOptions {
@@ -210,7 +215,7 @@ export default function zipCode() {
             return {
                 // tslint:disable-next-line:max-line-length
                 message: format(
-                    input.l10n ? opts.message || input.l10n.zipCode.country : opts.message,
+                    (input.l10n ? opts.message || input.l10n.zipCode.country : opts.message) ?? '',
                     input.l10n ? input.l10n.zipCode.countries[country] : country,
                 ),
                 valid: isValid,

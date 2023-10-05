@@ -40,7 +40,7 @@ export default class SubmitButton extends Plugin<SubmitButtonOptions> {
             return;
         }
         const form = this.core.getFormElement() as HTMLFormElement;
-        this.selectorButtons = [].slice.call(form.querySelectorAll(this.opts.selector)) as Element[];
+        this.selectorButtons = [].slice.call(form.querySelectorAll(this.opts?.selector ?? '')) as Element[];
         this.submitButtons = [].slice.call(form.querySelectorAll('[type="submit"]')) as Element[];
 
         // Disable client side validation in HTML 5
@@ -66,7 +66,7 @@ export default class SubmitButton extends Plugin<SubmitButtonOptions> {
         this.submitButtons.forEach((button) => {
             button.removeEventListener('click', this.buttonClickHandler);
         });
-        this.hiddenClickedEle.parentElement.removeChild(this.hiddenClickedEle);
+        this.hiddenClickedEle?.parentElement?.removeChild(this.hiddenClickedEle);
     }
 
     private handleSubmitEvent(e: Event): void {
@@ -79,7 +79,7 @@ export default class SubmitButton extends Plugin<SubmitButtonOptions> {
             // Don't perform validation when clicking on the submit button/input which
             // aren't defined by the the `opts.selector` option
             && (this.selectorButtons.indexOf(target) !== -1)) {
-            if (this.opts.aspNetButton && this.isFormValid === true) {
+            if (this.opts?.aspNetButton && this.isFormValid === true) {
                 // Do nothing
             } else {
                 const form = this.core.getFormElement();
@@ -89,8 +89,8 @@ export default class SubmitButton extends Plugin<SubmitButtonOptions> {
                 const name = this.clickedButton.getAttribute('name');
                 const value = this.clickedButton.getAttribute('value');
                 if (name && value) {
-                    this.hiddenClickedEle.setAttribute('name', name);
-                    this.hiddenClickedEle.setAttribute('value', value);
+                    this.hiddenClickedEle?.setAttribute('name', name);
+                    this.hiddenClickedEle?.setAttribute('value', value);
                 }
                 this.validateForm(e);
             }
@@ -100,7 +100,7 @@ export default class SubmitButton extends Plugin<SubmitButtonOptions> {
     private validateForm(e: Event): void {
         e.preventDefault();
         this.core.validate().then((result) => {
-            if (result === 'Valid' && this.opts.aspNetButton && !this.isFormValid && this.clickedButton) {
+            if (result === 'Valid' && this.opts?.aspNetButton && !this.isFormValid && this.clickedButton) {
                 this.isFormValid = true;
                 this.clickedButton.removeEventListener('click', this.buttonClickHandler);
 

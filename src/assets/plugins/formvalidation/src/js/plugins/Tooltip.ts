@@ -4,7 +4,10 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { ElementValidatedEvent, ValidatorValidatedEvent } from '../core/Core';
+import {
+  ElementValidatedEvent,
+  ValidatorValidatedEvent,
+} from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
 import { IconPlacedEvent } from './Icon';
@@ -40,7 +43,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
         this.tip = document.createElement('div');
         classSet(this.tip, {
             'fv-plugins-tooltip': true,
-            [`fv-plugins-tooltip--${this.opts.placement}`]: true,
+            [`fv-plugins-tooltip--${this.opts?.placement}`]: true,
         });
         document.body.appendChild(this.tip);
 
@@ -49,7 +52,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
             .on('core.validator.validated', this.validatorValidatedHandler)
             .on('core.element.validated', this.elementValidatedHandler);
 
-        if ('click' === this.opts.trigger) {
+        if ('click' === this.opts?.trigger) {
             document.addEventListener('click', this.documentClickHandler);
         }
     }
@@ -63,7 +66,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
             .off('core.validator.validated', this.validatorValidatedHandler)
             .off('core.element.validated', this.elementValidatedHandler);
 
-        if ('click' === this.opts.trigger) {
+        if ('click' === this.opts?.trigger) {
             document.removeEventListener('click', this.documentClickHandler);
         }
     }
@@ -72,7 +75,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
         classSet(e.iconElement, {
             'fv-plugins-tooltip-icon': true,
         });
-        switch (this.opts.trigger) {
+        switch (this.opts?.trigger) {
             case 'hover':
                 e.iconElement.addEventListener('mouseenter', (evt) => this.show(e.element, evt));
                 e.iconElement.addEventListener('mouseleave', (evt) => this.hide());
@@ -94,9 +97,9 @@ export default class Tooltip extends Plugin<TooltipOptions> {
             // Get the message
             const message = (typeof e.result.message === 'string')
                         ? e.result.message
-                        : e.result.message[this.core.getLocale()];
+                        : e.result.message?.[this.core.getLocale()];
 
-            this.messages.set(ele, message);
+            this.messages.set(ele, message ?? '');
         }
     }
 
@@ -132,7 +135,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
         const rect = icon.getBoundingClientRect();
         let top = 0;
         let left = 0;
-        switch (this.opts.placement) {
+        switch (this.opts?.placement) {
             case 'top':
             default:
                 top = rect.top - rect.height;

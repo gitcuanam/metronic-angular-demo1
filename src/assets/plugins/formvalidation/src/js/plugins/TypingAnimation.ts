@@ -35,7 +35,7 @@ export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
 
     public install(): void {
         this.fields = Object.keys(this.core.getFields());
-        if (this.opts.autoPlay) {
+        if (this.opts?.autoPlay) {
             this.play();
         }
     }
@@ -52,7 +52,7 @@ export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
         const field = this.fields[fieldIndex];
         const ele = this.core.getElements(field)[0];
         const inputType = ele.getAttribute('type');
-        const samples = this.opts.data[field];
+        const samples = this.opts?.data[field];
 
         if ('checkbox' === inputType || 'radio' === inputType) {
             (ele as HTMLInputElement).checked = true;
