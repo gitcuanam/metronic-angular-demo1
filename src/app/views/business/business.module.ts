@@ -5,10 +5,11 @@ import {
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
+import { PartialsModule } from '../partials/partials.module';
 import { UserListV2Component } from './user-list-v2/user-list-v2.component';
-import { CoreModule } from 'src/app/core/core.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CoreModule } from 'src/app/core/core.module';
     CommonModule,
     CoreModule,
     SharedModule,
+    PartialsModule,
     RouterModule.forChild([
 			{
 				path: 'user',
