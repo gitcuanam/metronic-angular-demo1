@@ -131,7 +131,7 @@ class Core {
 
     constructor(form: HTMLElement, fields?: FieldsOptions) {
         this.form = form;
-        this.fields = fields;
+        this.fields = fields ?? {};
     }
 
     public on(event: string, func: (...arg: any[]) => any): this {
@@ -765,7 +765,7 @@ class Core {
 
     private waterfall(promises: Array<() => Promise<string>>): Promise<string[]> {
         return promises.reduce((p, c, i, a) => {
-            return p.then((res) => {
+            return p.then((res: string[]) => {
                 return c().then((result) => {
                     res.push(result);
                     return res;
@@ -777,11 +777,11 @@ class Core {
     private queryElements(field: string): HTMLElement[] {
         const selector = (this.fields[field].selector)
             // Check if the selector is an ID selector which starts with `#`
-            ? ('#' === this.fields[field].selector.charAt(0)
-                ? `[id="${this.fields[field].selector.substring(1)}"]`
+            ? ('#' === this.fields[field].selector?.charAt(0)
+                ? `[id="${this.fields[field].selector?.substring(1)}"]`
                 : this.fields[field].selector)
             : `[name="${field}"]`;
-        return ([].slice.call(this.form.querySelectorAll(selector)) as HTMLElement[]);
+        return selector ? ([].slice.call(this.form.querySelectorAll(selector)) as HTMLElement[]) : [];
     }
 
     private normalizeResult(field: string, validator: string, result: ValidateResult): ValidateResult {
@@ -825,7 +825,7 @@ export default function formValidation(form: HTMLElement, options?: Options): Co
     }, options);
 
     const core = new Core(form, opts.fields);
-    core.setLocale(opts.locale, opts.localization);
+    core.setLocale(opts.locale, opts.localization ?? {});
 
     // Register plugins
     Object.keys(opts.plugins).forEach((name) => core.registerPlugin(name, opts.plugins[name]));

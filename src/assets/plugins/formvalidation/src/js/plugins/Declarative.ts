@@ -61,7 +61,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
 
     private parseOptions(): FieldsOptions {
         // Find all fields which have either `name` or `data-fv-field` attribute
-        const prefix = this.opts.prefix;
+        const prefix = this.opts?.prefix;
         const opts: FieldsOptions = {};
         const fields = this.core.getFields();
         const form = this.core.getFormElement();
@@ -73,7 +73,9 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
             // we only set the HTML attribute to one of them
             if (!this.isEmptyOption(validators)) {
                 const field = ele.getAttribute('name') || ele.getAttribute(`${prefix}field`);
-                opts[field] = Object.assign({}, opts[field], validators);
+                if (field) {
+                    opts[field] = Object.assign({}, opts[field], validators);
+                }
             }
         });
 
@@ -112,7 +114,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
 
     private parsePlugins(): void {
         const form = this.core.getFormElement();
-        const reg = new RegExp(`^${this.opts.pluginPrefix}([a-z0-9\-]+)(___)*([a-z0-9\-]+)*$`);
+        const reg = new RegExp(`^${this.opts?.pluginPrefix}([a-z0-9\-]+)(___)*([a-z0-9\-]+)*$`);
         const numAttributes = form.attributes.length;
         const plugins = {};
         for (let i = 0; i < numAttributes; i++) {
@@ -152,7 +154,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
     }
 
     private parseElement(ele: Element): FieldOptions {
-        const reg = new RegExp(`^${this.opts.prefix}([a-z0-9\-]+)(___)*([a-z0-9\-]+)*$`);
+        const reg = new RegExp(`^${this.opts?.prefix}([a-z0-9\-]+)(___)*([a-z0-9\-]+)*$`);
         const numAttributes = ele.attributes.length;
         const opts = {};
         const type = ele.getAttribute('type');
@@ -160,7 +162,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
             const name = ele.attributes[i].name;
             const value = ele.attributes[i].value;
 
-            if (this.opts.html5Input) {
+            if (this.opts?.html5Input) {
                 /* tslint:disable:no-string-literal */
                 switch (true) {
                     case ('minlength' === name):
@@ -214,8 +216,8 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
                     case ('type' === name && 'range' === value):
                         opts['between'] = Object.assign({}, {
                             enabled: true,
-                            max: parseFloat(ele.getAttribute('max')),
-                            min: parseFloat(ele.getAttribute('min')),
+                            max: parseFloat(ele.getAttribute('max') ?? ''),
+                            min: parseFloat(ele.getAttribute('min') ?? ''),
                         }, opts['between']);
                         break;
 

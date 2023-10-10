@@ -26,6 +26,7 @@ import {
 	ProductsStatusUpdated,
 	selectProductsPageLastQuery
 } from '../../../../../../core/e-commerce';
+import { IMessage } from '../message.model';
 
 // Table with EDIT item in new page
 // ARTICLE for table with sort/filter/paginator
@@ -250,7 +251,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 			const idsForDeletion: number[] = [];
 			// tslint:disable-next-line:prefer-for-of
 			for (let i = 0; i < this.selection.selected.length; i++) {
-				idsForDeletion.push(this.selection.selected[i].id);
+				const id = this.selection.selected[i].id;
+				if (id) {
+					idsForDeletion.push(id);
+				}
 			}
 			this.store.dispatch(new ManyProductsDeleted({ ids: idsForDeletion }));
 			this.layoutUtilsService.showActionNotification(_deleteMessage, MessageType.Delete);
@@ -263,7 +267,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 	 */
 	fetchProducts() {
 		// tslint:disable-next-line:prefer-const
-		let messages = [];
+		let messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.manufacture} ${elem.model} ${elem.modelYear}`,
@@ -281,7 +285,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 		const _title = 'Update status for selected products';
 		const _updateMessage = 'Status has been updated for selected products';
 		const _statuses = [{ value: 0, text: 'Selling' }, { value: 1, text: 'Sold' }];
-		const _messages = [];
+		const _messages: IMessage[] = [];
 
 		this.selection.selected.forEach(elem => {
 			_messages.push({

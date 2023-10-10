@@ -30,7 +30,7 @@ import { delay } from 'rxjs/operators';
 export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	// Public properties
 	role: Role;
-	role$: Observable<Role>;
+	role$: Observable<Role | undefined>;
 	hasFormErrors = false;
 	viewLoading = false;
 	loadingAfterSubmit = false;
@@ -134,7 +134,7 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns permissions ids
 	 */
 	preparePermissionIds(): number[] {
-		const result = [];
+		const result: number[] = [];
 		each(this.rolePermissions, (_root: Permission) => {
 			if (_root.isSelected) {
 				result.push(_root.id);
@@ -297,6 +297,6 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns is title valid
 	 */
 	isTitleValid(): boolean {
-		return (this.role && this.role.title && this.role.title.length > 0);
+		return (!!this.role && !!this.role.title && this.role.title.length > 0);
 	}
 }

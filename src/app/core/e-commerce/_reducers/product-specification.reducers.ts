@@ -8,10 +8,10 @@ import { ProductSpecificationModel } from '../_models/product-specification.mode
 import { QueryParamsModel } from '../../_base/crud';
 
 export interface ProductSpecificationsState extends EntityState<ProductSpecificationModel> {
-  productId: number;
+  productId?: number;
   loading: boolean;
   totalCount: number;
-  lastCreatedProductSpecificationId: number;
+  lastCreatedProductSpecificationId?: number;
   lastQuery: QueryParamsModel;
   showInitWaitingMessage: boolean;
 }

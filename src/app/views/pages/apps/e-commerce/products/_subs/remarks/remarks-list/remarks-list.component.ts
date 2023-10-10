@@ -28,6 +28,7 @@ import {
 	selectLastCreatedProductRemarkId,
 	ProductRemarkOnServerCreated
 } from '../../../../../../../../core/e-commerce';
+import { IMessage } from '../../../message.model';
 
 // Table with EDIT item in new page
 // ARTICLE for table with sort/filter/paginator
@@ -453,7 +454,7 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 	 * Fetch selected remarks
 	 */
 	fetchRemarks() {
-		const messages = [];
+		const messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => { messages.push({ text: `${elem.text}`, id: elem.id }); });
 		this.layoutUtilsService.fetchElements(messages);
 	}

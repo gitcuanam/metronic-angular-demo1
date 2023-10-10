@@ -104,7 +104,7 @@ export class SearchDefaultComponent implements OnInit {
 	 * @param e: Event
 	 */
 	search(e) {
-		this.data = null;
+		this.data = [];
 		if (e.target.value.length > 2) {
 			this.loading = true;
 			// simulate getting search result
@@ -122,7 +122,7 @@ export class SearchDefaultComponent implements OnInit {
 	 * @param e: Event
 	 */
 	clear(e) {
-		this.data = null;
+		this.data = [];
 		this.searchInput.nativeElement.value = '';
 	}
 }

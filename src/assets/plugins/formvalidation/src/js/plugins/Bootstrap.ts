@@ -27,24 +27,24 @@ export default class Bootstrap extends Framework {
     protected onIconPlaced(e: IconPlacedEvent): void {
         // Adjust icon place if the field belongs to a `input-group`
         const parent = e.element.parentElement;
-        if (hasClass(parent, 'input-group')) {
-            parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+        if (parent && hasClass(parent, 'input-group')) {
+            parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
         }
 
         const type = e.element.getAttribute('type');
         if ('checkbox' === type || 'radio' === type) {
-            const grandParent = parent.parentElement;
+            const grandParent = parent?.parentElement;
             // Place it after the container of checkbox/radio
-            if (hasClass(parent, 'form-check')) {
+            if (parent && hasClass(parent, 'form-check')) {
                 classSet(e.iconElement, {
                     'fv-plugins-icon-check': true,
                 });
-                parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
-            } else if (hasClass(parent.parentElement, 'form-check')) {
+                parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
+            } else if (parent && parent.parentElement && hasClass(parent.parentElement, 'form-check')) {
                 classSet(e.iconElement, {
                     'fv-plugins-icon-check': true,
                 });
-                grandParent.parentElement.insertBefore(e.iconElement, grandParent.nextSibling);
+                grandParent?.parentElement?.insertBefore(e.iconElement, grandParent.nextSibling);
             }
         }
     }

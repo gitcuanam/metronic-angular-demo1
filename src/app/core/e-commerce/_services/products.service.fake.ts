@@ -56,7 +56,7 @@ export class ProductsService {
   // Comment this when you start work with real server
   // This code imitates server calls
   updateStatusForProduct(products: ProductModel[], status: number): Observable<any> {
-    const tasks$ = [];
+    const tasks$: Observable<any>[] = [];
     each(products, element => {
       const _product = Object.assign({}, element);
       _product.status = status;
@@ -72,7 +72,7 @@ export class ProductsService {
   }
 
   deleteProducts(ids: number[] = []): Observable<any> {
-    const tasks$ = [];
+    const tasks$: Observable<any>[] = [];
     const length = ids.length;
     // tslint:disable-next-line:prefer-const
     for (let i = 0; i < length; i++) {

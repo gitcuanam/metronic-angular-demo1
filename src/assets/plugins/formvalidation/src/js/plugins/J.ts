@@ -35,7 +35,7 @@ $.fn['formValidation'] = function(options: Options) {
         const $this = $(this);
         let data = $this.data('formValidation');
         const opts = 'object' === typeof options && options;
-        if (!data) {
+        if (!data && opts) {
             data = formValidation(this, opts);
             $this.data('formValidation', data)
                  .data('FormValidation', data);

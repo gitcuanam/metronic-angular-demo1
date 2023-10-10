@@ -29,18 +29,18 @@ export default class Bootstrap3 extends Framework {
 
         // Adjust icon place if the field belongs to a `input-group`
         const parent = e.element.parentElement;
-        if (hasClass(parent, 'input-group')) {
-            parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+        if (parent && hasClass(parent, 'input-group')) {
+            parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
         }
 
         const type = e.element.getAttribute('type');
         if ('checkbox' === type || 'radio' === type) {
-            const grandParent = parent.parentElement;
+            const grandParent = parent?.parentElement;
             // Place it after the container of checkbox/radio
-            if (hasClass(parent, type)) {
-                parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
-            } else if (hasClass(parent.parentElement, type)) {
-                grandParent.parentElement.insertBefore(e.iconElement, grandParent.nextSibling);
+            if (parent && hasClass(parent, type)) {
+                parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
+            } else if (parent && parent.parentElement && hasClass(parent.parentElement, type)) {
+                grandParent?.parentElement?.insertBefore(e.iconElement, grandParent.nextSibling);
             }
         }
     }

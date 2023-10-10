@@ -288,7 +288,7 @@ export class AlertComponent implements OnInit {
 		this._success.subscribe((message) => this.successMessage = message);
 		this._success.pipe(
 			debounceTime(5000)
-		).subscribe(() => this.successMessage = null);
+		).subscribe(() => this.successMessage = '');
 	}
 
 	closeAlert(alert: IAlert) {

@@ -20,6 +20,7 @@ import { LayoutUtilsService, MessageType, QueryParamsModel } from '../../../../.
 import { CustomerModel, CustomersDataSource, CustomersPageRequested, OneCustomerDeleted, ManyCustomersDeleted, CustomersStatusUpdated } from '../../../../../../core/e-commerce';
 // Components
 import { CustomerEditDialogComponent } from '../customer-edit/customer-edit.dialog.component';
+import { IMessage } from '../../products/message.model';
 
 // Table with EDIT item in MODAL
 // ARTICLE for table with sort/filter/paginator
@@ -220,7 +221,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
 	 * Fetch selected customers
 	 */
 	fetchCustomers() {
-		const messages = [];
+		const messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.lastName}, ${elem.firstName}`,
@@ -238,7 +239,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
 		const _title = this.translate.instant('ECOMMERCE.CUSTOMERS.UPDATE_STATUS.TITLE');
 		const _updateMessage = this.translate.instant('ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE');
 		const _statuses = [{ value: 0, text: 'Suspended' }, { value: 1, text: 'Active' }, { value: 2, text: 'Pending' }];
-		const _messages = [];
+		const _messages: IMessage[] = [];
 
 		this.selection.selected.forEach(elem => {
 			_messages.push({

@@ -565,12 +565,12 @@ export class NgbdDatepickerConfig {
  */
 @Injectable()
 export class NgbDateNativeAdapter extends NgbDateAdapter<Date> {
-	fromModel(date: Date): NgbDateStruct {
+	fromModel(date: Date): NgbDateStruct | null {
 		return (date && date.getFullYear) ? { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } : null;
 	}
 
-	toModel(date: NgbDateStruct): Date {
-		return date ? new Date(date.year, date.month - 1, date.day) : null;
+	toModel(date: NgbDateStruct): Date | null {
+		return !!date ? new Date(date.year, date.month - 1, date.day) : null;
 	}
 }
 
@@ -675,10 +675,10 @@ export class DatepickerComponent implements OnInit {
 	showWeekNumbers = false;
 	thirdModel: NgbDateStruct = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 	disabled = true;
-	hoveredDate: NgbDateStruct;
+	hoveredDate?: NgbDateStruct;
 
-	fromDate: NgbDateStruct;
-	toDate: NgbDateStruct;
+	fromDate?: NgbDateStruct;
+	toDate?: NgbDateStruct;
 	model1: Date;
 	model2: Date;
 	sixModel;
@@ -709,8 +709,8 @@ export class DatepickerComponent implements OnInit {
 		return d.getDay() === 0 || d.getDay() === 6;
 	}
 
-	isDisabled(date: NgbDateStruct, current: { month: number }) {
-		return date.month !== current.month;
+	isDisabled(date: NgbDateStruct, current?: { month: number }) {
+		return date.month !== current?.month;
 	}
 
 	constructor(calendar: NgbCalendar, config: NgbDatepickerConfig) {
@@ -736,13 +736,13 @@ export class DatepickerComponent implements OnInit {
 		} else if (this.fromDate && !this.toDate && after(date, this.fromDate)) {
 			this.toDate = date;
 		} else {
-			this.toDate = null;
+			this.toDate = undefined;
 			this.fromDate = date;
 		}
 	}
 
 	isHovered = date => this.fromDate && !this.toDate && this.hoveredDate && after(date, this.fromDate) && before(date, this.hoveredDate);
-	isInside = date => after(date, this.fromDate) && before(date, this.toDate);
-	isFrom = date => equals(date, this.fromDate);
-	isTo = date => equals(date, this.toDate);
+	isInside = date => !!this.fromDate && !!this.toDate && after(date, this.fromDate) && before(date, this.toDate);
+	isFrom = date => !!this.fromDate && equals(date, this.fromDate);
+	isTo = date => !!this.toDate && equals(date, this.toDate);
 }

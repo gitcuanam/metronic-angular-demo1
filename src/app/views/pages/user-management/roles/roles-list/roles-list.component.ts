@@ -20,6 +20,7 @@ import { QueryParamsModel } from '../../../../../core/_base/crud';
 
 // Components
 import { RoleEditDialogComponent } from '../role-edit/role-edit.dialog.component';
+import { IMessage } from '../../../apps/e-commerce/products/message.model';
 
 // Table with EDIT item in MODAL
 // ARTICLE for table with sort/filter/paginator
@@ -178,7 +179,7 @@ export class RolesListComponent implements OnInit, OnDestroy {
 	 * Fetch selected rows
 	 */
 	fetchRoles() {
-		const messages = [];
+		const messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.title}`,
