@@ -10,7 +10,7 @@ import { Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, NgZone } from '@angu
 })
 export class TimeElapsedPipe implements PipeTransform, OnDestroy {
   // Private properties
-  private timer: number;
+  private timer: number | null;
 
   /**
    * Pipe Constructor

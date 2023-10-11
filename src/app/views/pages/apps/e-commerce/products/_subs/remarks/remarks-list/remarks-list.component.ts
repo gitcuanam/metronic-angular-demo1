@@ -303,12 +303,16 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 	 * @param _item: ProductRemarkModel
 	 */
 	editRemarkButtonOnClick(_item: ProductRemarkModel) {
+		const itemId = _item.id;
+		if (!itemId) {
+			return;
+		}
 		const controls = this.formGroup.controls;
 		controls.editText.setValue(_item.text);
 		controls.editType.setValue(_item.type.toString());
 		controls.editDueDate.setValue(this.typesUtilsService.getDateFromString(_item.dueDate));
 		const updateProductReamrk: Update<ProductRemarkModel> = {
-			id: _item.id,
+			id: itemId,
 			changes: {
 				_isEditMode: true
 			}
@@ -323,8 +327,12 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 	 * @param _item: ProductRemarkModel
 	 */
 	cancelEditButtonOnClick(_item: ProductRemarkModel) {
+		const itemId = _item.id;
+		if (!itemId) {
+			return;
+		}
 		const updateProductReamrk: Update<ProductRemarkModel> = {
-			id: _item.id,
+			id: itemId,
 			changes: {
 				_isEditMode: false
 			}
@@ -342,6 +350,11 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 		if (!this.checkEditForm()) {
 			return;
 		}
+		
+		const itemId = _item.id;
+		if (!itemId) {
+			return;
+		}
 
 		this.loadingAfterSubmit = true;
 		const controls = this.formGroup.controls;
@@ -357,7 +370,7 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 		objectForUpdate._updatedDate = this.typesUtilsService.getDateStringFromDate();
 		objectForUpdate._isEditMode = false;
 		const updateProductReamrk: Update<ProductRemarkModel> = {
-			id: _item.id,
+			id: itemId,
 			changes: objectForUpdate
 		};
 
@@ -415,7 +428,7 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 
 		const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
 		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
+			if (!res || !_item.id) {
 				return;
 			}
 
@@ -442,7 +455,10 @@ export class RemarksListComponent implements OnInit, OnDestroy {
 			const length = this.selection.selected.length;
 			const idsForDeletion: number[] = [];
 			for (let i = 0; i < length; i++) {
-				idsForDeletion.push(this.selection.selected[i].id);
+				const id = this.selection.selected[i].id;
+				if (id !== null && id !== undefined) {
+					idsForDeletion.push(id);
+				}
 			}
 			this.store.dispatch(new ManyProductRemarksDeleted({ ids: idsForDeletion }));
 			this.layoutUtilsService.showActionNotification(_deleteMessage, MessageType.Delete);

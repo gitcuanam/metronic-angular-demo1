@@ -1,9 +1,9 @@
 import { BaseModel } from '../../_base/crud';
 
 export class Role extends BaseModel {
-  id: number;
-  title: string;
-  permissions: number[];
+  id?: number;
+  title?: string;
+  permissions?: number[];
   isCoreRole = false;
 
   clear(): void {

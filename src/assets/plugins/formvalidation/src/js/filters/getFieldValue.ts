@@ -27,7 +27,7 @@ export default function getFieldValue(
         case 'select':
             const select = element as HTMLSelectElement;
             const index = select.selectedIndex;
-            return (index >= 0) ? select.options.item(index)?.value : '';
+            return (index >= 0) ? (select.options.item(index)?.value ?? '') : '';
 
         case 'input':
             if ('radio' === type || 'checkbox' === type) {

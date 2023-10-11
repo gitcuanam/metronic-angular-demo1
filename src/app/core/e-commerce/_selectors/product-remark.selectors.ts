@@ -40,7 +40,9 @@ export const selectProductRemarksInStore = createSelector(
     productRemarksState => {
       const items: ProductRemarkModel[] = [];
       each(productRemarksState.entities, element => {
-        items.push(element);
+        if (element) {
+          items.push(element);
+        }
       });
       const httpExtension = new HttpExtenstionsModel();
       // tslint:disable-next-line

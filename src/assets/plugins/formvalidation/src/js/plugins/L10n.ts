@@ -34,7 +34,7 @@ export default class L10n extends Plugin<L10nOptions> {
     }
 
     private getMessage(locale: string, field: string, validator: string): string {
-        if (this.opts[field] && this.opts[field][validator]) {
+        if (this.opts?.[field] && this.opts[field][validator]) {
             const message = this.opts[field][validator];
             const messageType = typeof message;
 

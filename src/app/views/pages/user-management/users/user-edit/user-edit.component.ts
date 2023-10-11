@@ -197,7 +197,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
 		const editedUser = this.prepareUser();
 
-		if (editedUser.id > 0) {
+		if (editedUser && editedUser.id && editedUser.id > 0) {
 			this.updateUser(editedUser, withBack);
 			return;
 		}
@@ -261,8 +261,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
 		// Update User
 		// tslint:disable-next-line:prefer-const
 
+		const userId = _user.id;
+		if (!userId) {
+			console.error('userId is undefined');
+			console.log(userId);
+			return;
+		}
 		const updatedUser: Update<User> = {
-			id: _user.id,
+			id: userId,
 			changes: _user
 		};
 		this.store.dispatch(new UserUpdated( { partialUser: updatedUser, user: _user }));

@@ -51,7 +51,7 @@ export class SubheaderSearchComponent implements OnInit, OnDestroy, AfterViewIni
 			if (bt) {
 				Promise.resolve(null).then(() => {
 					this.title = bt.title;
-					this.desc = bt.desc;
+					this.desc = bt.desc ?? '';
 				});
 			}
 		}));

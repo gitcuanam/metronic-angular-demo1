@@ -164,7 +164,7 @@ export class RolesListComponent implements OnInit, OnDestroy {
 
 		const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
 		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
+			if (!res || !_item.id) {
 				return;
 			}
 
@@ -183,7 +183,7 @@ export class RolesListComponent implements OnInit, OnDestroy {
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.title}`,
-				id: elem.id.toString(),
+				id: elem.id?.toString(),
 				// status: elem.username
 			});
 		});

@@ -1,9 +1,9 @@
 import { BaseModel } from '../../_base/crud';
 
 export class ProductSpecificationModel  extends BaseModel {
-  id: number;
+  id?: number;
   carId: number;
-  specId: number;
+  specId?: number;
   value: string;
 
   // Refs

@@ -3,8 +3,8 @@
   <!--begin::Container-->
   <div [ngClass]="headerContainerClasses" class="d-flex align-items-stretch justify-content-between">
 
-    <ng-container *ngIf="(loader.progress$|async) > 0">
-      <ngb-progressbar class="loading-bar" [value]="loader.progress$|async" height="3px"></ngb-progressbar>
+    <ng-container *ngIf="(loader.progress$|async) as progress;">
+      <ngb-progressbar class="loading-bar" [value]="progress" height="3px"></ngb-progressbar>
     </ng-container>
 
     <!-- begin: Header Menu -->

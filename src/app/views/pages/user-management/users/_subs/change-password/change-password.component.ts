@@ -60,7 +60,7 @@ export class ChangePasswordComponent implements OnInit {
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
 	hasFormErrors = false;
 	viewLoading = false;
-	user: User;
+	user?: User;
 	changePasswordForm: FormGroup;
 
 	/**
@@ -92,7 +92,7 @@ export class ChangePasswordComponent implements OnInit {
 	 */
 	loadData() {
 		this.auth.getUserById(this.userId).subscribe(res => {
-			this.user = res;
+			this.user = res ?? undefined;
 			this.createForm();
 		});
 	}
@@ -135,10 +135,21 @@ export class ChangePasswordComponent implements OnInit {
 
 			return;
 		}
+		const userId = this.user?.id;
+		if (!userId) {
+			console.error('userId is undefined');
+			console.log(userId);
+			return;
+		}
 
+		if (!this.user) {
+			console.error('user is undefined');
+			console.log(userId);
+			return;
+		}
 		this.user.password = controls.password.value;
 		const updatedUser: Update<User> = {
-			id: this.user.id,
+			id: userId,
 			changes: this.user
 		};
 

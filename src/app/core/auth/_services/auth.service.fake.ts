@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   // Authentication/Authorization
-  login(email: string, password: string): Observable<User> {
+  login(email: string, password: string): Observable<User | null> {
     if (!email || !password) {
       return of(null);
     }
@@ -52,7 +52,7 @@ export class AuthService {
 
   }
 
-  register(user: User): Observable<any> {
+  register(user: User): Observable<User | null> {
     user.roles = [2]; // Manager
     user.accessToken = 'access-token-' + Math.random();
     user.refreshToken = 'access-token-' + Math.random();
@@ -66,7 +66,7 @@ export class AuthService {
           return res;
         }),
         catchError(err => {
-          return null;
+          return of(null);
         })
       );
   }
@@ -78,7 +78,7 @@ export class AuthService {
           return null;
         }
 
-        const user = find(users, (item: User) => {
+        const user: User | undefined = find(users, (item: User) => {
           return (item.email.toLowerCase() === email.toLowerCase());
         });
 
@@ -93,7 +93,7 @@ export class AuthService {
     );
   }
 
-  getUserByToken(): Observable<User> {
+  getUserByToken(): Observable<User | null> {
     const userToken = localStorage.getItem(environment.authTokenKey);
     if (!userToken) {
       return of(null);
@@ -134,7 +134,7 @@ export class AuthService {
     return this.http.get<User[]>(API_USERS_URL);
   }
 
-  getUserById(userId: number): Observable<User> {
+  getUserById(userId: number): Observable<User | null> {
     if (!userId) {
       return of(null);
     }
@@ -179,9 +179,9 @@ export class AuthService {
 
   getRolePermissions(roleId: number): Observable<Permission[]> {
     const allRolesRequest = this.http.get<Permission[]>(API_PERMISSION_URL);
-    const roleRequest = roleId ? this.getRoleById(roleId) : of(null);
-    return forkJoin(allRolesRequest, roleRequest).pipe(
-      map(res => {
+    const roleRequest = roleId ? this.getRoleById(roleId) : of(new Role());
+    return forkJoin([allRolesRequest, roleRequest]).pipe(
+      map((res) => {
         const allPermissions: Permission[] = res[0];
         const role: Role = res[1];
         if (!allPermissions || allPermissions.length === 0) {

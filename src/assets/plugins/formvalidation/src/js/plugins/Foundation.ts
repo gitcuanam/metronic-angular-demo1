@@ -24,15 +24,15 @@ export default class Foundation extends Framework {
         const type = e.element.getAttribute('type');
         if ('checkbox' === type || 'radio' === type) {
             const nextEle = e.iconElement.nextSibling;
-            if ('LABEL' === nextEle.nodeName) {
-                nextEle.parentNode.insertBefore(e.iconElement, nextEle.nextSibling);
-            } else if ('#text' === nextEle.nodeName) {
+            if ('LABEL' === nextEle?.nodeName) {
+                nextEle.parentNode?.insertBefore(e.iconElement, nextEle.nextSibling);
+            } else if ('#text' === nextEle?.nodeName) {
                 // There's space between the input and label tags as
                 // <input type="checkbox" id="agreeCheckbox" />
                 // <label for="agreeCheckbox">Agree with the terms and conditions</label>
                 const next = nextEle.nextSibling;
                 if (next && 'LABEL' === next.nodeName) {
-                    next.parentNode.insertBefore(e.iconElement, next.nextSibling);
+                    next.parentNode?.insertBefore(e.iconElement, next.nextSibling);
                 }
             }
         }

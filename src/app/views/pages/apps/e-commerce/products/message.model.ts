@@ -1,7 +1,7 @@
 export interface IMessage {
   text?: string;
   id?: number | string;
-  status?: number;
+  status?: number | string;
   statusTitle?: string;
   statusCssClass?: string;
 }

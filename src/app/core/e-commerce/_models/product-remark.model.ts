@@ -1,7 +1,7 @@
 import { BaseModel } from '../../_base/crud';
 
 export class ProductRemarkModel extends BaseModel {
-  id: number;
+  id?: number;
   carId: number;
   text: string;
   type: number; // Info, Note, Reminder

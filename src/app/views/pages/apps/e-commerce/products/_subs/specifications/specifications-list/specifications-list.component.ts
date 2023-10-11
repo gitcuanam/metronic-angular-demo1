@@ -199,7 +199,7 @@ export class SpecificationsListComponent implements OnInit, OnDestroy {
 
 		const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
 		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
+			if (!res || !_item.id) {
 				return;
 			}
 
@@ -227,7 +227,8 @@ export class SpecificationsListComponent implements OnInit, OnDestroy {
 			const length = this.selection.selected.length;
 			const idsForDeletion: number[] = [];
 			for (let i = 0; i < length; i++) {
-				idsForDeletion.push(this.selection.selected[i].id);
+				const id = this.selection.selected[i].id;
+				id !== undefined && id !== null && idsForDeletion.push(id);
 			}
 			this.store.dispatch(new ManyProductSpecificationsDeleted({ ids: idsForDeletion }));
 			this.layoutUtilsService.showActionNotification(_deleteMessage, MessageType.Delete);
@@ -299,7 +300,7 @@ export class SpecificationsListComponent implements OnInit, OnDestroy {
 			width: '450px'
 		});
 		dialogRef.afterClosed().subscribe(res => {
-			if (res && res.isUpdated) {
+			if (res && res.isUpdated && !!(_item.id)) {
 				_item._specificationName = res._specificationName;
 				_item.specId = res.specId;
 				_item.value = res.value;

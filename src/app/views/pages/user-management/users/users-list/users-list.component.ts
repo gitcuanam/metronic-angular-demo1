@@ -28,6 +28,7 @@ import {
 	selectAllRoles
 } from '../../../../../core/auth';
 import { SubheaderService } from '../../../../../core/_base/layout';
+import { IMessage } from '../../../apps/e-commerce/products/message.model';
 
 // Table with EDIT item in MODAL
 // ARTICLE for table with sort/filter/paginator
@@ -185,7 +186,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
 		const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
 		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
+			if (!res || !_item.id) {
 				return;
 			}
 
@@ -198,11 +199,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
 	 * Fetch selected rows
 	 */
 	fetchUsers() {
-		const messages = [];
+		const messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.fullname}, ${elem.email}`,
-				id: elem.id.toString(),
+				id: elem.id?.toString(),
 				status: elem.username
 			});
 		});
@@ -240,7 +241,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 		each(user.roles, (roleId: number) => {
 			const _role = find(this.allRoles, (role: Role) => role.id === roleId);
 			if (_role) {
-				titles.push(_role.title);
+				titles.push(_role.title ?? '');
 			}
 		});
 		return titles.join(', ');

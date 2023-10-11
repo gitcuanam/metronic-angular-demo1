@@ -866,7 +866,7 @@ export class FileDatabase {
       return this.dataChange.value;
     }
 
-    return undefined;
+    return [];
   }
 
 	constructor() {
@@ -1080,7 +1080,7 @@ export class ChecklistDatabase {
       return this.dataChange.value;
     }
 
-    return undefined;
+    return [];
   }
 
 	constructor() {

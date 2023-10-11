@@ -60,7 +60,7 @@ export default class Message extends Plugin<MessageOptions> {
      * @param pattern The pattern
      * @return {HTMLElement}
      */
-    public static getClosestContainer(element: HTMLElement, upper: HTMLElement, pattern: RegExp): HTMLElement {
+    public static getClosestContainer(element: HTMLElement, upper: HTMLElement, pattern?: RegExp): HTMLElement {
         let ele = element;
         while (ele) {
             if (ele === upper) {
@@ -69,7 +69,7 @@ export default class Message extends Plugin<MessageOptions> {
             if (ele.parentElement) {
                 ele = ele.parentElement;
             }
-            if (pattern.test(ele.className)) {
+            if (pattern?.test(ele.className)) {
                 break;
             }
         }

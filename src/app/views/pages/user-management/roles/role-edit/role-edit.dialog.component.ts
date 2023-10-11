@@ -102,10 +102,10 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 
 			const mainPermissions = _allPermissions.filter(el => !el.parentId);
 			mainPermissions.forEach((element: Permission) => {
-				const hasUserPermission = this.role.permissions.some(t => t === element.id);
+				const hasUserPermission = this.role.permissions?.some(t => t === element.id);
 				const rootPermission = new Permission();
 				rootPermission.clear();
-				rootPermission.isSelected = hasUserPermission;
+				rootPermission.isSelected = !!hasUserPermission;
 				rootPermission._children = [];
 				rootPermission.id = element.id;
 				rootPermission.level = element.level;
@@ -113,10 +113,10 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 				rootPermission.title = element.title;
 				const children = _allPermissions.filter(el => el.parentId && el.parentId === element.id);
 				children.forEach(child => {
-					const hasUserChildPermission = this.role.permissions.some(t => t === child.id);
+					const hasUserChildPermission = this.role.permissions?.some(t => t === child.id);
 					const childPermission = new Permission();
 					childPermission.clear();
-					childPermission.isSelected = hasUserChildPermission;
+					childPermission.isSelected = !!hasUserChildPermission;
 					childPermission._children = [];
 					childPermission.id = child.id;
 					childPermission.level = child.level;
@@ -174,7 +174,7 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		}
 
 		const editedRole = this.prepareRole();
-		if (editedRole.id > 0) {
+		if (editedRole && editedRole.id && editedRole.id > 0) {
 			this.updateRole(editedRole);
 		} else {
 			this.createRole(editedRole);
@@ -190,8 +190,14 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		this.loadingAfterSubmit = true;
 		this.viewLoading = true;
 		/* Server loading imitation. Remove this on real code */
+		const id = this.role.id;
+		if (!id) {
+			console.error('role id is undefined');
+			console.log(id);
+			return;
+		}
 		const updateRole: Update<Role> = {
-			id: this.role.id,
+			id,
 			changes: _role
 		};
 		this.store.dispatch(new RoleUpdated({

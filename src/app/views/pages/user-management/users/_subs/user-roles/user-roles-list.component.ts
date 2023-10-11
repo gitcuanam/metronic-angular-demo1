@@ -100,8 +100,8 @@ export class UserRolesListComponent implements OnInit {
 	 * Update roles
 	 */
 	updateRoles() {
-		const _roles = [];
-		each(this.assignedRoles, elem => _roles.push(elem.id));
+		const _roles: number[] = [];
+		each(this.assignedRoles, elem => elem.id !== null && elem.id !== undefined &&  _roles.push(elem.id));
 		this.rolesSubject.next(_roles);
 	}
 }

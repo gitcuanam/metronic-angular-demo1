@@ -252,7 +252,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 			// tslint:disable-next-line:prefer-for-of
 			for (let i = 0; i < this.selection.selected.length; i++) {
 				const id = this.selection.selected[i].id;
-				if (id) {
+				if (id !== null && id !== undefined) {
 					idsForDeletion.push(id);
 				}
 			}
