@@ -1,20 +1,42 @@
 // Angular
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-// RxJS
-import { Observable, Subscription } from 'rxjs';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+
+// User permissions
+import { NgxPermissionsService } from 'ngx-permissions';
 // Object-Path
 import * as objectPath from 'object-path';
+// RxJS
+import {
+  Observable,
+  Subscription,
+} from 'rxjs';
+
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
 // Layout
-import { LayoutConfigService, MenuConfigService, PageConfigService } from '../../../core/_base/layout';
-import { HtmlClassService } from '../html-class.service';
+import {
+  LayoutConfigModel,
+  LayoutConfigService,
+  MenuConfigService,
+  PageConfigService,
+} from '../../../core/_base/layout';
 import { LayoutConfig } from '../../../core/_config/layout.config';
 import { MenuConfig } from '../../../core/_config/menu.config';
 import { PageConfig } from '../../../core/_config/page.config';
-// User permissions
-import { NgxPermissionsService } from 'ngx-permissions';
-import { currentUserPermissions, Permission } from '../../../core/auth';
-import { select, Store } from '@ngrx/store';
+import {
+  currentUserPermissions,
+  Permission,
+} from '../../../core/auth';
 import { AppState } from '../../../core/reducers';
+import { HtmlClassService } from '../html-class.service';
 
 @Component({
   selector: 'kt-base',
@@ -66,7 +88,7 @@ export class BaseComponent implements OnInit, OnDestroy {
     const subscription = this.layoutConfigService.onConfigUpdated$.subscribe(layoutConfig => {
       // reset body class based on global and page level layout config, refer to html-class.service.ts
       document.body.className = '';
-      this.htmlClassService.setConfig(layoutConfig);
+      layoutConfig && this.htmlClassService.setConfig(layoutConfig as LayoutConfigModel);
     });
     this.unsubscribe.push(subscription);
   }

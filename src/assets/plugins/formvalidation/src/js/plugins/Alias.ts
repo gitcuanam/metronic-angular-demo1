@@ -52,6 +52,6 @@ export default class Alias extends Plugin<AliasOptions> {
     }
 
     private getValidatorName(alias: string, field: string): string {
-        return this.opts[alias] || alias;
+        return this.opts?.[alias] || alias;
     }
 }

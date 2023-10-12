@@ -29,7 +29,7 @@ export default class Transformer extends Plugin<TransformerOptions> {
     }
 
     private getElementValue(defaultValue: string, field: string, element: HTMLElement, validator: string): string {
-        if (this.opts[field] && this.opts[field][validator] && 'function' === typeof this.opts[field][validator]) {
+        if (this.opts?.[field]?.[validator] && 'function' === typeof this.opts[field][validator]) {
             return this.opts[field][validator].apply(this, [field, element, validator]);
         }
         return defaultValue;

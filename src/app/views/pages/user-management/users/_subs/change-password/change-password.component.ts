@@ -56,7 +56,7 @@ export class PasswordValidation {
 })
 export class ChangePasswordComponent implements OnInit {
 	// Public properties
-	@Input() userId: number;
+	@Input() userId?: number;
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
 	hasFormErrors = false;
 	viewLoading = false;
@@ -91,6 +91,9 @@ export class ChangePasswordComponent implements OnInit {
 	 * Load data
 	 */
 	loadData() {
+		if (!this.userId) {
+			return;
+		}
 		this.auth.getUserById(this.userId).subscribe(res => {
 			this.user = res ?? undefined;
 			this.createForm();

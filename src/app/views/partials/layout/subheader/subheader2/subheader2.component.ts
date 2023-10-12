@@ -1,10 +1,20 @@
 // Angular
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+
 // RxJS
 import { Subscription } from 'rxjs';
+
 // Layout
 import { SubheaderService } from '../../../../../core/_base/layout';
-import { Breadcrumb } from '../../../../../core/_base/layout/services/subheader.service';
+import {
+  Breadcrumb,
+} from '../../../../../core/_base/layout/services/subheader.service';
 
 @Component({
   selector: 'kt-subheader2',
@@ -56,7 +66,7 @@ export class Subheader2Component implements OnInit, OnDestroy, AfterViewInit {
       if (bt) {
         Promise.resolve(null).then(() => {
           this.title = bt.title;
-          this.desc = bt.desc;
+          this.desc = bt.desc ?? '';
         });
       }
     }));

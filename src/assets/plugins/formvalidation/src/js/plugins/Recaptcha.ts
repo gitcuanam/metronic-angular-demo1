@@ -106,9 +106,9 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
             loadPrevCaptcha();
 
             const captchaOptions = {
-                'badge': this.opts.badge,
+                'badge': this.opts?.badge,
                 'callback': () => {
-                    if (this.opts.backendVerificationUrl === '') {
+                    if (this.opts?.backendVerificationUrl === '') {
                         this.captchaStatus = 'Valid';
                         // Mark the captcha as valid, so the library will remove the error message
                         this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'Valid');
@@ -126,20 +126,20 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
                     this.captchaStatus = 'NotValidated';
                     this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'NotValidated');
                 },
-                'sitekey': this.opts.siteKey,
-                'size': this.opts.size,
+                'sitekey': this.opts?.siteKey,
+                'size': this.opts?.size,
             };
 
             // tslint:disable-next-line:no-string-literal
-            const widgetId = window['grecaptcha'].render(this.opts.element, captchaOptions);
-            this.widgetIds.set(this.opts.element, widgetId);
+            const widgetId = window['grecaptcha'].render(this.opts?.element, captchaOptions);
+            this.opts?.element && this.widgetIds.set(this.opts.element, widgetId);
 
             this.core.addField(Recaptcha.CAPTCHA_FIELD, {
                 validators: {
                     promise: {
-                        message: this.opts.message,
+                        message: this.opts?.message,
                         promise: (input) => {
-                            const value = this.widgetIds.has(this.opts.element)
+                            const value = !!(this.opts?.element) &&this.widgetIds.has(this.opts.element)
                                 // tslint:disable-next-line:no-string-literal
                                 ? window['grecaptcha'].getResponse(this.widgetIds.get(this.opts.element))
                                 : input.value;
@@ -149,7 +149,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
                                 return Promise.resolve({
                                     valid: false,
                                 });
-                            } else if (this.opts.backendVerificationUrl === '') {
+                            } else if (this.opts?.backendVerificationUrl === '') {
                                 this.captchaStatus = 'Valid';
                                 return Promise.resolve({
                                     valid: true,
@@ -160,6 +160,9 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
                                     valid: true,
                                 });
                             } else {
+                                if (!this.opts?.backendVerificationUrl) {
+                                    return;
+                                }
                                 return fetch(this.opts.backendVerificationUrl, {
                                     method: 'POST',
                                     params: {
@@ -211,20 +214,20 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
         // Remove script
         const src = this.getScript();
         const scripts = [].slice.call(document.body.querySelectorAll(`script[src="${src}"]`)) as HTMLScriptElement[];
-        scripts.forEach((s) => s.parentNode.removeChild(s));
+        scripts.forEach((s) => s.parentNode?.removeChild(s));
 
         this.core.removeField(Recaptcha.CAPTCHA_FIELD);
     }
 
     private getScript(): string {
-        const lang = this.opts.language ? `&hl=${this.opts.language}` : '';
+        const lang = this.opts?.language ? `&hl=${this.opts?.language}` : '';
         return `https://www.google.com/recaptcha/api.js?onload=${Recaptcha.LOADED_CALLBACK}&render=explicit${lang}`;
     }
 
     private preValidate(): Promise<void> {
         // grecaptcha.execute() is only available for invisible reCAPTCHA
-        if (this.opts.size === 'invisible' && this.widgetIds.has(this.opts.element)) {
-            const widgetId = this.widgetIds.get(this.opts.element);
+        if (this.opts?.size === 'invisible' && this.widgetIds.has(this.opts?.element)) {
+            const widgetId = this.widgetIds.get(this.opts?.element);
             return this.captchaStatus === 'Valid'
                     ? Promise.resolve()
                     : new Promise((resolve, reject) => {
@@ -242,7 +245,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
     }
 
     private onResetField(e: FieldResetEvent): void {
-        if (e.field === Recaptcha.CAPTCHA_FIELD && this.widgetIds.has(this.opts.element)) {
+        if (e.field === Recaptcha.CAPTCHA_FIELD && this.opts?.element && this.widgetIds.has(this.opts.element)) {
             const widgetId = this.widgetIds.get(this.opts.element);
             window['grecaptcha'].reset(widgetId); // tslint:disable-line:no-string-literal
         }
@@ -251,14 +254,14 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
     private onIconPlaced(e: IconPlacedEvent): void {
         if (e.field === Recaptcha.CAPTCHA_FIELD) {
             // Hide the icon for captcha element, since it will look weird when the captcha is valid
-            if (this.opts.size === 'invisible') {
+            if (this.opts?.size === 'invisible') {
                 e.iconElement.style.display = 'none';
             } else {
-                const captchaContainer = document.getElementById(this.opts.element);
+                const captchaContainer = !!(this.opts?.element) && document.getElementById(this.opts.element);
                 // We need to move the icon element to after the captcha container
                 // Otherwise, the icon will be removed when the captcha is re-rendered (after it's expired)
                 if (captchaContainer) {
-                    captchaContainer.parentNode.insertBefore(e.iconElement, captchaContainer.nextSibling);
+                    captchaContainer?.parentNode?.insertBefore(e.iconElement, captchaContainer.nextSibling);
                 }
             }
         }

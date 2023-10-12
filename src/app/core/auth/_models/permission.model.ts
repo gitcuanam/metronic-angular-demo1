@@ -1,10 +1,10 @@
 import { BaseModel } from '../../_base/crud';
 
 export class Permission extends BaseModel {
-  id: number;
+  id?: number;
   title: string;
   level: number;
-  parentId: number;
+  parentId?: number;
   isSelected: boolean;
   name: string;
   // tslint:disable-next-line

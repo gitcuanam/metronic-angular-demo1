@@ -30,8 +30,8 @@ export interface WizardValidEvent {
 export default class Wizard extends Plugin<WizardOptions> {
     public static EXCLUDED_PLUGIN: string = '___wizardExcluded';
 
-    private prevButton?: HTMLElement | null;
-    private nextButton?: HTMLElement | null;
+    private prevButton?: HTMLElement | Element | null;
+    private nextButton?: HTMLElement | Element | null;
     private prevStepHandler: () => void;
     private nextStepHandler: () => void;
     private steps: HTMLElement[];

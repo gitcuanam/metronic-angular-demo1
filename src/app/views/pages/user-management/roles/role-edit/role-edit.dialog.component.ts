@@ -1,26 +1,49 @@
 // Angular
-import { Component, OnInit, Inject, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-// RxJS
-import { Observable, of, Subscription } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
 // Lodash
-import { each, find, some } from 'lodash';
+import {
+  each,
+  find,
+  some,
+} from 'lodash';
+// RxJS
+import {
+  Observable,
+  of,
+  Subscription,
+} from 'rxjs';
+import { delay } from 'rxjs/operators';
+
 // NGRX
 import { Update } from '@ngrx/entity';
-import { Store, select } from '@ngrx/store';
-// State
-import { AppState } from '../../../../../core/reducers';
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
 // Services and Models
 import {
-	Role,
-	Permission,
-	selectRoleById,
-	RoleUpdated,
-	selectAllPermissions,
-	selectLastCreatedRoleId,
-	RoleOnServerCreated
+  Permission,
+  Role,
+  RoleOnServerCreated,
+  RoleUpdated,
+  selectAllPermissions,
+  selectLastCreatedRoleId,
+  selectRoleById,
 } from '../../../../../core/auth';
-import { delay } from 'rxjs/operators';
+// State
+import { AppState } from '../../../../../core/reducers';
 
 @Component({
 	selector: 'kt-role-edit-dialog',
@@ -137,10 +160,10 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		const result: number[] = [];
 		each(this.rolePermissions, (_root: Permission) => {
 			if (_root.isSelected) {
-				result.push(_root.id);
+				_root.id !== undefined && _root.id !== null && result.push(_root.id);
 				each(_root._children, (_child: Permission) => {
 					if (_child.isSelected) {
-						result.push(_child.id);
+						_child.id !== undefined && _child.id !== null  && result.push(_child.id);
 					}
 				});
 			}

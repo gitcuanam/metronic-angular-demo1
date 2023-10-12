@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import format from '../utils/format';
 import isValidDate from '../utils/isValidDate';
 
@@ -217,7 +222,7 @@ export default function date() {
             // Determine the time
             const d = new Date(year, month - 1, day);
             if (timeFormat) {
-                const hms = timeSection.split(':');
+                const hms = timeSection?.split(':') ?? [];
                 if (timeFormat.split(':').length !== hms.length) {
                     return invalidResult;
                 }
@@ -262,8 +267,8 @@ export default function date() {
                         : (maxOption ? parseDate(maxOption as string, dateFormat, separator) : d);
 
             // In order to avoid displaying a date string like "Mon Dec 08 2014 19:14:12 GMT+0000 (WET)"
-            const minOptionStr = (minOption instanceof Date) ? formatDate(min, opts.format) : (minOption as string);
-            const maxOptionStr = (maxOption instanceof Date) ? formatDate(max, opts.format) : (maxOption as string);
+            const minOptionStr = (minOption instanceof Date && min) ? formatDate(min, opts.format) : (minOption as string);
+            const maxOptionStr = (maxOption instanceof Date && max) ? formatDate(max, opts.format) : (maxOption as string);
 
             switch (true) {
                 case (!!minOptionStr && !maxOptionStr):
@@ -272,7 +277,7 @@ export default function date() {
                         meta: {
                             date: d,
                         },
-                        valid: d.getTime() >= min.getTime(),
+                        valid: !!min && d.getTime() >= min.getTime(),
                     };
 
                 case (!!maxOptionStr && !minOptionStr):
@@ -281,7 +286,7 @@ export default function date() {
                         meta: {
                             date: d,
                         },
-                        valid: d.getTime() <= max.getTime(),
+                        valid: !!max && d.getTime() <= max.getTime(),
                     };
 
                 case (!!maxOptionStr && !!minOptionStr):
@@ -290,7 +295,7 @@ export default function date() {
                         meta: {
                             date: d,
                         },
-                        valid: d.getTime() <= max.getTime() && d.getTime() >= min.getTime(),
+                        valid: !!min && !!max && d.getTime() <= max.getTime() && d.getTime() >= min.getTime(),
                     };
 
                 default:

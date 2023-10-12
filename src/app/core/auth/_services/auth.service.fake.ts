@@ -1,19 +1,41 @@
+import {
+  HttpClient,
+  HttpHeaders,
+} from '@angular/common/http';
 // Angular
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-// RxJS
-import {forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, mergeMap} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+
 // Lodash
-import {each, filter, find, some} from 'lodash';
+import {
+  each,
+  filter,
+  find,
+  some,
+} from 'lodash';
+// RxJS
+import {
+  forkJoin,
+  Observable,
+  of,
+} from 'rxjs';
+import {
+  catchError,
+  map,
+  mergeMap,
+} from 'rxjs/operators';
+
 // Environment
-import {environment} from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 // CRUD
-import {HttpUtilsService, QueryParamsModel, QueryResultsModel} from '../../_base/crud';
+import {
+  HttpUtilsService,
+  QueryParamsModel,
+  QueryResultsModel,
+} from '../../_base/crud';
+import { Permission } from '../_models/permission.model';
+import { Role } from '../_models/role.model';
 // Models
-import {User} from '../_models/user.model';
-import {Permission} from '../_models/permission.model';
-import {Role} from '../_models/role.model';
+import { User } from '../_models/user.model';
 
 const API_USERS_URL = 'api/users';
 const API_PERMISSION_URL = 'api/permissions';
@@ -199,7 +221,7 @@ export class AuthService {
     const root: Permission[] = filter(allPermission, (item: Permission) => !item.parentId);
     each(root, (rootItem: Permission) => {
       rootItem._children = [];
-      rootItem._children = this.collectChildrenPermission(allPermission, rootItem.id, rolePermissionIds);
+      rootItem._children = rootItem.id ? this.collectChildrenPermission(allPermission, rootItem.id, rolePermissionIds) : [];
       rootItem.isSelected = (some(rolePermissionIds, (id: number) => id === rootItem.id));
       result.push(rootItem);
     });
@@ -217,7 +239,7 @@ export class AuthService {
 
     each(_children, (childItem: Permission) => {
       childItem._children = [];
-      childItem._children = this.collectChildrenPermission(allPermission, childItem.id, rolePermissionIds);
+      childItem._children = childItem.id ? this.collectChildrenPermission(allPermission, childItem.id, rolePermissionIds): [];
       childItem.isSelected = (some(rolePermissionIds, (id: number) => id === childItem.id));
       result.push(childItem);
     });

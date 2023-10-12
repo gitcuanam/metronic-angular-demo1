@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 type CompareWithCallback = () => string;
 
@@ -15,6 +20,9 @@ export interface IdenticalOptions extends ValidateOptions {
 export default function identical() {
     return {
         validate(input: ValidateInput<IdenticalOptions, Localization>): ValidateResult {
+            if (!input.options?.compare) {
+                return { valid: false };
+            }
             const compareWith = ('function' === typeof input.options.compare)
                 ? (input.options.compare as CompareWithCallback).call(this)
                 : (input.options.compare as string);

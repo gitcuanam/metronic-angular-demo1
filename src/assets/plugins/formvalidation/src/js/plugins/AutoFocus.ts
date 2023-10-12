@@ -53,7 +53,7 @@ export default class AutoFocus extends Plugin<AutoFocusOptions> {
 
                 const e = { firstElement, field: firstInvalidField } as AutoFocusPrefocusEvent;
                 this.core.emit('plugins.autofocus.prefocus', e);
-                this.opts.onPrefocus(e);
+                this.opts?.onPrefocus(e);
 
                 // Focus on the first invalid element
                 firstElement.focus();

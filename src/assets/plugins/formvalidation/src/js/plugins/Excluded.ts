@@ -36,6 +36,6 @@ export default class Excluded extends Plugin<ExcludedOptions> {
     }
 
     private ignoreValidation(field: string, element: HTMLElement, elements: HTMLElement[]): boolean {
-        return this.opts.excluded.apply(this, [field, element, elements]);
+        return this.opts?.excluded.apply(this, [field, element, elements]);
     }
 }

@@ -4,10 +4,18 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { ElementNotValidatedEvent, ElementValidatedEvent, ElementValidatingEvent } from '../core/Core';
+import {
+  ElementNotValidatedEvent,
+  ElementValidatedEvent,
+  ElementValidatingEvent,
+} from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
-import { IconOptions, IconPlacedEvent, IconSetEvent } from './Icon';
+import {
+  IconOptions,
+  IconPlacedEvent,
+  IconSetEvent,
+} from './Icon';
 
 export interface MandatoryIconOptions {
     icon: string;
@@ -72,7 +80,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
                 if (this.core.getElementValue(e.field, ele) === '') {
                     // Add required icon
                     classSet(e.iconElement, {
-                        [this.opts.icon]: true,
+                        ...(this.opts?.icon && { [this.opts.icon]: true}),
                     });
                 }
             }
@@ -82,14 +90,14 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
         // (for example, fa, glyphicon)
         this.iconClasses = e.classes;
 
-        const icons = this.opts.icon.split(' ');
+        const icons = this.opts?.icon.split(' ') ?? [];
         const feedbackIcons = {
             Invalid: this.iconClasses.invalid ? this.iconClasses.invalid.split(' ') : [],
             Valid: this.iconClasses.valid ? this.iconClasses.valid.split(' ') : [],
             Validating: this.iconClasses.validating ? this.iconClasses.validating.split(' ') : [],
         };
         Object.keys(feedbackIcons).forEach((status) => {
-            const classes = [];
+            const classes: string[] = [];
             for (const clazz of icons) {
                 if (feedbackIcons[status].indexOf(clazz) === -1) {
                     classes.push(clazz);
@@ -120,7 +128,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
         ) {
             classSet(icon, {
                 [this.removedIcons[status]]: false,
-                [this.opts.icon]: false,
+                ...(this.opts?.icon && { [this.opts.icon]: false}),
             });
         }
     }
@@ -130,7 +138,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
         const icon = this.icons.get(e.element);
         if (icon && e.status === 'NotValidated' && this.core.getElementValue(e.field, e.element) === '') {
             classSet(icon, {
-                [this.opts.icon]: true,
+                ...(this.opts?.icon && { [this.opts.icon]: true}),
             });
         }
     }

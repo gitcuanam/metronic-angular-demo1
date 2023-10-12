@@ -27,8 +27,8 @@ export default class Pure extends Framework {
             classSet(e.iconElement, {
                 'fv-plugins-icon-check': true,
             });
-            if ('LABEL' === parent.tagName) {
-                parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+            if ('LABEL' === parent?.tagName) {
+                parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
             }
         }
     }

@@ -4,7 +4,10 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { ValidateFunction, ValidatorValidatedEvent } from '../core/Core';
+import {
+  ValidateFunction,
+  ValidatorValidatedEvent,
+} from '../core/Core';
 import Plugin from '../core/Plugin';
 
 export interface PasswordStrengthOptions {
@@ -44,7 +47,7 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
         this.core.registerValidator(PasswordStrength.PASSWORD_STRENGTH_VALIDATOR, this.validatePassword);
         this.core.on('core.validator.validated', this.validatorValidatedHandler);
 
-        this.core.addField(this.opts.field, {
+        this.opts?.field && this.core.addField(this.opts.field, {
             validators: {
                 [PasswordStrength.PASSWORD_STRENGTH_VALIDATOR]: {
                     message: this.opts.message,
@@ -57,7 +60,7 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
     public uninstall(): void {
         this.core.off('core.validator.validated', this.validatorValidatedHandler);
         // It's better if we can remove validator
-        this.core.disableValidator(this.opts.field, PasswordStrength.PASSWORD_STRENGTH_VALIDATOR);
+        this.opts?.field && this.core.disableValidator(this.opts.field, PasswordStrength.PASSWORD_STRENGTH_VALIDATOR);
     }
 
     private checkPasswordStrength(): ValidateFunction {
@@ -74,7 +77,7 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
                 const score = result.score;
                 const message = result.feedback.warning || 'The password is weak';
 
-                if (score < this.opts.minimalScore) {
+                if (this.opts?.minimalScore !== null && this.opts?.minimalScore !== undefined && score < this.opts.minimalScore) {
                     return {
                         message,
                         meta: {
@@ -97,14 +100,14 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
     }
 
     private onValidatorValidated(e: ValidatorValidatedEvent): void {
-        if (e.field === this.opts.field && e.validator === PasswordStrength.PASSWORD_STRENGTH_VALIDATOR
+        if (e.field === this.opts?.field && e.validator === PasswordStrength.PASSWORD_STRENGTH_VALIDATOR
             && e.result.meta) {
             // tslint:disable-next-line:no-string-literal
             const message = e.result.meta['message'] as string;
             // tslint:disable-next-line:no-string-literal
             const score = e.result.meta['score'] as number;
 
-            this.opts.onValidated(e.result.valid, message, score);
+            this.opts.onValidated && this.opts.onValidated(e.result.valid, message, score);
         }
     }
 }

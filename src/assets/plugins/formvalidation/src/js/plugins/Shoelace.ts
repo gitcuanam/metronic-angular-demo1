@@ -29,9 +29,9 @@ export default class Shoelace extends Framework {
             classSet(e.iconElement, {
                 'fv-plugins-icon-check': true,
             });
-            if ('LABEL' === parent.tagName) {
+            if ('LABEL' === parent?.tagName) {
                 // Place it after the container of checkbox/radio
-                parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+                parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
             }
         }
     }

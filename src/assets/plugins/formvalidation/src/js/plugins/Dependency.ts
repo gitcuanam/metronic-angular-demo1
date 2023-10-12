@@ -29,11 +29,11 @@ export default class Dependency extends Plugin<DependencyOptions> {
     }
 
     private onTriggerExecuted(e: TriggerExecutedEvent): void {
-        if (this.opts[e.field]) {
-            const dependencies = this.opts[e.field].split(' ');
+        if (this.opts?.[e.field]) {
+            const dependencies = this.opts?.[e.field].split(' ');
             for (const d of dependencies) {
                 const dependentField = d.trim();
-                if (this.opts[dependentField]) {
+                if (this.opts?.[dependentField]) {
                     // Revalidate the dependent field
                     this.core.revalidateField(dependentField);
                 }

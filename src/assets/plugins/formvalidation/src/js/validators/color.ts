@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 export interface ColorOptions extends ValidateOptions {
     // The array of valid color types
@@ -107,9 +112,9 @@ export default function color() {
                 return { valid: true };
             }
 
-            const types = (typeof input.options.type === 'string')
-                        ? input.options.type.toString().replace(/s/g, '').split(',')
-                        : (input.options.type || SUPPORTED_TYPES);
+            const types = (typeof input.options?.type === 'string')
+                        ? input.options?.type.toString().replace(/s/g, '').split(',')
+                        : (input.options?.type || SUPPORTED_TYPES);
             for (const type of types) {
                 const tpe = type.toLowerCase();
                 if (SUPPORTED_TYPES.indexOf(tpe) === -1) {

@@ -13,7 +13,7 @@ function matches(element: HTMLElement, selector: string): boolean {
 
     // In case `matchesselector` isn't supported (such as IE10)
     // See http://caniuse.com/matchesselector
-    const nodes = [].slice.call(element.parentElement.querySelectorAll(selector)) as HTMLElement[];
+    const nodes = [].slice.call(element.parentElement?.querySelectorAll(selector)) as HTMLElement[];
     return nodes.indexOf(element) >= 0;
 }
 
@@ -23,7 +23,9 @@ export default function closest(element: HTMLElement, selector: string): HTMLEle
         if (matches(ele, selector)) {
             break;
         }
-        ele = ele.parentElement;
+        if (ele.parentElement) {
+            ele = ele.parentElement;
+        }
     }
     return ele;
 }

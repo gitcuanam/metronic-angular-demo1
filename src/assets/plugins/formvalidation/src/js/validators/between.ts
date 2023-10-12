@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import format from '../utils/format';
 
 export interface BetweenOptions extends ValidateOptions {
@@ -33,22 +38,28 @@ export default function between() {
             }
 
             const opts = Object.assign({}, { inclusive: true, message: '' }, input.options);
-            const minValue = formatValue(opts.min);
-            const maxValue = formatValue(opts.max);
+            const minValue = opts.min ? formatValue(opts.min) : null;
+            const maxValue = opts.max ? formatValue(opts.max) : null;
             return opts.inclusive
                 ? {
                     message: format(
                         input.l10n ? opts.message || input.l10n.between.default : opts.message,
                         [`${minValue}`, `${maxValue}`],
                     ),
-                    valid: parseFloat(value) >= minValue && parseFloat(value) <= maxValue,
+                    valid: (!!minValue && !!maxValue && parseFloat(value) >= minValue && parseFloat(value) <= maxValue)
+                            || (!minValue && !!maxValue && parseFloat(value) <= maxValue)
+                            || (!!minValue && !maxValue && parseFloat(value) >= minValue)
+                            || (!minValue && !maxValue),
                 }
                 : {
                     message: format(
                         input.l10n ? opts.message || input.l10n.between.notInclusive : opts.message,
                         [`${minValue}`, `${maxValue}`],
                     ),
-                    valid: parseFloat(value) > minValue && parseFloat(value) < maxValue,
+                    valid: (!!minValue && !!maxValue && parseFloat(value) > minValue && parseFloat(value) < maxValue)
+                    || (!minValue && !!maxValue && parseFloat(value) < maxValue)
+                    || (!!minValue && !maxValue && parseFloat(value) > minValue)
+                    || (!minValue && !maxValue),
                 };
         },
     };

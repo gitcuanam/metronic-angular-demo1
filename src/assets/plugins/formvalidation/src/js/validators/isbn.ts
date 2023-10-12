@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 export default function isbn() {
     return {
@@ -88,6 +93,8 @@ export default function isbn() {
                         },
                         valid: `${checksum}` === chars[length - 1],
                     };
+                default:
+                    return { meta: {type: undefined}, valid: false}
             }
         },
     };

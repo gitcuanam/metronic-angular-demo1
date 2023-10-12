@@ -62,18 +62,21 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
             const tokenField = document.createElement('input');
             tokenField.setAttribute('type', 'hidden');
             tokenField.setAttribute('name', Recaptcha3.CAPTCHA_FIELD);
-            document.getElementById(this.opts.element).appendChild(tokenField);
+            this.opts?.element && document.getElementById(this.opts.element)?.appendChild(tokenField);
 
             this.core.addField(Recaptcha3.CAPTCHA_FIELD, {
                 validators: {
                     promise: {
-                        message: this.opts.message,
+                        message: this.opts?.message,
                         promise: (input) => {
                             return new Promise((resolve, reject) => {
                                 // tslint:disable-next-line:no-string-literal
                                 window['grecaptcha']
-                                    .execute(this.opts.siteKey, { action: this.opts.action })
+                                    .execute(this.opts?.siteKey, { action: this.opts?.action })
                                     .then((token: string) => {
+                                        if (!this.opts?.backendVerificationUrl) {
+                                            return;
+                                        }
                                         // Verify it
                                         fetch(this.opts.backendVerificationUrl, {
                                             method: 'POST',
@@ -82,9 +85,9 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
                                             },
                                         }).then((response: VerificationResponse) => {
                                             const isValid = `${response.success}` === 'true' &&
-                                                            response.score >= this.opts.minimumScore;
+                                                            this.opts?.minimumScore && response.score >= this.opts.minimumScore;
                                             resolve({
-                                                message: response.message || this.opts.message,
+                                                message: response.message || this.opts?.message,
                                                 meta: response,
                                                 valid: isValid,
                                             });
@@ -118,15 +121,15 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
         // Remove script
         const src = this.getScript();
         const scripts = [].slice.call(document.body.querySelectorAll(`script[src="${src}"]`)) as HTMLScriptElement[];
-        scripts.forEach((s) => s.parentNode.removeChild(s));
+        scripts.forEach((s) => s.parentNode?.removeChild(s));
 
         this.core.removeField(Recaptcha3.CAPTCHA_FIELD);
     }
 
     private getScript(): string {
-        const lang = this.opts.language ? `&hl=${this.opts.language}` : '';
+        const lang = this.opts?.language ? `&hl=${this.opts?.language}` : '';
         return 'https://www.google.com/recaptcha/api.js?' +
-                `onload=${Recaptcha3.LOADED_CALLBACK}&render=${this.opts.siteKey}${lang}`;
+                `onload=${Recaptcha3.LOADED_CALLBACK}&render=${this.opts?.siteKey}${lang}`;
     }
 
     private onIconPlaced(e: IconPlacedEvent): void {

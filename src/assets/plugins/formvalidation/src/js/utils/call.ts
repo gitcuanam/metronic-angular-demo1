@@ -31,6 +31,9 @@ export default function call(functionName: ((...arg: any[]) => any) | string, ar
             context = context[t];
         }
 
+        if (!func) {
+            return undefined;
+        }
         return (typeof context[func] === 'undefined') ? null : context[func].apply(this, args);
     }
 }
