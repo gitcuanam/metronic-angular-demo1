@@ -5,4 +5,7 @@ fasdasfasdf
 
 
 Container goes here:
-<ng-container [cdkPortalOutlet]="portalOutlet"></ng-container>
+<ng-container *ngIf="selectedPortal" [cdkPortalOutlet]="selectedPortal"></ng-container>
+
+<ng-template #noData></ng-template>
+<ng-template #templateData1>1</ng-template>
