@@ -49,6 +49,9 @@ import { CoreModule } from '../../core/core.module';
 import {
   DemoPortalComponent,
 } from './content/antd/demo-portal/demo-portal.component';
+import {
+  HelloWorldComponent,
+} from './content/antd/hello-world/hello-world.component';
 // CRUD Partials
 import {
   ActionNotificationComponent,
@@ -177,7 +180,8 @@ import { CartComponent } from './layout/topbar/cart/cart.component';
     Dropdown3Component,
     Dropdown4Component,
     Dropdown5Component,
-    DemoPortalComponent
+    DemoPortalComponent,
+    HelloWorldComponent,
   ],
   exports: [
     WidgetModule,
@@ -229,6 +233,7 @@ import { CartComponent } from './layout/topbar/cart/cart.component';
     Dropdown4Component,
     Dropdown5Component,
     DemoPortalComponent,
+    HelloWorldComponent,
   ],
   imports: [
     CommonModule,
