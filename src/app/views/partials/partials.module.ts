@@ -50,6 +50,9 @@ import {
   DemoPortalComponent,
 } from './content/antd/demo-portal/demo-portal.component';
 import {
+  GetComponentRefComponent,
+} from './content/antd/get-component-ref/get-component-ref.component';
+import {
   HelloWorldComponent,
 } from './content/antd/hello-world/hello-world.component';
 // CRUD Partials
@@ -182,6 +185,7 @@ import { CartComponent } from './layout/topbar/cart/cart.component';
     Dropdown5Component,
     DemoPortalComponent,
     HelloWorldComponent,
+    GetComponentRefComponent,
   ],
   exports: [
     WidgetModule,
@@ -234,6 +238,7 @@ import { CartComponent } from './layout/topbar/cart/cart.component';
     Dropdown5Component,
     DemoPortalComponent,
     HelloWorldComponent,
+    GetComponentRefComponent,
   ],
   imports: [
     CommonModule,
