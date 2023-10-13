@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+
 import { SparklineChartOptions } from '../../../../../core/_base/layout';
 
 @Component({
@@ -8,9 +13,9 @@ import { SparklineChartOptions } from '../../../../../core/_base/layout';
 })
 export class Widget26Component implements OnInit {
 
-	@Input() value: string | number;
-	@Input() desc: string;
-	@Input() options: SparklineChartOptions;
+	@Input() value?: string | number;
+	@Input() desc?: string;
+	@Input() options?: SparklineChartOptions;
 
 	constructor() {
 	}

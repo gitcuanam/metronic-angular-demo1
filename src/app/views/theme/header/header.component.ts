@@ -1,20 +1,30 @@
 // Angular
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
   NavigationStart,
   RouteConfigLoadEnd,
   RouteConfigLoadStart,
-  Router
+  Router,
 } from '@angular/router';
+
 // Loading bar
 import { LoadingBarService } from '@ngx-loading-bar/core';
+
 // Layout
-import { LayoutConfigService, LayoutRefService } from '../../../core/_base/layout';
+import {
+  LayoutConfigService,
+  LayoutRefService,
+} from '../../../core/_base/layout';
 // HTML Class Service
 import { HtmlClassService } from '../html-class.service';
-
 
 @Component({
   selector: 'kt-header',
@@ -30,7 +40,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   headerAttributes = {};
   headerMenuSelfDisplay = true;
 
-  @ViewChild('ktHeader', {static: true}) ktHeader: ElementRef;
+  @ViewChild('ktHeader', {static: true}) ktHeader?: ElementRef;
 
   /**
    * Component constructor
@@ -75,12 +85,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
    * On init
    */
   ngOnInit(): void {
-    this.headerClasses = this.htmlClassService.getClasses('header', true).toString();
+    this.headerClasses = this.htmlClassService.getClasses('header', true)?.toString() ?? '';
     this.headerAttributes = this.htmlClassService.getAttributes('header');
     this.headerLogo = this.getLogo();
     this.headerMenuSelfDisplay = this.layoutConfigService.getConfig('header.menu.self.display');
-    this.headerContainerClasses = this.htmlClassService.getClasses('header_container', true).toString();
-    this.headerMenuClasses = this.htmlClassService.getClasses('header_menu', true).toString();
+    this.headerContainerClasses = this.htmlClassService.getClasses('header_container', true)?.toString() ?? '';
+    this.headerMenuClasses = this.htmlClassService.getClasses('header_menu', true)?.toString() ?? '';
     // header width fluid
 
     // animate the header minimize the height on scroll down. to be removed, not applicable for default demo
@@ -92,7 +102,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // keep header element in the service
-    this.layoutRefService.addElement('header', this.ktHeader.nativeElement);
+    this.ktHeader && this.layoutRefService.addElement('header', this.ktHeader.nativeElement);
   }
 
   getLogo() {

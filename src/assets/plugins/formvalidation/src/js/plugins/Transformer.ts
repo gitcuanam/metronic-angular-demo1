@@ -21,11 +21,11 @@ export default class Transformer extends Plugin<TransformerOptions> {
     }
 
     public install(): void {
-        this.core.registerFilter('field-value', this.valueFilter);
+        this.core?.registerFilter('field-value', this.valueFilter);
     }
 
     public uninstall(): void {
-        this.core.deregisterFilter('field-value', this.valueFilter);
+        this.core?.deregisterFilter('field-value', this.valueFilter);
     }
 
     private getElementValue(defaultValue: string, field: string, element: HTMLElement, validator: string): string {

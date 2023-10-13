@@ -1,5 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 
 const checkboxButtons = {
 	beforeCodeTitle: 'Checkbox buttons',
@@ -192,15 +199,8 @@ export class ButtonsComponent implements OnInit {
 	checkboxGroupForm: FormGroup;
 	radioGroupForm: FormGroup;
 
-	constructor(private formBuilder: FormBuilder) {}
-
-	ngOnInit() {
-		this.exampleCheckboxButtons = checkboxButtons;
-		this.exampleCheckboxButtonsReactiveForms = checkboxButtonsReactiveForms;
-		this.exampleRadioButtons = radioButtons;
-		this.exampleRadioButtonsReactiveForms = radioButtonsReactiveForms;
-
-		this.checkboxGroupForm = this.formBuilder.group({
+	constructor(private formBuilder: FormBuilder) {
+    this.checkboxGroupForm = this.formBuilder.group({
 			left: true,
 			middle: false,
 			right: false
@@ -209,5 +209,12 @@ export class ButtonsComponent implements OnInit {
 		this.radioGroupForm = this.formBuilder.group({
 			model: 1
 		});
+  }
+
+	ngOnInit() {
+		this.exampleCheckboxButtons = checkboxButtons;
+		this.exampleCheckboxButtonsReactiveForms = checkboxButtonsReactiveForms;
+		this.exampleRadioButtons = radioButtons;
+		this.exampleRadioButtonsReactiveForms = radioButtonsReactiveForms;
 	}
 }

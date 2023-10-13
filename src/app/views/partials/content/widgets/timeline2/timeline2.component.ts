@@ -1,5 +1,9 @@
 // Angular
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 export interface Timeline2Data {
 	time: string;
@@ -15,7 +19,7 @@ export interface Timeline2Data {
 })
 export class Timeline2Component implements OnInit {
 	// Public properties
-	@Input() data: Timeline2Data[];
+	@Input() data?: Timeline2Data[];
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks

@@ -1,8 +1,15 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
+import {
+  LayoutConfigService,
+  ToggleOptions,
+} from '../../../../core/_base/layout';
 // Layout
 import { HtmlClassService } from '../../html-class.service';
-import { LayoutConfigService, ToggleOptions } from '../../../../core/_base/layout';
 
 @Component({
   selector: 'kt-header-mobile',
@@ -38,7 +45,7 @@ export class HeaderMobileComponent implements OnInit {
    * On init
    */
   ngOnInit() {
-    this.headerMobileClasses = this.uiService.getClasses('header_mobile', true).toString();
+    this.headerMobileClasses = this.uiService.getClasses('header_mobile', true)?.toString() ?? '';
     this.headerLogo = this.getLogoUrl();
     this.asideSelfDisplay = this.layoutConfigService.getConfig('aside.self.display');
     this.headerMenuSelfDisplay = this.layoutConfigService.getConfig('header.menu.self.display');

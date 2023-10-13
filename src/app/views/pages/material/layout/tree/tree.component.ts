@@ -800,8 +800,8 @@ export class TreeLoadmoreExample {
  * Each node has a filename, and a type or a list of children.
  */
 export class FileNode {
-	children: FileNode[];
-	filename: string;
+	children?: FileNode[];
+	filename?: string;
 	type: any;
 }
 
@@ -1034,15 +1034,23 @@ export class DynamicDataSource extends DataSource<DynamicFlatNode> {
  * Node for to-do item
  */
 export class TodoItemNode {
-	children: TodoItemNode[];
-	item: string;
+	children?: TodoItemNode[];
+	item?: string;
+
+  constructor(data?: TodoItemNode) {
+    Object.assign(this, data);
+  }
 }
 
 /** Flat to-do item node with expandable and level information */
 export class TodoItemFlatNode {
-	item: string;
-	level: number;
-	expandable: boolean;
+	item?: string;
+	level?: number;
+	expandable?: boolean;
+
+  constructor(data?: TodoItemFlatNode) {
+    Object.assign(this, data);
+  }
 }
 
 /**
@@ -1309,17 +1317,17 @@ export class TreeComponent implements OnInit {
 	hasChild = (_: number, _nodeData: DynamicFlatNode) => _nodeData.expandable;
 
 	transformer2 = (node: FileNode, level: number) => {
-		return new FileFlatNode(!!node.children, node.filename, level, node.type);
+		return new FileFlatNode(!!node.children, node.filename ?? '', level, node.type);
 	}
 	private _getLevel2 = (node: FileFlatNode) => node.level;
 	private _isExpandable2 = (node: FileFlatNode) => node.expandable;
-	private _getChildren2 = (node: FileNode): Observable<FileNode[]> => observableOf(node.children);
+	private _getChildren2 = (node: FileNode): Observable<FileNode[]> => observableOf(node.children ?? []);
 	hasChild2 = (_: number, _nodeData: FileFlatNode) => _nodeData.expandable;
 
-	getLevel3 = (node: TodoItemFlatNode) => node.level;
-	isExpandable3 = (node: TodoItemFlatNode) => node.expandable;
-	getChildren3 = (node: TodoItemNode): TodoItemNode[] => node.children;
-	hasChild3 = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
+	getLevel3 = (node: TodoItemFlatNode) => node.level ?? 0;
+	isExpandable3 = (node: TodoItemFlatNode) => node.expandable ?? false;
+	getChildren3 = (node: TodoItemNode): TodoItemNode[] => node.children ?? [];
+	hasChild3 = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable ?? false;
 	hasNoContent3 = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.item === '';
 
 	/**

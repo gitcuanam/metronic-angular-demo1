@@ -1,5 +1,10 @@
 // Angular
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
   selector: 'kt-notice',
@@ -8,9 +13,9 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 })
 export class NoticeComponent implements OnInit {
   // Public properties
-  @Input() classes: string;
-  @Input() icon: string;
-  @Input() svg: string;
+  @Input() classes?: string;
+  @Input() icon?: string;
+  @Input() svg?: string;
 
   /**
    * Component constructor

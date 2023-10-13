@@ -1,17 +1,36 @@
 // Angular
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+
 // RxJS
-import { BehaviorSubject, fromEvent } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+} from 'rxjs/operators';
+
 // NGRX
 import { Store } from '@ngrx/store';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-// Auth
-import { Address, AuthService } from '../../../../../../core/auth';
-// State
-import { AppState } from '../../../../../../core/reducers';
+
 // Layout
 import { LayoutUtilsService } from '../../../../../../core/_base/crud';
+// Auth
+import {
+  Address,
+  AuthService,
+} from '../../../../../../core/auth';
+// State
+import { AppState } from '../../../../../../core/reducers';
 
 @Component({
 	selector: 'kt-address',
@@ -21,7 +40,7 @@ import { LayoutUtilsService } from '../../../../../../core/_base/crud';
 export class AddressComponent implements OnInit {
 	// Public properties
 	// Incoming data
-	@Input() addressSubject: BehaviorSubject<Address>;
+	@Input() addressSubject?: BehaviorSubject<Address>;
 	hasFormErrors = false;
 	addressForm: FormGroup;
 
@@ -33,10 +52,24 @@ export class AddressComponent implements OnInit {
 	 * @param store: Store<AppState>
 	 * @param layoutUtilsService: LayoutUtilsService
 	 */
-	constructor(private fb: FormBuilder,
-		           private auth: AuthService,
-		           private store: Store<AppState>,
-		           private layoutUtilsService: LayoutUtilsService) {}
+	constructor(
+		private fb: FormBuilder,
+		private auth: AuthService,
+		private store: Store<AppState>,
+		private layoutUtilsService: LayoutUtilsService
+	) {
+		
+		/**
+		 * Init form
+		 */
+		
+		this.addressForm = this.fb.group({
+			addressLine: [this.addressSubject?.value.addressLine, Validators.required],
+			city: [this.addressSubject?.value.city, Validators.required],
+			state: [this.addressSubject?.value.state, Validators.required],
+			postCode: [this.addressSubject?.value.postCode, Validators.required]
+		});
+	}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -46,13 +79,12 @@ export class AddressComponent implements OnInit {
 	 * On init
 	 */
 	ngOnInit() {
-		if (!this.addressSubject.value) {
+		if (!this.addressSubject?.value) {
 			const newAddress = new Address();
 			newAddress.clear();
-			this.addressSubject.next(newAddress);
+			this.addressSubject?.next(newAddress);
 		}
 
-		this.createForm();
 		this.addressForm.valueChanges
 			.pipe(
 				// tslint:disable-next-line:max-line-length
@@ -63,18 +95,6 @@ export class AddressComponent implements OnInit {
 				})
 			)
 			.subscribe();
-	}
-
-	/**
-	 * Init form
-	 */
-	createForm() {
-		this.addressForm = this.fb.group({
-			addressLine: [this.addressSubject.value.addressLine, Validators.required],
-			city: [this.addressSubject.value.city, Validators.required],
-			state: [this.addressSubject.value.state, Validators.required],
-			postCode: [this.addressSubject.value.postCode, Validators.required]
-		});
 	}
 
 	/**
@@ -99,7 +119,7 @@ export class AddressComponent implements OnInit {
 		newAddress.city = controls.city.value;
 		newAddress.postCode = controls.postCode.value;
 		newAddress.state = controls.state.value;
-		this.addressSubject.next(newAddress);
+		this.addressSubject?.next(newAddress);
 	}
 
 	/**

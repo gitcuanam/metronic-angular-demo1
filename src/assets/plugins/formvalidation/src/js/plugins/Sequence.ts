@@ -63,7 +63,7 @@ export default class Sequence extends Plugin<SequenceOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.validator.validated', this.validatorHandler)
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -74,7 +74,7 @@ export default class Sequence extends Plugin<SequenceOptions> {
     public uninstall(): void {
         this.invalidFields.clear();
 
-        this.core
+        this.core && this.core
             .off('core.validator.validated', this.validatorHandler)
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)

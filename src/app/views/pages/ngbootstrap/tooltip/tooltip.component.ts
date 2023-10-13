@@ -1,7 +1,14 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
+import {
+  NgbTooltip,
+  NgbTooltipConfig,
+} from '@ng-bootstrap/ng-bootstrap';
 
 const quickAndEasyTooltips = {
 	beforeCodeTitle: 'Quick and easy tooltips',
@@ -259,14 +266,14 @@ export class TooltipComponent implements OnInit {
 	greeting = {};
 	name2 = 'World';
 
-	@ViewChild('t2', {static: true}) public tooltip: NgbTooltip;
+	@ViewChild('t2', {static: true}) public tooltip?: NgbTooltip;
 
 	public changeGreeting(greeting: any): void {
-		const isOpen = this.tooltip.isOpen();
-		this.tooltip.close();
+		const isOpen = this.tooltip?.isOpen();
+		this.tooltip?.close();
 		if (greeting !== this.greeting || !isOpen) {
 			this.greeting = greeting;
-			this.tooltip.open(greeting);
+			this.tooltip?.open(greeting);
 		}
 	}
 

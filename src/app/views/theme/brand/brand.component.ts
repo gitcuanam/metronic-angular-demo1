@@ -1,7 +1,15 @@
 // Angular
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+} from '@angular/core';
+
 // Layout
-import { LayoutConfigService, ToggleOptions } from '../../../core/_base/layout';
+import {
+  LayoutConfigService,
+  ToggleOptions,
+} from '../../../core/_base/layout';
 import { HtmlClassService } from '../html-class.service';
 
 @Component({
@@ -38,7 +46,7 @@ export class BrandComponent implements OnInit, AfterViewInit {
    */
   ngOnInit(): void {
     this.headerLogo = this.getAsideLogo();
-    this.brandClasses = this.htmlClassService.getClasses('brand', true).toString();
+    this.brandClasses = this.htmlClassService.getClasses('brand', true)?.toString() ?? '';
     this.asideSelfMinimizeToggle = this.layoutConfigService.getConfig('aside.self.minimize.toggle');
   }
 

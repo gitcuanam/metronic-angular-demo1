@@ -34,7 +34,7 @@ export default class Wizard extends Plugin<WizardOptions> {
     private nextButton?: HTMLElement | Element | null;
     private prevStepHandler: () => void;
     private nextStepHandler: () => void;
-    private steps: HTMLElement[];
+    private steps: HTMLElement[] = [];
     private currentStep: number = 0;
     private numSteps: number = 0;
 
@@ -54,10 +54,10 @@ export default class Wizard extends Plugin<WizardOptions> {
     }
 
     public install(): void {
-        this.core.registerPlugin(Wizard.EXCLUDED_PLUGIN, new Excluded());
+        this.core && this.core.registerPlugin(Wizard.EXCLUDED_PLUGIN, new Excluded());
 
-        const form = this.core.getFormElement();
-        this.steps = [].slice.call(form.querySelectorAll(this.opts?.stepSelector ?? '')) as HTMLElement[];
+        const form = this.core && this.core.getFormElement();
+        this.steps = [].slice.call(form?.querySelectorAll(this.opts?.stepSelector ?? '')) as HTMLElement[];
         this.numSteps = this.steps.length;
         this.steps.forEach((s) => {
             classSet(s, {
@@ -68,15 +68,15 @@ export default class Wizard extends Plugin<WizardOptions> {
             [this.opts?.activeStepClass?? '']: true,
         });
 
-        this.prevButton = form.querySelector(this.opts?.prevButton ?? '');
-        this.nextButton = form.querySelector(this.opts?.nextButton ?? '');
+        this.prevButton = form?.querySelector(this.opts?.prevButton ?? '');
+        this.nextButton = form?.querySelector(this.opts?.nextButton ?? '');
 
         this.prevButton?.addEventListener('click', this.prevStepHandler);
         this.nextButton?.addEventListener('click', this.nextStepHandler);
     }
 
     public uninstall(): void {
-        this.core.deregisterPlugin(Wizard.EXCLUDED_PLUGIN);
+        this.core && this.core.deregisterPlugin(Wizard.EXCLUDED_PLUGIN);
 
         this.prevButton?.removeEventListener('click', this.prevStepHandler);
         this.nextButton?.removeEventListener('click', this.nextStepHandler);
@@ -113,7 +113,7 @@ export default class Wizard extends Plugin<WizardOptions> {
      */
     public goToNextStep(): void {
         // When click the Next button, we will validate the current step
-        this.core
+        this.core && this.core
             .validate()
             .then((status) => {
                 if (status === 'Valid') {
@@ -156,7 +156,7 @@ export default class Wizard extends Plugin<WizardOptions> {
             numSteps: this.numSteps,
             step: this.currentStep,
         } as WizardStepEvent;
-        this.core.emit('plugins.wizard.step.active', e);
+        this.core && this.core.emit('plugins.wizard.step.active', e);
         this.opts?.onStepActive && this.opts?.onStepActive(e);
     }
 
@@ -165,7 +165,7 @@ export default class Wizard extends Plugin<WizardOptions> {
             numSteps: this.numSteps,
             step: this.currentStep,
         } as WizardStepEvent;
-        this.core.emit('plugins.wizard.step.valid', e);
+        this.core && this.core.emit('plugins.wizard.step.valid', e);
         this.opts?.onStepValid && this.opts?.onStepValid(e);
     }
 
@@ -174,7 +174,7 @@ export default class Wizard extends Plugin<WizardOptions> {
             numSteps: this.numSteps,
             step: this.currentStep,
         } as WizardStepEvent;
-        this.core.emit('plugins.wizard.step.invalid', e);
+        this.core && this.core.emit('plugins.wizard.step.invalid', e);
         this.opts?.onStepInvalid && this.opts?.onStepInvalid(e);
     }
 
@@ -182,7 +182,7 @@ export default class Wizard extends Plugin<WizardOptions> {
         const e = {
             numSteps: this.numSteps,
         } as WizardValidEvent;
-        this.core.emit('plugins.wizard.valid', e);
+        this.core && this.core.emit('plugins.wizard.valid', e);
         this.opts?.onValid && this.opts?.onValid(e);
     }
 }

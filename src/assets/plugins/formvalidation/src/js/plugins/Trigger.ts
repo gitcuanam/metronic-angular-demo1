@@ -103,7 +103,7 @@ export default class Trigger extends Plugin<TriggerOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.field.removed', this.fieldRemovedHandler);
     }
@@ -115,7 +115,7 @@ export default class Trigger extends Plugin<TriggerOptions> {
         this.timers.forEach((t) => window.clearTimeout(t));
         this.timers.clear();
 
-        this.core
+        this.core && this.core
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.field.removed', this.fieldRemovedHandler);
     }
@@ -165,10 +165,10 @@ export default class Trigger extends Plugin<TriggerOptions> {
 
     private handleEvent(e: Event, field: string, ele: HTMLElement): void {
         if (this.exceedThreshold(field, ele) &&
-            this.core.executeFilter('plugins-trigger-should-validate', true, [field, ele])
+        this.core && this.core.executeFilter('plugins-trigger-should-validate', true, [field, ele])
         ) {
-            const handler = () => this.core.validateElement(field, ele).then((_) => {
-                this.core.emit('plugins.trigger.executed', {
+            const handler = () => this.core && this.core.validateElement(field, ele).then((_) => {
+                this.core?.emit('plugins.trigger.executed', {
                     element: ele,
                     event: e,
                     field,
@@ -215,7 +215,7 @@ export default class Trigger extends Plugin<TriggerOptions> {
             return true;
         }
 
-        const value = this.core.getElementValue(field, element);
-        return value.length >= threshold;
+        const value = this.core?.getElementValue(field, element);
+        return !!value && value.length >= threshold;
     }
 }

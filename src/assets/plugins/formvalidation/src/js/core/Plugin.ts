@@ -7,7 +7,7 @@
 import { Core } from './Core';
 
 export default class Plugin<T> {
-    protected core: Core;
+    protected core?: Core;
     protected opts?: T;
 
     constructor(opts?: T) {

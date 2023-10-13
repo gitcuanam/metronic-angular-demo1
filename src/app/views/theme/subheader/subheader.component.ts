@@ -1,10 +1,15 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
-// Layout
-import { LayoutConfigService } from '../../../core/_base/layout';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
 // Object-Path
 import * as objectPath from 'object-path';
-import {HtmlClassService} from '../html-class.service';
+
+// Layout
+import { LayoutConfigService } from '../../../core/_base/layout';
+import { HtmlClassService } from '../html-class.service';
 
 @Component({
   selector: 'kt-subheader',
@@ -47,7 +52,7 @@ export class SubheaderComponent implements OnInit {
     this.style = objectPath.get(config, 'subheader.style');
     this.displayDesc = objectPath.get(config, 'subheader.displayDesc');
     this.displayDaterangepicker = objectPath.get(config, 'subheader.displayDaterangepicker');
-    this.subheaderClasses = this.uiService.getClasses('subheader', true).toString();
-    this.subheaderContainerClasses = this.uiService.getClasses('subheader_container', true).toString()
+    this.subheaderClasses = this.uiService.getClasses('subheader', true)?.toString() ?? '';
+    this.subheaderContainerClasses = this.uiService.getClasses('subheader_container', true)?.toString() ?? '';
   }
 }

@@ -1,8 +1,14 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 
 const basicAlert = {
 	beforeCodeTitle: 'Basic Alert',
@@ -224,7 +230,7 @@ export class AlertComponent implements OnInit {
 	@Input() alerts: Array<IAlert> = [];
 	private _success = new Subject<string>();
 	staticAlertClosed = false;
-	successMessage: string;
+	successMessage?: string;
 	private backup: Array<IAlert>;
 
 	exampleBasicAlert: any;

@@ -1,12 +1,26 @@
 // Angular
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+
 // RxJS
 import { Observable } from 'rxjs';
+
 // NGRX
-import { select, Store } from '@ngrx/store';
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
+import {
+  currentUser,
+  Logout,
+  User,
+} from '../../../../../core/auth';
 // State
 import { AppState } from '../../../../../core/reducers';
-import { currentUser, Logout, User } from '../../../../../core/auth';
 
 @Component({
   selector: 'kt-user-profile4',
@@ -18,8 +32,8 @@ export class UserProfile4Component implements OnInit {
 
   @Input() avatar = true;
   @Input() greeting = true;
-  @Input() badge: boolean;
-  @Input() icon: boolean;
+  @Input() badge?: boolean;
+  @Input() icon?: boolean;
 
   /**
    * Component constructor
@@ -27,6 +41,7 @@ export class UserProfile4Component implements OnInit {
    * @param store: Store<AppState>
    */
   constructor(private store: Store<AppState>) {
+    this.user$ = this.store.pipe(select(currentUser));
   }
 
   /**
@@ -37,7 +52,6 @@ export class UserProfile4Component implements OnInit {
    * On init
    */
   ngOnInit(): void {
-    this.user$ = this.store.pipe(select(currentUser));
   }
 
   /**

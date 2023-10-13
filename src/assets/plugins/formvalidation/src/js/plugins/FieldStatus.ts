@@ -42,7 +42,7 @@ export default class FieldStatus extends Plugin<FieldStatusOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -53,7 +53,7 @@ export default class FieldStatus extends Plugin<FieldStatusOptions> {
 
     public uninstall(): void {
         this.statuses.clear();
-        this.core
+        this.core && this.core
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)

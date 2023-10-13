@@ -4,7 +4,10 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { FieldOptions, FieldsOptions } from '../core/Core';
+import {
+  FieldOptions,
+  FieldsOptions,
+} from '../core/Core';
 import Plugin from '../core/Plugin';
 
 export interface DeclarativeOptions {
@@ -56,16 +59,16 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
         this.parsePlugins();
 
         const opts = this.parseOptions();
-        Object.keys(opts).forEach((field) => this.core.addField(field, opts[field]));
+        Object.keys(opts).forEach((field) => this.core && this.core.addField(field, opts[field]));
     }
 
     private parseOptions(): FieldsOptions {
         // Find all fields which have either `name` or `data-fv-field` attribute
         const prefix = this.opts?.prefix;
         const opts: FieldsOptions = {};
-        const fields = this.core.getFields();
-        const form = this.core.getFormElement();
-        const elements = [].slice.call(form.querySelectorAll(`[name], [${prefix}field]`)) as Element[];
+        const fields = this.core && this.core.getFields();
+        const form = this.core && this.core.getFormElement();
+        const elements = [].slice.call(form?.querySelectorAll(`[name], [${prefix}field]`)) as Element[];
         elements.forEach((ele) => {
             const validators = this.parseElement(ele);
             // Do not try to merge the options if it's empty
@@ -86,7 +89,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
                 opts[field].validators[v].enabled = opts[field].validators[v].enabled || false;
 
                 // Mix the options in declarative and programmatic modes
-                if (fields[field] && fields[field].validators && fields[field].validators[v]) {
+                if (fields?.[field]?.validators?.[v]) {
                     Object.assign(opts[field].validators[v], fields[field].validators[v]);
                 }
             });
@@ -113,14 +116,14 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
     }
 
     private parsePlugins(): void {
-        const form = this.core.getFormElement();
+        const form = this.core && this.core.getFormElement();
         const reg = new RegExp(`^${this.opts?.pluginPrefix}([a-z0-9\-]+)(___)*([a-z0-9\-]+)*$`);
-        const numAttributes = form.attributes.length;
+        const numAttributes = form?.attributes.length ?? 0;
         const plugins = {};
         for (let i = 0; i < numAttributes; i++) {
-            const name = form.attributes[i].name;
-            const value = form.attributes[i].value;
-            const items = reg.exec(name);
+            const name = form?.attributes[i].name;
+            const value = form?.attributes[i].value;
+            const items = name && reg.exec(name);
             if (items && items.length === 4) {
                 const pluginName = this.toCamelCase(items[1]);
                 plugins[pluginName] = Object.assign(
@@ -142,7 +145,7 @@ export default class Declarative extends Plugin<DeclarativeOptions> {
                 delete opts['enabled'];
                 delete opts['clazz'];
                 const p = this.createPluginInstance(clazz, opts);
-                this.core.registerPlugin(pluginName, p);
+                this.core && this.core.registerPlugin(pluginName, p);
             }
         });
         /* tslint:enable:no-string-literal */

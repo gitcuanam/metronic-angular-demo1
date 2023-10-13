@@ -18,20 +18,20 @@ export default class DefaultSubmit extends Plugin<{}> {
     }
 
     public install(): void {
-        const form = this.core.getFormElement();
-        if (form.querySelectorAll('[type="submit"][name="submit"]').length) {
+        const form = this.core && this.core.getFormElement();
+        if (form?.querySelectorAll('[type="submit"][name="submit"]').length) {
             throw new Error('Do not use `submit` for the name attribute of submit button');
         }
 
-        this.core.on('core.form.valid', this.onValidHandler);
+       this.core && this.core.on('core.form.valid', this.onValidHandler);
     }
 
     public uninstall(): void {
-        this.core.off('core.form.valid', this.onValidHandler);
+        this.core && this.core.off('core.form.valid', this.onValidHandler);
     }
 
     private onFormValid(): void {
-        const form = this.core.getFormElement();
+        const form = this.core && this.core.getFormElement();
         if (form instanceof HTMLFormElement) {
             form.submit();
         }

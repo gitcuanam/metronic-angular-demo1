@@ -1,11 +1,31 @@
 // Angular
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import {
+  CollectionViewer,
+  DataSource,
+} from '@angular/cdk/collections';
+
 // RxJS
-import { Observable, BehaviorSubject, of} from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable,
+  of,
+} from 'rxjs';
+import {
+  catchError,
+  finalize,
+  tap,
+} from 'rxjs/operators';
+
 // CRUD
-import { QueryParamsModel,  QueryResultsModel, HttpExtenstionsModel } from '../../../../../../core/_base/crud';
-import { DataTableService, DataTableItemModel } from '../../../../../../core/_base/layout';
+import {
+  HttpExtenstionsModel,
+  QueryParamsModel,
+  QueryResultsModel,
+} from '../../../../../../core/_base/crud';
+import {
+  DataTableItemModel,
+  DataTableService,
+} from '../../../../../../core/_base/layout';
 
 // Why not use MatTableDataSource?
 /*  In this example, we will not be using the built-in MatTableDataSource because its designed for filtering,
@@ -71,8 +91,8 @@ export class DataTableDataSource implements DataSource<DataTableItemModel> {
 		// Paginator
 		// start
 		const totalCount = entitiesResult.length;
-		const initialPos = _queryParams.pageNumber * _queryParams.pageSize;
-		entitiesResult = entitiesResult.slice(initialPos, initialPos + _queryParams.pageSize);
+		const initialPos = (_queryParams.pageNumber && _queryParams.pageSize) ? _queryParams.pageNumber * _queryParams.pageSize : 1;
+		entitiesResult = entitiesResult.slice(initialPos, initialPos + (_queryParams?.pageSize ?? 1));
 		// end
 
 		const queryResults = new QueryResultsModel();

@@ -1,7 +1,17 @@
-import { Component, OnInit, Injectable, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbDateStruct, NgbCalendar, NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDatepickerI18n, NgbCalendarIslamicCivil, NgbCalendarIslamicUmalqura } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injectable,
+  OnInit,
+} from '@angular/core';
+
+import {
+  NgbCalendar,
+  NgbDateAdapter,
+  NgbDatepickerConfig,
+  NgbDatepickerI18n,
+  NgbDateStruct,
+} from '@ng-bootstrap/ng-bootstrap';
 
 const now = new Date();
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
@@ -665,11 +675,11 @@ export class DatepickerComponent implements OnInit {
 	exampleAlternativeCalendar: any;
 	exampleGlobalConfigurationOfDatepickers: any;
 
-	model: NgbDateStruct;
-	date: { year: number, month: number };
+	model?: NgbDateStruct;
+	date?: { year?: number, month?: number };
 	secondModel;
 	fourthModel;
-	fifthModel: NgbDateStruct;
+	fifthModel?: NgbDateStruct;
 	displayMonths = 2;
 	navigation = 'select';
 	showWeekNumbers = false;
@@ -679,8 +689,8 @@ export class DatepickerComponent implements OnInit {
 
 	fromDate?: NgbDateStruct;
 	toDate?: NgbDateStruct;
-	model1: Date;
-	model2: Date;
+	model1?: Date;
+	model2?: Date;
 	sixModel;
 
 	ngOnInit() {

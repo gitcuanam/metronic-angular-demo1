@@ -47,11 +47,11 @@ import { HtmlClassService } from '../html-class.service';
 export class BaseComponent implements OnInit, OnDestroy {
   // Public variables
   selfLayout = 'default';
-  asideSelfDisplay: true;
+  asideSelfDisplay?: true;
   contentClasses = '';
   contentContainerClasses = '';
   subheaderDisplay = true;
-  contentExtended: false;
+  contentExtended?: false;
 
   // Private properties
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -74,7 +74,8 @@ export class BaseComponent implements OnInit, OnDestroy {
     private pageConfigService: PageConfigService,
     private htmlClassService: HtmlClassService,
     private store: Store<AppState>,
-    private permissionsService: NgxPermissionsService) {
+    private permissionsService: NgxPermissionsService
+  ) {
     this.loadRolesWithPermissions();
 
     // register configs by demos
@@ -91,6 +92,9 @@ export class BaseComponent implements OnInit, OnDestroy {
       layoutConfig && this.htmlClassService.setConfig(layoutConfig as LayoutConfigModel);
     });
     this.unsubscribe.push(subscription);
+
+    
+    this.currentUserPermissions$ = this.store.pipe(select(currentUserPermissions));
   }
 
   /**
@@ -106,8 +110,8 @@ export class BaseComponent implements OnInit, OnDestroy {
     this.selfLayout = objectPath.get(config, 'self.layout');
     this.asideSelfDisplay = objectPath.get(config, 'aside.self.display');
     this.subheaderDisplay = objectPath.get(config, 'subheader.display');
-    this.contentClasses = this.htmlClassService.getClasses('content', true).toString();
-    this.contentContainerClasses = this.htmlClassService.getClasses('content_container', true).toString();
+    this.contentClasses = this.htmlClassService.getClasses('content', true)?.toString() ?? '';
+    this.contentContainerClasses = this.htmlClassService.getClasses('content_container', true)?.toString() ?? '';
     this.contentExtended = objectPath.get(config, 'content.extended');
 
     // let the layout type change
@@ -132,7 +136,6 @@ export class BaseComponent implements OnInit, OnDestroy {
    * NGX Permissions, init roles
    */
   loadRolesWithPermissions() {
-    this.currentUserPermissions$ = this.store.pipe(select(currentUserPermissions));
     const subscription = this.currentUserPermissions$.subscribe(res => {
       if (!res || res.length === 0) {
         return;

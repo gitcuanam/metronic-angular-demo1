@@ -81,7 +81,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
     private iconPlacedHandler: (e: IconPlacedEvent) => void;
     private preValidateFilter: (...arg: any[]) => Promise<void>;
     private captchaStatus: string = 'NotValidated';
-    private timer: number;
+    private timer?: number;
 
     constructor(opts?: RecaptchaOptions) {
         super(opts);
@@ -92,7 +92,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.field.reset', this.fieldResetHandler)
             .on('plugins.icon.placed', this.iconPlacedHandler)
             .registerFilter('validate-pre', this.preValidateFilter);
@@ -111,20 +111,20 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
                     if (this.opts?.backendVerificationUrl === '') {
                         this.captchaStatus = 'Valid';
                         // Mark the captcha as valid, so the library will remove the error message
-                        this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'Valid');
+                        this.core && this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'Valid');
                     } else {
                         // Revalidate the captcha, so it will be sent to our backend verification
-                        this.core.revalidateField(Recaptcha.CAPTCHA_FIELD);
+                        this.core && this.core.revalidateField(Recaptcha.CAPTCHA_FIELD);
                     }
                 },
                 'error-callback': () => {
                     this.captchaStatus = 'Invalid';
-                    this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'Invalid');
+                    this.core && this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'Invalid');
                 },
                 'expired-callback': () => {
                     // Update the captcha status when session expires
                     this.captchaStatus = 'NotValidated';
-                    this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'NotValidated');
+                    this.core && this.core.updateFieldStatus(Recaptcha.CAPTCHA_FIELD, 'NotValidated');
                 },
                 'sitekey': this.opts?.siteKey,
                 'size': this.opts?.size,
@@ -134,7 +134,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
             const widgetId = window['grecaptcha'].render(this.opts?.element, captchaOptions);
             this.opts?.element && this.widgetIds.set(this.opts.element, widgetId);
 
-            this.core.addField(Recaptcha.CAPTCHA_FIELD, {
+            this.core && this.core.addField(Recaptcha.CAPTCHA_FIELD, {
                 validators: {
                     promise: {
                         message: this.opts?.message,
@@ -205,7 +205,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
             clearTimeout(this.timer);
         }
 
-        this.core
+        this.core && this.core
             .off('core.field.reset', this.fieldResetHandler)
             .off('plugins.icon.placed', this.iconPlacedHandler)
             .deregisterFilter('validate-pre', this.preValidateFilter);
@@ -216,7 +216,7 @@ export default class Recaptcha extends Plugin<RecaptchaOptions> {
         const scripts = [].slice.call(document.body.querySelectorAll(`script[src="${src}"]`)) as HTMLScriptElement[];
         scripts.forEach((s) => s.parentNode?.removeChild(s));
 
-        this.core.removeField(Recaptcha.CAPTCHA_FIELD);
+        this.core && this.core.removeField(Recaptcha.CAPTCHA_FIELD);
     }
 
     private getScript(): string {

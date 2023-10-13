@@ -25,8 +25,8 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
     private fieldValidHandler: (e: string) => void;
     private fieldInvalidHandler: (e: string) => void;
 
-    private startDateValid: boolean;
-    private endDateValid: boolean;
+    private startDateValid?: boolean;
+    private endDateValid?: boolean;
 
     constructor(opts?: StartEndDateOptions) {
         super(opts);
@@ -36,13 +36,13 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
 
     public install(): void {
         // Backup the original options
-        const fieldOptions = this.core.getFields();
-        this.startDateFieldOptions = this.opts?.startDate.field ? fieldOptions[this.opts?.startDate.field] : undefined;
-        this.endDateFieldOptions = this.opts?.endDate.field ? fieldOptions[this.opts?.endDate.field] : undefined;
+        const fieldOptions = this.core?.getFields();
+        this.startDateFieldOptions = this.opts?.startDate.field ? fieldOptions?.[this.opts?.startDate.field] : undefined;
+        this.endDateFieldOptions = this.opts?.endDate.field ? fieldOptions?.[this.opts?.endDate.field] : undefined;
 
-        const form = this.core.getFormElement();
+        const form = this.core?.getFormElement();
 
-        this.core
+        this.core && this.core
             .on('core.field.valid', this.fieldValidHandler)
             .on('core.field.invalid', this.fieldInvalidHandler)
             .addField(this.opts?.startDate.field ?? '', {
@@ -50,7 +50,7 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
                     date: {
                         format: this.opts?.format,
                         max: () => {
-                            const endDateField = form.querySelector(`[name="${this.opts?.endDate.field}"]`);
+                            const endDateField = form?.querySelector(`[name="${this.opts?.endDate.field}"]`);
                             return (endDateField as HTMLInputElement).value;
                         },
                         message: this.opts?.startDate.message,
@@ -63,7 +63,7 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
                         format: this.opts?.format,
                         message: this.opts?.endDate.message,
                         min: () => {
-                            const startDateField = form.querySelector(`[name="${this.opts?.startDate.field}"]`);
+                            const startDateField = form?.querySelector(`[name="${this.opts?.startDate.field}"]`);
                             return (startDateField as HTMLInputElement).value;
                         },
                     },
@@ -72,17 +72,17 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
     }
 
     public uninstall(): void {
-        this.core.removeField(this.opts?.startDate.field ?? '');
+        this.core?.removeField(this.opts?.startDate.field ?? '');
         if (this.startDateFieldOptions) {
-            this.core.addField(this.opts?.startDate.field ?? '', this.startDateFieldOptions);
+            this.core && this.core.addField(this.opts?.startDate.field ?? '', this.startDateFieldOptions);
         }
 
-        this.core.removeField(this.opts?.endDate.field ?? '');
+        this.core && this.core.removeField(this.opts?.endDate.field ?? '');
         if (this.endDateFieldOptions) {
-            this.core.addField(this.opts?.endDate.field ?? '', this.endDateFieldOptions);
+            this.core && this.core.addField(this.opts?.endDate.field ?? '', this.endDateFieldOptions);
         }
 
-        this.core
+        this.core && this.core
             .off('core.field.valid', this.fieldValidHandler)
             .off('core.field.invalid', this.fieldInvalidHandler);
     }
@@ -107,14 +107,14 @@ export default class StartEndDate extends Plugin<StartEndDateOptions> {
             case this.opts?.startDate.field:
                 this.startDateValid = true;
                 if (this.endDateValid === false) {
-                    this.core.revalidateField(this.opts?.endDate.field ?? '');
+                    this.core && this.core.revalidateField(this.opts?.endDate.field ?? '');
                 }
                 break;
 
             case this.opts?.endDate.field:
                 this.endDateValid = true;
                 if (this.startDateValid === false) {
-                    this.core.revalidateField(this.opts?.startDate.field ?? '');
+                    this.core && this.core.revalidateField(this.opts?.startDate.field ?? '');
                 }
                 break;
 

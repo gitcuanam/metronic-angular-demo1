@@ -1,18 +1,28 @@
 import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	OnInit,
-	Renderer2,
-	ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
-import { filter } from 'rxjs/operators';
-import { NavigationEnd, Router } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+} from '@angular/router';
+
 import * as objectPath from 'object-path';
+import { filter } from 'rxjs/operators';
+
 // Layout
-import { LayoutConfigService, MenuAsideService, MenuOptions, OffcanvasOptions } from '../../../core/_base/layout';
+import {
+  LayoutConfigService,
+  MenuAsideService,
+  MenuOptions,
+  OffcanvasOptions,
+} from '../../../core/_base/layout';
 import { HtmlClassService } from '../html-class.service';
 
 @Component({
@@ -24,8 +34,8 @@ import { HtmlClassService } from '../html-class.service';
 export class AsideLeftComponent implements OnInit, AfterViewInit {
   private offcanvas: any;
 
-  @ViewChild('asideMenuOffcanvas', {static: true}) asideMenuOffcanvas: ElementRef;
-  @ViewChild('asideMenu', {static: true}) asideMenu: ElementRef;
+  @ViewChild('asideMenuOffcanvas', {static: true}) asideMenuOffcanvas?: ElementRef;
+  @ViewChild('asideMenu', {static: true}) asideMenu?: ElementRef;
 
   asideLogo = '';
   asideClasses = '';
@@ -99,15 +109,15 @@ export class AsideLeftComponent implements OnInit, AfterViewInit {
     const config = this.layoutConfigService.getConfig();
 
     if (objectPath.get(config, 'aside.menu.dropdown')) {
-      this.render.setAttribute(this.asideMenu.nativeElement, 'data-ktmenu-dropdown', '1');
+      this.asideMenu && this.render.setAttribute(this.asideMenu.nativeElement, 'data-ktmenu-dropdown', '1');
       // tslint:disable-next-line:max-line-length
-      this.render.setAttribute(this.asideMenu.nativeElement, 'data-ktmenu-dropdown-timeout', objectPath.get(config, 'aside.menu.submenu.dropdown.hover-timeout'));
+      this.asideMenu && this.render.setAttribute(this.asideMenu.nativeElement, 'data-ktmenu-dropdown-timeout', objectPath.get(config, 'aside.menu.submenu.dropdown.hover-timeout'));
     }
 
-    this.asideClasses = this.htmlClassService.getClasses('aside', true).toString();
+    this.asideClasses = this.htmlClassService.getClasses('aside', true)?.toString() ?? '';
     this.asideLogo = this.getAsideLogo();    
     setTimeout(() => {
-      this.offcanvas = new KTOffcanvas(this.asideMenuOffcanvas.nativeElement, this.menuCanvasOptions);
+      this.offcanvas = this.asideMenuOffcanvas ? new KTOffcanvas(this.asideMenuOffcanvas.nativeElement, this.menuCanvasOptions) : undefined;
     });
   }
 

@@ -62,7 +62,7 @@ export default class Icon extends Plugin<IconOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -74,7 +74,7 @@ export default class Icon extends Plugin<IconOptions> {
         this.icons.forEach((icon) => icon.parentNode?.removeChild(icon));
         this.icons.clear();
 
-        this.core
+        this.core && this.core
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -127,7 +127,7 @@ export default class Icon extends Plugin<IconOptions> {
             field,
             iconElement: i,
         } as IconPlacedEvent;
-        this.core.emit('plugins.icon.placed', e);
+        this.core && this.core.emit('plugins.icon.placed', e);
         this.opts?.onPlaced && this.opts.onPlaced(e);
 
         this.icons.set(ele, i);
@@ -145,7 +145,7 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'Validating',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
         this.opts?.onSet && this.opts.onSet(evt);
     }
 
@@ -161,7 +161,7 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: e.valid ? 'Valid' : 'Invalid',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
         this.opts?.onSet && this.opts.onSet(evt);
     }
 
@@ -177,7 +177,7 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'NotValidated',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
         this.opts?.onSet && this.opts.onSet(evt);
     }
 
@@ -193,7 +193,7 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'Ignored',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
         this.opts?.onSet && this.opts.onSet(evt);
     }
 

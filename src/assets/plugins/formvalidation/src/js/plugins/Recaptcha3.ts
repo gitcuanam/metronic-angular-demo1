@@ -48,7 +48,7 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
     }
 
     public install(): void {
-        this.core.on('plugins.icon.placed', this.iconPlacedHandler);
+        this.core && this.core.on('plugins.icon.placed', this.iconPlacedHandler);
 
         const loadPrevCaptcha = (typeof window[Recaptcha3.LOADED_CALLBACK] === 'undefined')
             ? () => {} // tslint:disable-line:no-empty
@@ -64,7 +64,7 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
             tokenField.setAttribute('name', Recaptcha3.CAPTCHA_FIELD);
             this.opts?.element && document.getElementById(this.opts.element)?.appendChild(tokenField);
 
-            this.core.addField(Recaptcha3.CAPTCHA_FIELD, {
+            this.core && this.core.addField(Recaptcha3.CAPTCHA_FIELD, {
                 validators: {
                     promise: {
                         message: this.opts?.message,
@@ -116,14 +116,14 @@ export default class Recaptcha3 extends Plugin<Recaptcha3Options> {
     }
 
     public uninstall(): void {
-        this.core.off('plugins.icon.placed', this.iconPlacedHandler);
+        this.core && this.core.off('plugins.icon.placed', this.iconPlacedHandler);
 
         // Remove script
         const src = this.getScript();
         const scripts = [].slice.call(document.body.querySelectorAll(`script[src="${src}"]`)) as HTMLScriptElement[];
         scripts.forEach((s) => s.parentNode?.removeChild(s));
 
-        this.core.removeField(Recaptcha3.CAPTCHA_FIELD);
+        this.core && this.core.removeField(Recaptcha3.CAPTCHA_FIELD);
     }
 
     private getScript(): string {

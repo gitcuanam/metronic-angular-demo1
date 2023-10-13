@@ -28,11 +28,11 @@ export default class Excluded extends Plugin<ExcludedOptions> {
     }
 
     public install(): void {
-        this.core.registerFilter('element-ignored', this.ignoreValidationFilter);
+        this.core?.registerFilter('element-ignored', this.ignoreValidationFilter);
     }
 
     public uninstall(): void {
-        this.core.deregisterFilter('element-ignored', this.ignoreValidationFilter);
+        this.core?.deregisterFilter('element-ignored', this.ignoreValidationFilter);
     }
 
     private ignoreValidation(field: string, element: HTMLElement, elements: HTMLElement[]): boolean {

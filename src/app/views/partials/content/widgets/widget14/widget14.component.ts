@@ -1,9 +1,17 @@
 // Angular
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-// Layout
-import { LayoutConfigService } from '../../../../../core/_base/layout';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+
 // Charts
 import { Chart } from 'chart.js';
+
+// Layout
+import { LayoutConfigService } from '../../../../../core/_base/layout';
 
 @Component({
 	selector: 'kt-widget14',
@@ -12,10 +20,10 @@ import { Chart } from 'chart.js';
 })
 export class Widget14Component implements OnInit {
 	// Public properties
-	@Input() title: string;
-	@Input() desc: string;
-	@Input() data: { labels: string[]; datasets: any[] };
-	@ViewChild('chart', {static: true}) chart: ElementRef;
+	@Input() title?: string;
+	@Input() desc?: string;
+	@Input() data?: { labels: string[]; datasets: any[] };
+	@ViewChild('chart', {static: true}) chart?: ElementRef;
 
 	/**
 	 * Component constructor
@@ -62,9 +70,9 @@ export class Widget14Component implements OnInit {
 		// For more information about the chartjs, visit this link
 		// https://www.chartjs.org/docs/latest/getting-started/usage.html
 
-		const chart = new Chart(this.chart.nativeElement, {
+		const chart = (this.chart) ? new Chart(this.chart.nativeElement, {
 			type: 'bar',
-			data: this.data,
+			data: this.data ?? { labels: [], datasets: [] },
 			options: {
 				plugins: {
 					legend: {
@@ -134,6 +142,6 @@ export class Widget14Component implements OnInit {
 					}
 				}
 			}
-		});
+		}) : undefined;
 	}
 }

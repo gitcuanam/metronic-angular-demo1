@@ -103,8 +103,8 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     public install(): void {
-        this.core.getFormElement().appendChild(this.defaultContainer);
-        this.core
+        this.core && this.core.getFormElement().appendChild(this.defaultContainer);
+        this.core && this.core
             .on('core.element.ignored', this.elementIgnoredHandler)
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.field.removed', this.fieldRemovedHandler)
@@ -113,12 +113,12 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     public uninstall(): void {
-        this.core.getFormElement().removeChild(this.defaultContainer);
+        this.core && this.core.getFormElement().removeChild(this.defaultContainer);
 
         this.messages.forEach((message) => message.parentNode?.removeChild(message));
         this.messages.clear();
 
-        this.core
+        this.core && this.core
             .off('core.element.ignored', this.elementIgnoredHandler)
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.field.removed', this.fieldRemovedHandler)
@@ -176,7 +176,7 @@ export default class Message extends Plugin<MessageOptions> {
             case ('string' === typeof this.opts?.container):
                 let selector = this.opts?.container as string;
                 selector = '#' === selector.charAt(0) ? `[id="${selector.substring(1)}"]` : selector;
-                container = (this.core.getFormElement().querySelector(selector) as HTMLElement);
+                container = (this.core && this.core.getFormElement().querySelector(selector) as HTMLElement);
                 break;
 
             default:
@@ -190,7 +190,7 @@ export default class Message extends Plugin<MessageOptions> {
             'fv-plugins-message-container': true,
         });
 
-        this.core.emit('plugins.message.placed', {
+        this.core && this.core.emit('plugins.message.placed', {
             element,
             elements,
             field,
@@ -201,9 +201,10 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     private getMessage(result: ValidateResult): string {
-        return ((typeof result.message === 'string')
+        const locale = this.core?.getLocale();
+        return (typeof result.message === 'string')
                 ? result.message
-                : result.message?.[this.core.getLocale()]) ?? '';
+                : (locale ? result.message?.[locale] ?? '' : '');
     }
 
     private onValidatorValidated(e: ValidatorValidatedEvent): void {
@@ -226,7 +227,7 @@ export default class Message extends Plugin<MessageOptions> {
                 }
                 container?.appendChild(ele);
 
-                this.core.emit('plugins.message.displayed', {
+                this.core && this.core.emit('plugins.message.displayed', {
                     element: e.element,
                     field: e.field,
                     message: e.result.message,
@@ -237,7 +238,7 @@ export default class Message extends Plugin<MessageOptions> {
             } else if (messageEle && !e.result.valid) {
                 // The validator returns new message
                 messageEle.innerHTML = this.getMessage(e.result);
-                this.core.emit('plugins.message.displayed', {
+                this.core && this.core.emit('plugins.message.displayed', {
                     element: e.element,
                     field: e.field,
                     message: e.result.message,

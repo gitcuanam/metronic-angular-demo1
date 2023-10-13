@@ -20,7 +20,8 @@
       "dom"
     ],
     // "allowSyntheticDefaultImports": true
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
   },
   "angularCompilerOptions": {
     "strictTemplates": true,

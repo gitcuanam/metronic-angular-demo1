@@ -1,33 +1,66 @@
-import { AfterViewInit, AfterViewChecked } from '@angular/core';
-// Angular
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 // Material
 import { SelectionModel } from '@angular/cdk/collections';
+// Angular
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-// RXJS
-import { debounceTime, distinctUntilChanged, tap, skip, take, delay } from 'rxjs/operators';
-import { fromEvent, merge, Observable, of, Subscription } from 'rxjs';
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
+
 // LODASH
-import { each, find } from 'lodash';
+import {
+  each,
+  find,
+} from 'lodash';
+import {
+  fromEvent,
+  merge,
+  of,
+  Subscription,
+} from 'rxjs';
+// RXJS
+import {
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  skip,
+  take,
+  tap,
+} from 'rxjs/operators';
+
 // NGRX
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../../../core/reducers';
+import {
+  select,
+  Store,
+} from '@ngrx/store';
 
 // Services
-import { LayoutUtilsService, MessageType, QueryParamsModel } from '../../../../../core/_base/crud';
+import {
+  LayoutUtilsService,
+  MessageType,
+  QueryParamsModel,
+} from '../../../../../core/_base/crud';
+import { SubheaderService } from '../../../../../core/_base/layout';
 // Models
 import {
-	User,
-	Role,
-	UsersDataSource,
-	UserDeleted,
-	UsersPageRequested,
-	selectUserById,
-	selectAllRoles
+  Role,
+  selectAllRoles,
+  User,
+  UserDeleted,
+  UsersDataSource,
+  UsersPageRequested,
 } from '../../../../../core/auth';
-import { SubheaderService } from '../../../../../core/_base/layout';
+import { AppState } from '../../../../../core/reducers';
 import { IMessage } from '../../../apps/e-commerce/products/message.model';
 
 // Table with EDIT item in MODAL
@@ -46,11 +79,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
 	// Table fields
 	dataSource: UsersDataSource;
 	displayedColumns = ['select', 'id', 'username', 'email', 'fullname', '_roles', 'actions'];
-	@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-	@ViewChild('sort1', {static: true}) sort: MatSort;
+	@ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+	@ViewChild('sort1', {static: true}) sort?: MatSort;
 	// Filter fields
-	@ViewChild('searchInput', {static: true}) searchInput: ElementRef;
-	lastQuery: QueryParamsModel;
+	@ViewChild('searchInput', {static: true}) searchInput?: ElementRef;
+	// lastQuery: QueryParamsModel;
 	// Selection
 	selection = new SelectionModel<User>(true, []);
 	usersResult: User[] = [];
@@ -73,7 +106,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private layoutUtilsService: LayoutUtilsService,
 		private subheaderService: SubheaderService,
-		private cdr: ChangeDetectorRef) {}
+		private cdr: ChangeDetectorRef
+	) {
+		// Init DataSource
+		this.dataSource = new UsersDataSource(this.store);
+	}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -88,40 +125,38 @@ export class UsersListComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(rolesSubscription);
 
 		// If the user changes the sort order, reset back to the first page.
-		const sortSubscription = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-		this.subscriptions.push(sortSubscription);
+		const sortSubscription = this.sort?.sortChange.subscribe(() => (this.paginator && (this.paginator.pageIndex = 0)));
+		sortSubscription && this.subscriptions.push(sortSubscription);
 
 		/* Data load will be triggered in two cases:
-		- when a pagination event occurs => this.paginator.page
-		- when a sort event occurs => this.sort.sortChange
+		- when a pagination event occurs => this.paginator?.page
+		- when a sort event occurs => this.sort?.sortChange
 		**/
-		const paginatorSubscriptions = merge(this.sort.sortChange, this.paginator.page).pipe(
+		const paginatorSubscriptions = !!this.sort?.sortChange && !!this.paginator?.page && merge(this.sort?.sortChange, this.paginator?.page).pipe(
 			tap(() => {
 				this.loadUsersList();
 			})
 		)
 		.subscribe();
-		this.subscriptions.push(paginatorSubscriptions);
+		paginatorSubscriptions && this.subscriptions.push(paginatorSubscriptions);
 
 
 		// Filtration, bind to searchInput
-		const searchSubscription = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+		const searchSubscription = this.searchInput && fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
 			// tslint:disable-next-line:max-line-length
 			debounceTime(150), // The user can type quite quickly in the input box, and that could trigger a lot of server requests. With this operator, we are limiting the amount of server requests emitted to a maximum of one every 150ms
 			distinctUntilChanged(), // This operator will eliminate duplicate values
 			tap(() => {
-				this.paginator.pageIndex = 0;
+				this.paginator && (this.paginator.pageIndex = 0);
 				this.loadUsersList();
 			})
 		)
 		.subscribe();
-		this.subscriptions.push(searchSubscription);
+		searchSubscription && this.subscriptions.push(searchSubscription);
 
 		// Set title to page breadCrumbs
 		this.subheaderService.setTitle('User management');
 
-		// Init DataSource
-		this.dataSource = new UsersDataSource(this.store);
 		const entitiesSubscription = this.dataSource.entitySubject.pipe(
 			skip(1),
 			distinctUntilChanged()
@@ -150,10 +185,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
 		this.selection.clear();
 		const queryParams = new QueryParamsModel(
 			this.filterConfiguration(),
-			this.sort.direction,
-			this.sort.active,
-			this.paginator.pageIndex,
-			this.paginator.pageSize
+			this.sort?.direction,
+			this.sort?.active,
+			this.paginator?.pageIndex,
+			this.paginator?.pageSize
 		);
 		this.store.dispatch(new UsersPageRequested({ page: queryParams }));
 		this.selection.clear();
@@ -162,7 +197,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 	/** FILTRATION */
 	filterConfiguration(): any {
 		const filter: any = {};
-		const searchText: string = this.searchInput.nativeElement.value;
+		const searchText = this.searchInput?.nativeElement.value;
 
 		filter.lastName = searchText;
 

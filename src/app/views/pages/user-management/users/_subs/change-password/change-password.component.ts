@@ -73,7 +73,12 @@ export class ChangePasswordComponent implements OnInit {
 	 */
 	constructor(private fb: FormBuilder, private auth: AuthService, private store: Store<AppState>,
 		// tslint:disable-next-line:align
-		private layoutUtilsService: LayoutUtilsService) {
+		private layoutUtilsService: LayoutUtilsService
+	) {
+		this.changePasswordForm = this.fb.group({
+			password: ['', Validators.required],
+			confirmPassword: ['', Validators.required]
+		});
 	}
 
 	/**
@@ -96,17 +101,6 @@ export class ChangePasswordComponent implements OnInit {
 		}
 		this.auth.getUserById(this.userId).subscribe(res => {
 			this.user = res ?? undefined;
-			this.createForm();
-		});
-	}
-
-	/**
-	 * Init form
-	 */
-	createForm() {
-		this.changePasswordForm = this.fb.group({
-			password: ['', Validators.required],
-			confirmPassword: ['', Validators.required]
 		});
 	}
 

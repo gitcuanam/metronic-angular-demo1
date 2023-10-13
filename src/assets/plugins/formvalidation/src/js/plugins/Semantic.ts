@@ -29,12 +29,12 @@ export default class Semantic extends Framework {
 
     public install(): void {
         super.install();
-        this.core.on('plugins.message.placed', this.messagePlacedHandler);
+        this.core && this.core.on('plugins.message.placed', this.messagePlacedHandler);
     }
 
     public uninstall(): void {
         super.uninstall();
-        this.core.off('plugins.message.placed', this.messagePlacedHandler);
+        this.core && this.core.off('plugins.message.placed', this.messagePlacedHandler);
     }
 
     protected onIconPlaced(e: IconPlacedEvent): void {

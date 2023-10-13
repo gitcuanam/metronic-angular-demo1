@@ -44,10 +44,10 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
     }
 
     public install(): void {
-        this.core.registerValidator(PasswordStrength.PASSWORD_STRENGTH_VALIDATOR, this.validatePassword);
-        this.core.on('core.validator.validated', this.validatorValidatedHandler);
+        this.core && this.core.registerValidator(PasswordStrength.PASSWORD_STRENGTH_VALIDATOR, this.validatePassword);
+        this.core && this.core.on('core.validator.validated', this.validatorValidatedHandler);
 
-        this.opts?.field && this.core.addField(this.opts.field, {
+        this.opts?.field && this.core && this.core.addField(this.opts.field, {
             validators: {
                 [PasswordStrength.PASSWORD_STRENGTH_VALIDATOR]: {
                     message: this.opts.message,
@@ -58,9 +58,9 @@ export default class PasswordStrength extends Plugin<PasswordStrengthOptions> {
     }
 
     public uninstall(): void {
-        this.core.off('core.validator.validated', this.validatorValidatedHandler);
+        this.core && this.core.off('core.validator.validated', this.validatorValidatedHandler);
         // It's better if we can remove validator
-        this.opts?.field && this.core.disableValidator(this.opts.field, PasswordStrength.PASSWORD_STRENGTH_VALIDATOR);
+        this.opts?.field && this.core && this.core.disableValidator(this.opts.field, PasswordStrength.PASSWORD_STRENGTH_VALIDATOR);
     }
 
     private checkPasswordStrength(): ValidateFunction {

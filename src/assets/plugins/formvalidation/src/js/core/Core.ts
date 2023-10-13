@@ -4,12 +4,11 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
+import getFieldValue from '../filters/getFieldValue';
+import validators from '../validators/index';
 import emitter, { Emitter } from './emitter';
 import filter, { Filter } from './filter';
 import Plugin from './Plugin';
-
-import getFieldValue from '../filters/getFieldValue';
-import validators from '../validators/index';
 
 export interface LocalizationMessage {
     [locale: string]: string;
@@ -127,7 +126,7 @@ class Core {
     } = {};
 
     private localization?: Localization;
-    private locale: string;
+    private locale?: string;
 
     constructor(form: HTMLElement, fields?: FieldsOptions) {
         this.form = form;
@@ -511,7 +510,7 @@ class Core {
 
     public getFormElement(): HTMLElement { return this.form; }
 
-    public getLocale(): string { return this.locale; }
+    public getLocale(): string | undefined { return this.locale; }
 
     public getPlugin(name: string): Plugin<any> {
         return this.plugins[name];
@@ -838,6 +837,4 @@ export default function formValidation(form: HTMLElement, options?: Options): Co
 
     return core;
 }
-export {
-    Core,
-};
+export { Core };

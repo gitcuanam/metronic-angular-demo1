@@ -33,7 +33,7 @@ export default class Mailgun extends Plugin<MailgunOptions> {
 
     public install(): void {
         if (this.opts?.suggestion) {
-            this.core.on('plugins.message.displayed', this.messageDisplayedHandler);
+            this.core && this.core.on('plugins.message.displayed', this.messageDisplayedHandler);
         }
 
         const aliasOpts: AliasOptions = {
@@ -42,7 +42,7 @@ export default class Mailgun extends Plugin<MailgunOptions> {
         if (!this.opts?.field) {
             return;
         }
-        this.core
+        this.core && this.core
             .registerPlugin('___mailgunAlias', new Alias(aliasOpts))
             .addField(this.opts.field, {
                 validators: {
@@ -65,9 +65,9 @@ export default class Mailgun extends Plugin<MailgunOptions> {
 
     public uninstall(): void {
         if (this.opts?.suggestion) {
-            this.core.off('plugins.message.displayed', this.messageDisplayedHandler);
+            this.core && this.core.off('plugins.message.displayed', this.messageDisplayedHandler);
         }
-        this.opts?.field && this.core.removeField(this.opts.field);
+        this.opts?.field && this.core && this.core.removeField(this.opts.field);
     }
 
     private onMessageDisplayed(e: MessageDisplayedEvent): void {

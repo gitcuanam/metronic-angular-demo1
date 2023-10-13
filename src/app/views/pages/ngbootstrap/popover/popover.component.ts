@@ -1,6 +1,14 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+
+import {
+  NgbPopover,
+  NgbPopoverConfig,
+} from '@ng-bootstrap/ng-bootstrap';
 
 const quickAndEasyPopovers = {
 		beforeCodeTitle: 'Quick and easy popovers',
@@ -287,8 +295,8 @@ export class PopoverComponent implements OnInit {
 	greeting = {};
 	name1 = 'World';
 
-	@ViewChild('p', {static: true}) public popover: NgbPopover;
-	@ViewChild('p2', {static: true}) public popover2: NgbPopover;
+	@ViewChild('p', {static: true}) public popover?: NgbPopover;
+	@ViewChild('p2', {static: true}) public popover2?: NgbPopover;
 
 	constructor(config: NgbPopoverConfig) {
 		// customize default values of popovers used by this component tree
@@ -307,11 +315,11 @@ export class PopoverComponent implements OnInit {
 	}
 
 	public changeGreeting(greeting: any): void {
-		const isOpen = this.popover2.isOpen();
-		this.popover2.close();
+		const isOpen = this.popover2?.isOpen();
+		this.popover2?.close();
 		if (greeting !== this.greeting || !isOpen) {
 			this.greeting = greeting;
-			this.popover2.open(greeting);
+			this.popover2?.open(greeting);
 		}
 	}
 }

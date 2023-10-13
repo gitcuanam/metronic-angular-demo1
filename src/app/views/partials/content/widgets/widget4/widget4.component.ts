@@ -1,7 +1,15 @@
 // Angular
-import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Input,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
+
 // Lodash
 import { shuffle } from 'lodash';
+
 // Layout
 import { LayoutConfigService } from '../../../../../core/_base/layout';
 
@@ -21,9 +29,9 @@ export interface Widget4Data {
 })
 export class Widget4Component implements OnInit {
 	// Public properties
-	@Input() data: Widget4Data[];
+	@Input() data?: Widget4Data[];
 
-	@ContentChild('actionTemplate', {static: true}) actionTemplate: TemplateRef<any>;
+	@ContentChild('actionTemplate', {static: true}) actionTemplate?: TemplateRef<any>;
 
 	/**
 	 * Component constructor

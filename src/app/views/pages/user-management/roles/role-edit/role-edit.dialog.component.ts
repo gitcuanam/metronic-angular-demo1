@@ -52,15 +52,15 @@ import { AppState } from '../../../../../core/reducers';
 })
 export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	// Public properties
-	role: Role;
+	role?: Role;
 	role$: Observable<Role | undefined>;
 	hasFormErrors = false;
 	viewLoading = false;
 	loadingAfterSubmit = false;
-	allPermissions$: Observable<Permission[]>;
+	allPermissions$?: Observable<Permission[]>;
 	rolePermissions: Permission[] = [];
 	// Private properties
-	private componentSubscriptions: Subscription;
+	private componentSubscriptions?: Subscription;
 
 	/**
 	 * Component constructor
@@ -71,7 +71,15 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 */
 	constructor(public dialogRef: MatDialogRef<RoleEditDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private store: Store<AppState>) { }
+		private store: Store<AppState>) {
+		if (this.data.roleId) {
+			this.role$ = this.store.pipe(select(selectRoleById(this.data.roleId)));
+		} else {
+			const newRole = new Role();
+			newRole.clear();
+			this.role$ = of(newRole);
+		}
+		}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -81,13 +89,6 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * On init
 	 */
 	ngOnInit() {
-		if (this.data.roleId) {
-			this.role$ = this.store.pipe(select(selectRoleById(this.data.roleId)));
-		} else {
-			const newRole = new Role();
-			newRole.clear();
-			this.role$ = of(newRole);
-		}
 
 		this.role$.subscribe(res => {
 			if (!res) {
@@ -118,14 +119,14 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Load permissions
 	 */
 	loadPermissions() {
-		this.allPermissions$.subscribe(_allPermissions => {
+		this.allPermissions$?.subscribe(_allPermissions => {
 			if (!_allPermissions) {
 				return;
 			}
 
 			const mainPermissions = _allPermissions.filter(el => !el.parentId);
 			mainPermissions.forEach((element: Permission) => {
-				const hasUserPermission = this.role.permissions?.some(t => t === element.id);
+				const hasUserPermission = this.role?.permissions?.some(t => t === element.id);
 				const rootPermission = new Permission();
 				rootPermission.clear();
 				rootPermission.isSelected = !!hasUserPermission;
@@ -136,7 +137,7 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 				rootPermission.title = element.title;
 				const children = _allPermissions.filter(el => el.parentId && el.parentId === element.id);
 				children.forEach(child => {
-					const hasUserChildPermission = this.role.permissions?.some(t => t === child.id);
+					const hasUserChildPermission = this.role?.permissions?.some(t => t === child.id);
 					const childPermission = new Permission();
 					childPermission.clear();
 					childPermission.isSelected = !!hasUserChildPermission;
@@ -176,11 +177,11 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 */
 	prepareRole(): Role {
 		const _role = new Role();
-		_role.id = this.role.id;
+		_role.id = this.role?.id;
 		_role.permissions = this.preparePermissionIds();
 		// each(this.assignedRoles, (_role: Role) => _user.roles.push(_role.id));
-		_role.title = this.role.title;
-		_role.isCoreRole = this.role.isCoreRole;
+		_role.title = this.role?.title;
+		_role.isCoreRole = this.role?.isCoreRole ?? false;
 		return _role;
 	}
 
@@ -213,7 +214,7 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		this.loadingAfterSubmit = true;
 		this.viewLoading = true;
 		/* Server loading imitation. Remove this on real code */
-		const id = this.role.id;
+		const id = this.role?.id;
 		if (!id) {
 			console.error('role id is undefined');
 			console.log(id);
@@ -313,9 +314,9 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns component title
 	 */
 	getTitle(): string {
-		if (this.role && this.role.id) {
+		if (this.role && this.role?.id) {
 			// tslint:disable-next-line:no-string-throw
-			return `Edit role '${this.role.title}'`;
+			return `Edit role '${this.role?.title}'`;
 		}
 
 		// tslint:disable-next-line:no-string-throw
@@ -326,6 +327,6 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns is title valid
 	 */
 	isTitleValid(): boolean {
-		return (!!this.role && !!this.role.title && this.role.title.length > 0);
+		return (!!this.role && !!this.role?.title && this.role?.title.length > 0);
 	}
 }

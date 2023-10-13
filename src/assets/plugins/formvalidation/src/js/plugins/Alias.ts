@@ -44,11 +44,11 @@ export default class Alias extends Plugin<AliasOptions> {
     }
 
     public install(): void {
-        this.core.registerFilter('validator-name', this.validatorNameFilter);
+        this.core?.registerFilter('validator-name', this.validatorNameFilter);
     }
 
     public uninstall(): void {
-        this.core.deregisterFilter('validator-name', this.validatorNameFilter);
+        this.core?.deregisterFilter('validator-name', this.validatorNameFilter);
     }
 
     private getValidatorName(alias: string, field: string): string {

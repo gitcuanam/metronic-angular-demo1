@@ -30,7 +30,7 @@ export default class Aria extends Plugin<{}> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.field.valid', this.fieldValidHandler)
             .on('core.field.invalid', this.fieldInvalidHandler)
             .on('core.element.validated', this.elementValidatedHandler)
@@ -38,7 +38,7 @@ export default class Aria extends Plugin<{}> {
     }
 
     public uninstall(): void {
-        this.core
+        this.core && this.core
             .off('core.field.valid', this.fieldValidHandler)
             .off('core.field.invalid', this.fieldInvalidHandler)
             .off('core.element.validated', this.elementValidatedHandler)
@@ -53,7 +53,7 @@ export default class Aria extends Plugin<{}> {
     }
 
     private onFieldValid(field: string): void {
-        const elements = this.core.getElements(field);
+        const elements = this.core?.getElements(field);
         if (elements) {
             elements.forEach((ele) => {
                 ele.setAttribute('aria-invalid', 'false');
@@ -63,7 +63,7 @@ export default class Aria extends Plugin<{}> {
     }
 
     private onFieldInvalid(field: string): void {
-        const elements = this.core.getElements(field);
+        const elements = this.core?.getElements(field);
         if (elements) {
             elements.forEach((ele) => ele.setAttribute('aria-invalid', 'true'));
         }
@@ -73,8 +73,8 @@ export default class Aria extends Plugin<{}> {
         e.messageElement.setAttribute('role', 'alert');
         e.messageElement.setAttribute('aria-hidden', 'false');
 
-        const elements = this.core.getElements(e.field);
-        const index = elements.indexOf(e.element);
+        const elements = this.core?.getElements(e.field);
+        const index = elements?.indexOf(e.element);
 
         const id = `js-fv-${e.field}-${index}-${Date.now()}-message`;
         e.messageElement.setAttribute('id', id);
@@ -82,7 +82,7 @@ export default class Aria extends Plugin<{}> {
 
         const type = e.element.getAttribute('type');
         if ('radio' === type || 'checkbox' === type) {
-            elements.forEach((ele) => ele.setAttribute('aria-describedby', id));
+            elements?.forEach((ele) => ele.setAttribute('aria-describedby', id));
         }
     }
 }

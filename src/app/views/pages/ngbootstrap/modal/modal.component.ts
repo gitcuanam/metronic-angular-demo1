@@ -1,6 +1,15 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbActiveModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 const modalWithDefaultOptions = {
 	beforeCodeTitle: 'Modal with default options',
@@ -502,8 +511,8 @@ export class ModalComponent implements OnInit {
 	exampleSmallModal;
 	exampleVerticallyCentered;
 
-	closeResult: string;
-	closeResult2: string;
+	closeResult?: string;
+	closeResult2?: string;
 	constructor(private modalService: NgbModal) { }
 
 	open(content) {

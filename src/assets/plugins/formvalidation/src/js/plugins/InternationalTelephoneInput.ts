@@ -39,9 +39,9 @@ export default class InternationalTelephoneInput extends Plugin<InternationalTel
     }
 
     public install(): void {
-        this.core.registerValidator(InternationalTelephoneInput.INT_TEL_VALIDATOR, this.validatePhoneNumber);
+        this.core && this.core.registerValidator(InternationalTelephoneInput.INT_TEL_VALIDATOR, this.validatePhoneNumber);
         this.fields.forEach((field) => {
-            this.core.addField(field, {
+            this.core && this.core.addField(field, {
                 validators: {
                     [InternationalTelephoneInput.INT_TEL_VALIDATOR]: {
                         message: this.opts?.message,
@@ -49,13 +49,13 @@ export default class InternationalTelephoneInput extends Plugin<InternationalTel
                 },
             });
 
-            const ele = this.core.getElements(field)[0];
-            const handler = () => this.core.revalidateField(field);
+            const ele = this.core && this.core.getElements(field)[0];
+            const handler = () => this.core && this.core.revalidateField(field);
 
-            ele.addEventListener('countrychange', handler);
+            ele?.addEventListener('countrychange', handler);
             this.countryChangeHandler.set(field, handler);
-            this.fieldElements.set(field, ele);
-            this.intlTelInstances?.set(field, intlTelInput(ele, this.opts ?? {field: '', message: ''}));
+            ele && this.fieldElements.set(field, ele);
+            ele && this.intlTelInstances?.set(field, intlTelInput(ele, this.opts ?? {field: '', message: ''}));
         });
     }
 
@@ -68,7 +68,7 @@ export default class InternationalTelephoneInput extends Plugin<InternationalTel
 
             if (handler && ele && intlTel) {
                 ele.removeEventListener('countrychange', handler);
-                this.core.disableValidator(field, InternationalTelephoneInput.INT_TEL_VALIDATOR);
+                this.core && this.core.disableValidator(field, InternationalTelephoneInput.INT_TEL_VALIDATOR);
                 intlTel.destroy();
             }
         });

@@ -1,5 +1,10 @@
 // Angular
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
 	selector: 'kt-portlet-footer',
@@ -9,7 +14,7 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
 export class PortletFooterComponent implements OnInit {
 	// Public properties
 	@HostBinding('class') classList = 'card-footer';
-	@Input() class: string;
+	@Input() class?: string;
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks

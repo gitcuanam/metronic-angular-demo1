@@ -5,23 +5,28 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnInit,
   Renderer2,
-  Input,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-// RxJS
-import { filter } from 'rxjs/operators';
+import {
+  NavigationEnd,
+  Router,
+} from '@angular/router';
+
 // Object-Path
 import * as objectPath from 'object-path';
+// RxJS
+import { filter } from 'rxjs/operators';
+
 // Layout
 import {
   LayoutConfigService,
   MenuConfigService,
   MenuHorizontalService,
   MenuOptions,
-  OffcanvasOptions
+  OffcanvasOptions,
 } from '../../../../core/_base/layout';
 // HTML Class
 import { HtmlClassService } from '../../html-class.service';
@@ -34,15 +39,15 @@ import { HtmlClassService } from '../../html-class.service';
 })
 export class MenuHorizontalComponent implements OnInit, AfterViewInit {
   private offcanvas: any;
-  @ViewChild('headerMenuOffcanvas', { static: true }) headerMenuOffcanvas: ElementRef;
+  @ViewChild('headerMenuOffcanvas', { static: true }) headerMenuOffcanvas?: ElementRef;
 
-  @Input() headerLogo: string;
-  @Input() headerMenuSelfDisplay: boolean;
-  @Input() headerMenuClasses: string;
+  @Input() headerLogo?: string;
+  @Input() headerMenuSelfDisplay?: boolean;
+  @Input() headerMenuClasses?: string;
   // Public properties
   currentRouteUrl: any = '';
   asideSelfDisplay = '';
-  rootArrowEnabled: boolean;
+  rootArrowEnabled?: boolean;
 
   menuOptions: MenuOptions = {
     submenu: {
@@ -110,7 +115,7 @@ export class MenuHorizontalComponent implements OnInit, AfterViewInit {
     this.rootArrowEnabled = this.layoutConfigService.getConfig('header.menu.self.rootArrow');
     this.currentRouteUrl = this.router.url;
     setTimeout(() => {
-      this.offcanvas = new KTOffcanvas(this.headerMenuOffcanvas.nativeElement, this.offcanvasOptions);
+      this.offcanvas = this.headerMenuOffcanvas ? new KTOffcanvas(this.headerMenuOffcanvas.nativeElement, this.offcanvasOptions) : undefined;
     });
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))

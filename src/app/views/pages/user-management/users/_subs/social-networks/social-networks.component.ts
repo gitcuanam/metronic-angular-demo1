@@ -1,17 +1,34 @@
 // Angular
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
+
 // RxJS
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-// State
-import { AppState } from '../../../../../../core/reducers';
-// Auth
-import { SocialNetworks, AuthService } from '../../../../../../core/auth';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+} from 'rxjs/operators';
+
+import { Store } from '@ngrx/store';
+
 // CRUD
 import { LayoutUtilsService } from '../../../../../../core/_base/crud';
-
+// Auth
+import {
+  AuthService,
+  SocialNetworks,
+} from '../../../../../../core/auth';
+// State
+import { AppState } from '../../../../../../core/reducers';
 
 @Component({
 	selector: 'kt-social-networks',
@@ -22,7 +39,7 @@ export class SocialNetworksComponent implements OnInit {
 	// Public properties
 	// Incoming data
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
-	@Input() socialNetworksSubject: BehaviorSubject<SocialNetworks>;
+	@Input() socialNetworksSubject?: BehaviorSubject<SocialNetworks>;
 	hasFormErrors = false;
 	socialNetworksForm: FormGroup;
 
@@ -34,10 +51,19 @@ export class SocialNetworksComponent implements OnInit {
 	 * @param store: Store<AppState>
 	 * @param layoutUtilsService: LayoutUtilsService
 	 */
-	constructor(private fb: FormBuilder,
-		           private auth: AuthService,
-		           private store: Store<AppState>,
-		           private layoutUtilsService: LayoutUtilsService) {}
+	constructor(
+		private fb: FormBuilder,
+		private auth: AuthService,
+		private store: Store<AppState>,
+		private layoutUtilsService: LayoutUtilsService
+	) {
+		this.socialNetworksForm = this.fb.group({
+			linkedIn: [this.socialNetworksSubject?.value.linkedIn],
+			facebook: [this.socialNetworksSubject?.value.facebook],
+			twitter: [this.socialNetworksSubject?.value.twitter],
+			instagram: [this.socialNetworksSubject?.value.instagram]
+		});
+	}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -47,13 +73,12 @@ export class SocialNetworksComponent implements OnInit {
 	 * On init
 	 */
 	ngOnInit() {
-		if (!this.socialNetworksSubject.value) {
+		if (!this.socialNetworksSubject?.value) {
 			const newSocialNetworks = new SocialNetworks();
 			newSocialNetworks.clear();
-			this.socialNetworksSubject.next(newSocialNetworks);
+			this.socialNetworksSubject?.next(newSocialNetworks);
 		}
 
-		this.createForm();
 		this.socialNetworksForm.valueChanges
 			.pipe(
 				// tslint:disable-next-line:max-line-length
@@ -64,16 +89,6 @@ export class SocialNetworksComponent implements OnInit {
 				})
 			)
 			.subscribe();
-	}
-
-	// Create form
-	createForm() {
-		this.socialNetworksForm = this.fb.group({
-			linkedIn: [this.socialNetworksSubject.value.linkedIn],
-			facebook: [this.socialNetworksSubject.value.facebook],
-			twitter: [this.socialNetworksSubject.value.twitter],
-			instagram: [this.socialNetworksSubject.value.instagram]
-		});
 	}
 
 	/**
@@ -100,7 +115,7 @@ export class SocialNetworksComponent implements OnInit {
 		newSocialNetworks.facebook = controls.facebook.value;
 		newSocialNetworks.twitter = controls.twitter.value;
 		newSocialNetworks.instagram = controls.instagram.value;
-		this.socialNetworksSubject.next(newSocialNetworks);
+		this.socialNetworksSubject?.next(newSocialNetworks);
 		this.loadingSubject.next(false);
 	}
 

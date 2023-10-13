@@ -20,7 +20,7 @@ export interface TooltipOptions {
 export default class Tooltip extends Plugin<TooltipOptions> {
     // Map the element with message
     private messages: Map<HTMLElement, string> = new Map();
-    private tip: HTMLElement;
+    private tip?: HTMLElement;
     private iconPlacedHandler: (e: IconPlacedEvent) => void;
     private validatorValidatedHandler: (e: ValidatorValidatedEvent) => void;
     private elementValidatedHandler: (e: ElementValidatedEvent) => void;
@@ -47,7 +47,7 @@ export default class Tooltip extends Plugin<TooltipOptions> {
         });
         document.body.appendChild(this.tip);
 
-        this.core
+        this.core && this.core
             .on('plugins.icon.placed', this.iconPlacedHandler)
             .on('core.validator.validated', this.validatorValidatedHandler)
             .on('core.element.validated', this.elementValidatedHandler);
@@ -59,9 +59,9 @@ export default class Tooltip extends Plugin<TooltipOptions> {
 
     public uninstall(): void {
         this.messages.clear();
-        document.body.removeChild(this.tip);
+        this.tip && document.body.removeChild(this.tip);
 
-        this.core
+        this.core && this.core
             .off('plugins.icon.placed', this.iconPlacedHandler)
             .off('core.validator.validated', this.validatorValidatedHandler)
             .off('core.element.validated', this.elementValidatedHandler);
@@ -95,9 +95,10 @@ export default class Tooltip extends Plugin<TooltipOptions> {
             const ele = ('radio' === type || 'checkbox' === type) ? elements[0] : e.element;
 
             // Get the message
+            const locale = this.core?.getLocale();
             const message = (typeof e.result.message === 'string')
                         ? e.result.message
-                        : e.result.message?.[this.core.getLocale()];
+                        : (locale ? e.result.message?.[locale] : undefined);
 
             this.messages.set(ele, message ?? '');
         }
@@ -120,15 +121,19 @@ export default class Tooltip extends Plugin<TooltipOptions> {
     private show(ele: HTMLElement, e: MouseEvent): void {
         e.preventDefault();
         e.stopPropagation();
+        
+        if (!this.tip) {
+            return;
+        }
 
         if (!this.messages.has(ele)) {
             return;
         }
 
-        classSet(this.tip, {
+        this.tip && classSet(this.tip, {
             'fv-plugins-tooltip--hide': false,
         });
-        this.tip.innerHTML = `<span class="fv-plugins-tooltip__content">${this.messages.get(ele)}</span>`;
+        this.tip && (this.tip.innerHTML = `<span class="fv-plugins-tooltip__content">${this.messages.get(ele)}</span>`);
 
         // Calculate position of the icon element
         const icon = e.target as HTMLElement;
@@ -183,11 +188,11 @@ export default class Tooltip extends Plugin<TooltipOptions> {
 
         top = top + scrollTop;
         left = left + scrollLeft;
-        this.tip.setAttribute('style', `top: ${top}px; left: ${left}px`);
+        this.tip?.setAttribute('style', `top: ${top}px; left: ${left}px`);
     }
 
     private hide(): void {
-        classSet(this.tip, {
+        this.tip && classSet(this.tip, {
             'fv-plugins-tooltip--hide': true,
         });
     }

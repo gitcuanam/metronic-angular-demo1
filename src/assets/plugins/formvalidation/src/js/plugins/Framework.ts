@@ -67,11 +67,11 @@ export default class Framework extends Plugin<FrameworkOptions> {
     }
 
     public install(): void {
-        classSet(this.core.getFormElement(), {
+        this.core && classSet(this.core.getFormElement(), {
             [this.opts?.formClass ?? '']: true,
             'fv-plugins-framework': true,
         });
-        this.core
+        this.core && this.core
             .on('core.element.ignored', this.elementIgnoredHandler)
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
@@ -81,7 +81,7 @@ export default class Framework extends Plugin<FrameworkOptions> {
             .on('core.field.removed', this.fieldRemovedHandler);
 
         if (this.opts?.defaultMessageContainer) {
-            this.core.registerPlugin('___frameworkMessage', new Message({
+            this.core && this.core.registerPlugin('___frameworkMessage', new Message({
                 clazz: this.opts?.messageClass,
                 container: (field, element) => {
                     const selector = ('string' === typeof this.opts?.rowSelector)
@@ -97,12 +97,12 @@ export default class Framework extends Plugin<FrameworkOptions> {
     public uninstall(): void {
         this.results.clear();
         this.containers.clear();
-        classSet(this.core.getFormElement(), {
+        this.core && classSet(this.core.getFormElement(), {
             [this.opts?.formClass ?? '']: false,
             'fv-plugins-framework': false,
         });
 
-        this.core
+        this.core && this.core
             .off('core.element.ignored', this.elementIgnoredHandler)
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)

@@ -65,13 +65,13 @@ export class AccordionControlPanelDirective implements AfterContentChecked {
 	/**
 	 *  The title for the panel.
 	 */
-	@Input() title: string;
+	@Input() title?: string;
 	/**
 	 *  The icon for the panel
 	 */
-	@Input() iconClass: string;
+	@Input() iconClass?: string;
 
-	@Input() hasBodyWrapper: string;
+	@Input() hasBodyWrapper?: string;
 
 
 	/**
@@ -79,20 +79,20 @@ export class AccordionControlPanelDirective implements AfterContentChecked {
 	 *  Bootstrap recognizes the following types: "primary", "secondary", "success", "danger", "warning", "info", "light"
 	 * and "dark"
 	 */
-	@Input() type: string;
+	@Input() type?: string;
 
-	titleTpl: AccordionControlPanelTitleDirective | null;
-	contentTpl: AccordionControlPanelContentDirective | null;
+	titleTpl?: AccordionControlPanelTitleDirective | null;
+	contentTpl?: AccordionControlPanelContentDirective | null;
 
-	@ContentChildren(AccordionControlPanelTitleDirective, { descendants: false }) titleTpls: QueryList<AccordionControlPanelTitleDirective>;
-	@ContentChildren(AccordionControlPanelContentDirective, { descendants: false }) contentTpls:
+	@ContentChildren(AccordionControlPanelTitleDirective, { descendants: false }) titleTpls?: QueryList<AccordionControlPanelTitleDirective>;
+	@ContentChildren(AccordionControlPanelContentDirective, { descendants: false }) contentTpls?:
 		QueryList<AccordionControlPanelContentDirective>;
 
 	ngAfterContentChecked() {
 		// We are using @ContentChildren instead of @ContantChild as in the Angular version being used
 		// only @ContentChildren allows us to specify the {descendants: false} option.
-		this.titleTpl = this.titleTpls.first;
-		this.contentTpl = this.contentTpls.first;
+		this.titleTpl = this.titleTpls?.first;
+		this.contentTpl = this.contentTpls?.first;
 	}
 }
 
@@ -141,7 +141,7 @@ export interface AccordionControlPanelChangeEvent {
 
 })
 export class AccordionControlComponent implements AfterContentChecked {
-	@ContentChildren(AccordionControlPanelDirective) panels: QueryList<AccordionControlPanelDirective>;
+	@ContentChildren(AccordionControlPanelDirective) panels?: QueryList<AccordionControlPanelDirective>;
 
 	/**
 	 * An array or comma separated strings of panel identifiers that should be opened
@@ -152,7 +152,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	/**
 	 *  Whether the other panels should be closed when a panel is opened
 	 */
-	@Input() closeOthers: boolean;
+	@Input() closeOthers?: boolean;
 
 	/**
 	 * Whether the closed panels should be hidden without destroying them
@@ -164,7 +164,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	 *  Bootstrap recognizes the following types: "primary", "secondary", "success", "danger", "warning", "info", "light"
 	 * and "dark
 	 */
-	@Input() type: string;
+	@Input() type?: string;
 
 	/**
 	 * A panel change event fired right before the panel toggle happens. See PanelChangeEvent for payload details
@@ -179,7 +179,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	 * Programmatically toggle a panel with a given id.
 	 */
 	toggle(panelId: string, accordionBodyScrollHeight?: any) {
-		const panel = this.panels.find(p => p.id === panelId);
+		const panel = this.panels?.find(p => p.id === panelId);
 
 		if (panel && !panel.disabled) {
 			let defaultPrevented = false;
@@ -215,7 +215,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 		}
 
 		// update panels open states
-		this.panels.forEach(panel => {
+		this.panels?.forEach(panel => {
 			panel.isOpen = !panel.disabled && this.activeIds.indexOf(panel.id) > -1;
 			if (this.hasAnimation) {
 				const domPanel = document.getElementById(panel.id);
@@ -235,7 +235,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	 * @param panelId: string
 	 */
 	private _closeOthers(panelId: string) {
-		this.panels.forEach(panel => {
+		this.panels?.forEach(panel => {
 			if (panel.id !== panelId) {
 				panel.isOpen = false;
 			}
@@ -246,7 +246,7 @@ export class AccordionControlComponent implements AfterContentChecked {
 	 * Update active ids
 	 */
 	private _updateActiveIds() {
-		this.activeIds = this.panels.filter(panel => panel.isOpen && !panel.disabled).map(panel => panel.id);
+		this.activeIds = this.panels?.filter(panel => panel.isOpen && !panel.disabled).map(panel => panel.id) ?? [];
 	}
 }
 
