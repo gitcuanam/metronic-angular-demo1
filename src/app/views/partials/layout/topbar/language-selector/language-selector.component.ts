@@ -1,8 +1,17 @@
 // Angular
-import { Component, HostBinding, OnInit, Input } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  NavigationStart,
+  Router,
+} from '@angular/router';
+
 // RxJS
 import { filter } from 'rxjs/operators';
+
 // Translate
 import { TranslationService } from '../../../../../core/_base/layout';
 
@@ -19,9 +28,9 @@ interface LanguageFlag {
 })
 export class LanguageSelectorComponent implements OnInit {
   // Public properties
-  @Input() iconType: '' | 'brand';
+  @Input() iconType?: '' | 'brand';
 
-  language: LanguageFlag;
+  language?: LanguageFlag;
   languages: LanguageFlag[] = [
     {
       lang: 'en',

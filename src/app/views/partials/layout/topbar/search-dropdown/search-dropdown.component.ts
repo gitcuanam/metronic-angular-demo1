@@ -100,14 +100,14 @@ export class SearchDropdownComponent implements OnInit {
   @Input() icon = 'flaticon2-search-1';
 
   // Set true to icon as SVG or false as icon class
-  @Input() useSVG: boolean;
+  @Input() useSVG?: boolean;
 
   @Input() type: 'brand' | 'success' | 'warning' = 'success';
 
-  @ViewChild('searchInput', {static: true}) searchInput: ElementRef;
+  @ViewChild('searchInput', {static: true}) searchInput?: ElementRef;
 
   data: any[] = [];
-  loading: boolean;
+  loading: boolean = false;
 
   /**
    * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -149,11 +149,11 @@ export class SearchDropdownComponent implements OnInit {
    */
   clear(e) {
     this.data = [];
-    this.searchInput.nativeElement.value = '';
+    this.searchInput && (this.searchInput.nativeElement.value = '');
   }
 
   openChange() {
-    setTimeout(() => this.searchInput.nativeElement.focus());
+    setTimeout(() => this.searchInput?.nativeElement.focus());
   }
 
   showCloseButton() {

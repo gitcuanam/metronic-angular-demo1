@@ -5,11 +5,11 @@
  */
 
 import {
-    DynamicFieldEvent,
-    ElementIgnoredEvent,
-    ElementNotValidatedEvent,
-    ElementValidatedEvent,
-    ElementValidatingEvent,
+  DynamicFieldEvent,
+  ElementIgnoredEvent,
+  ElementNotValidatedEvent,
+  ElementValidatedEvent,
+  ElementValidatingEvent,
 } from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
@@ -67,11 +67,11 @@ export default class Framework extends Plugin<FrameworkOptions> {
     }
 
     public install(): void {
-        classSet(this.core.getFormElement(), {
-            [this.opts.formClass]: true,
+        this.core && classSet(this.core.getFormElement(), {
+            [this.opts?.formClass ?? '']: true,
             'fv-plugins-framework': true,
         });
-        this.core
+        this.core && this.core
             .on('core.element.ignored', this.elementIgnoredHandler)
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
@@ -80,15 +80,15 @@ export default class Framework extends Plugin<FrameworkOptions> {
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.field.removed', this.fieldRemovedHandler);
 
-        if (this.opts.defaultMessageContainer) {
-            this.core.registerPlugin('___frameworkMessage', new Message({
-                clazz: this.opts.messageClass,
+        if (this.opts?.defaultMessageContainer) {
+            this.core && this.core.registerPlugin('___frameworkMessage', new Message({
+                clazz: this.opts?.messageClass,
                 container: (field, element) => {
-                    const selector = ('string' === typeof this.opts.rowSelector)
-                        ? this.opts.rowSelector
-                        : this.opts.rowSelector(field, element);
+                    const selector = ('string' === typeof this.opts?.rowSelector)
+                        ? this.opts?.rowSelector
+                        : this.opts?.rowSelector(field, element) ?? '';
                     const groupEle = closest(element, selector);
-                    return Message.getClosestContainer(element, groupEle, this.opts.rowPattern);
+                    return Message.getClosestContainer(element, groupEle, this.opts?.rowPattern);
                 },
             }));
         }
@@ -97,12 +97,12 @@ export default class Framework extends Plugin<FrameworkOptions> {
     public uninstall(): void {
         this.results.clear();
         this.containers.clear();
-        classSet(this.core.getFormElement(), {
-            [this.opts.formClass]: false,
+        this.core && classSet(this.core.getFormElement(), {
+            [this.opts?.formClass ?? '']: false,
             'fv-plugins-framework': false,
         });
 
-        this.core
+        this.core && this.core
             .off('core.element.ignored', this.elementIgnoredHandler)
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)
@@ -121,9 +121,9 @@ export default class Framework extends Plugin<FrameworkOptions> {
                 const groupEle = this.containers.get(ele);
                 if (groupEle) {
                     classSet(groupEle, {
-                        [this.opts.rowInvalidClass]: false,
-                        [this.opts.rowValidatingClass]: false,
-                        [this.opts.rowValidClass]: false,
+                        [this.opts?.rowInvalidClass ?? '']: false,
+                        [this.opts?.rowValidatingClass ?? '']: false,
+                        [this.opts?.rowValidClass ?? '']: false,
                         'fv-plugins-icon-container': false,
                     });
                     this.containers.delete(ele);
@@ -139,9 +139,9 @@ export default class Framework extends Plugin<FrameworkOptions> {
             const groupEle = this.containers.get(ele);
             if (groupEle) {
                 classSet(groupEle, {
-                    [this.opts.rowInvalidClass]: false,
-                    [this.opts.rowValidatingClass]: false,
-                    [this.opts.rowValidClass]: false,
+                    [this.opts?.rowInvalidClass ?? '']: false,
+                    [this.opts?.rowValidatingClass ?? '']: false,
+                    [this.opts?.rowValidClass ?? '']: false,
                 });
             }
         });
@@ -159,13 +159,13 @@ export default class Framework extends Plugin<FrameworkOptions> {
     }
 
     private prepareElementContainer(field: string, element: HTMLElement): void {
-        const selector = ('string' === typeof this.opts.rowSelector)
-            ? this.opts.rowSelector
-            : this.opts.rowSelector(field, element);
+        const selector = ('string' === typeof this.opts?.rowSelector)
+            ? this.opts?.rowSelector
+            : this.opts?.rowSelector(field, element) ?? '';
         const groupEle = closest(element, selector);
         if (groupEle !== element) {
             classSet(groupEle, {
-                [this.opts.rowClasses]: true,
+                [this.opts?.rowClasses ?? '']: true,
                 'fv-plugins-icon-container': true,
             });
             this.containers.set(element, groupEle);
@@ -180,9 +180,9 @@ export default class Framework extends Plugin<FrameworkOptions> {
         const groupEle = this.containers.get(element);
         if (groupEle) {
             classSet(groupEle, {
-                [this.opts.rowInvalidClass]: false,
-                [this.opts.rowValidatingClass]: true,
-                [this.opts.rowValidClass]: false,
+                [this.opts?.rowInvalidClass ?? '']: false,
+                [this.opts?.rowValidatingClass ?? '']: true,
+                [this.opts?.rowValidClass ?? '']: false,
             });
         }
     }
@@ -200,16 +200,16 @@ export default class Framework extends Plugin<FrameworkOptions> {
         const ele = ('radio' === type || 'checkbox' === type) ? elements[0] : element;
 
         classSet(ele, {
-            [this.opts.eleValidClass]: false,
-            [this.opts.eleInvalidClass]: false,
+            [this.opts?.eleValidClass ?? '']: false,
+            [this.opts?.eleInvalidClass ?? '']: false,
         });
 
         const groupEle = this.containers.get(ele);
         if (groupEle) {
             classSet(groupEle, {
-                [this.opts.rowInvalidClass]: false,
-                [this.opts.rowValidatingClass]: false,
-                [this.opts.rowValidClass]: false,
+                [this.opts?.rowInvalidClass ?? '']: false,
+                [this.opts?.rowValidatingClass ?? '']: false,
+                [this.opts?.rowValidClass ?? '']: false,
             });
         }
     }
@@ -220,8 +220,8 @@ export default class Framework extends Plugin<FrameworkOptions> {
         const element = ('radio' === type || 'checkbox' === type) ? elements[0] : e.element;
 
         classSet(element, {
-            [this.opts.eleValidClass]: e.valid,
-            [this.opts.eleInvalidClass]: !e.valid,
+            [this.opts?.eleValidClass ?? '']: e.valid,
+            [this.opts?.eleInvalidClass ?? '']: !e.valid,
         });
 
         const groupEle = this.containers.get(element);
@@ -229,9 +229,9 @@ export default class Framework extends Plugin<FrameworkOptions> {
             if (!e.valid) {
                 this.results.set(element, false);
                 classSet(groupEle, {
-                    [this.opts.rowInvalidClass]: true,
-                    [this.opts.rowValidatingClass]: false,
-                    [this.opts.rowValidClass]: false,
+                    [this.opts?.rowInvalidClass ?? '']: true,
+                    [this.opts?.rowValidatingClass ?? '']: false,
+                    [this.opts?.rowValidClass ?? '']: false,
                 });
             } else {
                 this.results.delete(element);
@@ -247,9 +247,9 @@ export default class Framework extends Plugin<FrameworkOptions> {
                 // If all field(s) belonging to the row are valid
                 if (isValid) {
                     classSet(groupEle, {
-                        [this.opts.rowInvalidClass]: false,
-                        [this.opts.rowValidatingClass]: false,
-                        [this.opts.rowValidClass]: true,
+                        [this.opts?.rowInvalidClass ?? '']: false,
+                        [this.opts?.rowValidatingClass ?? '']: false,
+                        [this.opts?.rowValidClass ?? '']: true,
                     });
                 }
             }

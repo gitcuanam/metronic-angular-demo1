@@ -45,7 +45,9 @@ export const selectProductsInStore = createSelector(
     productsState => {
       const items: ProductModel[] = [];
       each(productsState.entities, element => {
-        items.push(element);
+        if (element) {
+          items.push(element);
+        }
       });
       const httpExtension = new HttpExtenstionsModel();
       const result: ProductModel[] = httpExtension.sortArray(items, productsState.lastQuery.sortField, productsState.lastQuery.sortOrder);

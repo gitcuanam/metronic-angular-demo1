@@ -647,8 +647,8 @@ export class AutocompleteComponent implements OnInit {
 		return this.options44.filter(option => option.toLowerCase().indexOf(val.toLowerCase()) === 0);
 	}
 
-	displayFn(user?: User): string | undefined {
-		return user ? user.name : undefined;
+	displayFn(user?: User): string {
+		return user ? user.name : '';
 	}
 
 

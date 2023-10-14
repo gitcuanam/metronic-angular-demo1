@@ -57,7 +57,7 @@ export class StickyDirective implements OnInit, AfterViewInit, OnDestroy {
   private scroll$ = new Subject<number>();
   private scrollThrottled$: Observable<number>;
   private resize$ = new Subject<void>();
-  private resizeThrottled$: Observable<void>;
+  private resizeThrottled$: Observable<void | null>;
   private extraordinaryChange$ = new BehaviorSubject<void>(undefined);
   private status$: Observable<StickyStatus>;
   private componentDestroyed = new Subject<void>();
@@ -201,7 +201,7 @@ export class StickyDirective implements OnInit, AfterViewInit, OnDestroy {
     let target: Element | Window;
 
     if (this.scrollContainer && typeof this.scrollContainer === 'string') {
-      target = document.querySelector(this.scrollContainer);
+      target = document.querySelector(this.scrollContainer) ?? window;
     } else if (this.scrollContainer && this.scrollContainer instanceof HTMLElement) {
       target = this.scrollContainer;
     } else {
@@ -216,8 +216,8 @@ private determineStatus(originalVals: StickyPositions,
                         marginBottom: number,
                         enabled: boolean): StickyStatus {
     const stickyElementHeight = this.getComputedStyle(this.stickyElement.nativeElement).height;
-    const reachedLowerEdge = this.boundaryElement &&
-      window.pageYOffset + stickyElementHeight + marginBottom >= (originalVals.bottomBoundary - marginTop);
+    const reachedLowerEdge = !!this.boundaryElement &&
+      window.pageYOffset + stickyElementHeight + marginBottom >= ((originalVals.bottomBoundary ?? 0) - marginTop);
     return {
       isSticky: enabled && pageYOffset > originalVals.offsetY,
       reachedLowerEdge,
@@ -255,8 +255,10 @@ private determineStatus(originalVals: StickyPositions,
 
     // do this before setting it to pos:fixed
     const {width, height, left} = this.getComputedStyle(this.stickyElement.nativeElement);
+
+    const bottom = this.boundaryElement ? this.getComputedStyle(this.boundaryElement).bottom : 0;
     const offSet = boundaryReached ?
-      (this.getComputedStyle(this.boundaryElement).bottom - height - this.marginBottom$.value) : this.marginTop$.value;
+      (bottom - height - this.marginBottom$.value) : this.marginTop$.value;
 
     this.sticky = true;
     this.stickyElement.nativeElement.style.position = 'sticky';

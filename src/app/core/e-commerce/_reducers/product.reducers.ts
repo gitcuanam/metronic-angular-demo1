@@ -14,7 +14,7 @@ export interface ProductsState extends EntityState<ProductModel> {
   actionsloading: boolean;
   totalCount: number;
   lastQuery: QueryParamsModel;
-  lastCreatedProductId: number;
+  lastCreatedProductId: number | undefined;
   showInitWaitingMessage: boolean;
 }
 

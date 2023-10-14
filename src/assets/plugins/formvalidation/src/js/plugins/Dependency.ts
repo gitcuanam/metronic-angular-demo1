@@ -21,21 +21,21 @@ export default class Dependency extends Plugin<DependencyOptions> {
     }
 
     public install(): void {
-        this.core.on('plugins.trigger.executed', this.triggerExecutedHandler);
+        this.core && this.core.on('plugins.trigger.executed', this.triggerExecutedHandler);
     }
 
     public uninstall(): void {
-        this.core.off('plugins.trigger.executed', this.triggerExecutedHandler);
+        this.core && this.core.off('plugins.trigger.executed', this.triggerExecutedHandler);
     }
 
     private onTriggerExecuted(e: TriggerExecutedEvent): void {
-        if (this.opts[e.field]) {
-            const dependencies = this.opts[e.field].split(' ');
+        if (this.opts?.[e.field]) {
+            const dependencies = this.opts?.[e.field].split(' ');
             for (const d of dependencies) {
                 const dependentField = d.trim();
-                if (this.opts[dependentField]) {
+                if (this.opts?.[dependentField]) {
                     // Revalidate the dependent field
-                    this.core.revalidateField(dependentField);
+                    this.core && this.core.revalidateField(dependentField);
                 }
             }
         }

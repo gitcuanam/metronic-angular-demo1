@@ -1,20 +1,28 @@
-import { KtDialogService, StickyDirective } from '../../../../../core/_base/layout';
 // Angular
 import {
-	AfterViewInit,
-	Component,
-	ElementRef,
-	HostBinding,
-	HostListener,
-	Inject,
-	Input,
-	OnDestroy,
-	OnInit,
-	PLATFORM_ID,
-	ViewChild
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
 } from '@angular/core';
+
 // RXJS
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+} from 'rxjs';
+
+import {
+  KtDialogService,
+  StickyDirective,
+} from '../../../../../core/_base/layout';
 
 @Component({
 	selector: 'kt-portlet-header',
@@ -35,27 +43,27 @@ import { Observable, Subscription } from 'rxjs';
 export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	// Public properties
 	// append html class to the portlet header
-	@Input() class: string;
+	@Input() class?: string;
 	// a simple title text
-	@Input() title: string;
+	@Input() title?: string;
 	// icon name to be added to the i tag
-	@Input() icon: string;
+	@Input() icon?: string;
 	// remove title container
-	@Input() noTitle: boolean;
+	@Input() noTitle?: boolean;
 	// enable sticky portlet header
-	@Input() sticky: boolean;
+	@Input() sticky?: boolean;
 	// enable loading to display
-	@Input() viewLoading$: Observable<boolean>;
+	@Input() viewLoading$?: Observable<boolean>;
 	viewLoading = false;
 
 	@HostBinding('class') classes = 'card-header';
 	@HostBinding('attr.ktSticky') stickyDirective: StickyDirective;
 
-	@ViewChild('refIcon', {static: true}) refIcon: ElementRef;
-	hideIcon: boolean;
+	@ViewChild('refIcon', {static: true}) refIcon?: ElementRef;
+	hideIcon?: boolean;
 
-	@ViewChild('refTools', {static: true}) refTools: ElementRef;
-	hideTools: boolean;
+	@ViewChild('refTools', {static: true}) refTools?: ElementRef;
+	hideTools?: boolean;
 
 	private lastScrollTop = 0;
 	private subscriptions: Subscription[] = [];
@@ -132,10 +140,10 @@ export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.classes += this.class ? ' ' + this.class : '';
 
 		// hide icon's parent node if no icon provided
-		this.hideIcon = this.refIcon.nativeElement.children.length === 0;
+		this.hideIcon = this.refIcon?.nativeElement.children.length === 0;
 
 		// hide tools' parent node if no tools template is provided
-		this.hideTools = this.refTools.nativeElement.children.length === 0;
+		this.hideTools = this.refTools?.nativeElement.children.length === 0;
 
 		if (this.sticky) {
 			this.updateStickyPosition();

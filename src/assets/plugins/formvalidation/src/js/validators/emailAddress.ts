@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 export interface EmailAddressOptions extends ValidateOptions {
     // Allow multiple email addresses, separated by a comma or semicolon; default is false.
@@ -18,7 +23,7 @@ export default function emailAddress() {
     const splitEmailAddresses = (emailAddresses: string, separator: string | RegExp) => {
         const quotedFragments = emailAddresses.split(/"/);
         const quotedFragmentCount = quotedFragments.length;
-        const emailAddressArray = [];
+        const emailAddressArray: string[] = [];
         let nextEmailAddress = '';
 
         for (let i = 0; i < quotedFragmentCount; i++) {

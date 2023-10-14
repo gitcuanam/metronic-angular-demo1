@@ -41,7 +41,7 @@ export const selectUsersInStore = createSelector(
     usersState => {
         const items: User[] = [];
         each(usersState.entities, element => {
-            items.push(element);
+            element && items.push(element);
         });
         const httpExtension = new HttpExtenstionsModel();
         const result: User[] = httpExtension.sortArray(items, usersState.lastQuery.sortField, usersState.lastQuery.sortOrder);

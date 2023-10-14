@@ -19,6 +19,7 @@ import {
   TimeElapsedPipe,
   ToggleDirective
 } from './_base/layout';
+import { DemoMenuTriggerDirective } from './_base/layout/directives/demo-menu-trigger.directive';
 
 @NgModule({
   imports: [CommonModule],
@@ -33,6 +34,7 @@ import {
     SparklineChartDirective,
     ContentAnimateDirective,
     StickyDirective,
+    DemoMenuTriggerDirective,
     // pipes
     TimeElapsedPipe,
     JoinPipe,
@@ -51,6 +53,7 @@ import {
     SparklineChartDirective,
     ContentAnimateDirective,
     StickyDirective,
+    DemoMenuTriggerDirective,
     // pipes
     TimeElapsedPipe,
     JoinPipe,

@@ -1,12 +1,19 @@
 // Angular
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
 class ISearchResult {
 	icon?: string;
 	svg?: string;
 	img?: string;
-	text: string;
-	type: number;
+	text?: string;
+	type?: number;
 }
 
 @Component({
@@ -20,13 +27,13 @@ export class SearchDefaultComponent implements OnInit {
 	@Input() icon = 'flaticon2-search-1';
 
 	// Set true to icon as SVG or false as icon class
-	@Input() useSVG: boolean;
+	@Input() useSVG?: boolean;
 
-	@ViewChild('searchInput', {static: true}) searchInput: ElementRef;
+	@ViewChild('searchInput', {static: true}) searchInput?: ElementRef;
 
-	data: any[];
-	result: ISearchResult[];
-	loading: boolean;
+	data: any[] = [];
+	result: ISearchResult[] = [];
+	loading: boolean = false;
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -104,7 +111,7 @@ export class SearchDefaultComponent implements OnInit {
 	 * @param e: Event
 	 */
 	search(e) {
-		this.data = null;
+		this.data = [];
 		if (e.target.value.length > 2) {
 			this.loading = true;
 			// simulate getting search result
@@ -122,7 +129,7 @@ export class SearchDefaultComponent implements OnInit {
 	 * @param e: Event
 	 */
 	clear(e) {
-		this.data = null;
-		this.searchInput.nativeElement.value = '';
+		this.data = [];
+		// this.searchInput.nativeElement.value = '';
 	}
 }

@@ -89,7 +89,7 @@
 						<strong>{{ 'AUTH.VALIDATION.MAX_LENGTH_FIELD' | translate }} 100</strong>
 					</mat-error>
 					<mat-error
-						*ngIf="registerForm.get('confirmPassword').errors && registerForm.get('confirmPassword').errors.ConfirmPassword">
+						*ngIf="registerForm.get('confirmPassword')?.errors && registerForm.get('confirmPassword')?.errors?.ConfirmPassword">
 						<strong>Passsword and ConfirmPassword didn't match.</strong>
 					</mat-error>
 				</mat-form-field>

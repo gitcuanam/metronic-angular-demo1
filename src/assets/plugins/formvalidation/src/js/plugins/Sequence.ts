@@ -5,7 +5,10 @@
  */
 
 import {
-    DynamicFieldEvent, ElementNotValidatedEvent, ElementValidatingEvent, ValidatorValidatedEvent,
+  DynamicFieldEvent,
+  ElementNotValidatedEvent,
+  ElementValidatingEvent,
+  ValidatorValidatedEvent,
 } from '../core/Core';
 import Plugin from '../core/Plugin';
 
@@ -60,7 +63,7 @@ export default class Sequence extends Plugin<SequenceOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.validator.validated', this.validatorHandler)
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -71,7 +74,7 @@ export default class Sequence extends Plugin<SequenceOptions> {
     public uninstall(): void {
         this.invalidFields.clear();
 
-        this.core
+        this.core && this.core
             .off('core.validator.validated', this.validatorHandler)
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -83,15 +86,15 @@ export default class Sequence extends Plugin<SequenceOptions> {
         // Stop validating
         // if the `enabled` option is set to `false`
         // and there's at least one validator that field doesn't pass
-        const stop = (this.opts.enabled === true || this.opts.enabled[field] === true)
+        const stop = (this.opts?.enabled === true || this.opts?.enabled[field] === true)
             && this.invalidFields.has(element)
-            && !!this.invalidFields.get(element).length
-            && this.invalidFields.get(element).indexOf(validator) === -1;
+            && !!this.invalidFields.get(element)?.length
+            && this.invalidFields.get(element)?.indexOf(validator) === -1;
         return !stop;
     }
 
     private onValidatorValidated(e: ValidatorValidatedEvent): void {
-        const validators = this.invalidFields.has(e.element) ? this.invalidFields.get(e.element) : [];
+        const validators = (this.invalidFields.has(e.element) ? this.invalidFields.get(e.element) : []) ?? [];
         const index = validators.indexOf(e.validator);
         if (e.result.valid && index >= 0) {
             validators.splice(index, 1);

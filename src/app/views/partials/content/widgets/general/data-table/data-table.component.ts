@@ -1,15 +1,24 @@
-// Angular
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+// Angular
+import {
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+
+import { merge } from 'rxjs';
 // RXJS
 import { tap } from 'rxjs/operators';
-import { merge } from 'rxjs';
+
 // Crud
 import { QueryParamsModel } from '../../../../../../core/_base/crud';
 // Layout
-import { DataTableItemModel, DataTableService } from '../../../../../../core/_base/layout';
+import {
+  DataTableItemModel,
+  DataTableService,
+} from '../../../../../../core/_base/layout';
 import { DataTableDataSource } from './data-table.data-source';
 
 @Component({
@@ -19,10 +28,10 @@ import { DataTableDataSource } from './data-table.data-source';
 })
 export class DataTableComponent implements OnInit {
 	// Public properties
-	dataSource: DataTableDataSource;
+	dataSource?: DataTableDataSource;
 	displayedColumns = ['id', 'cManufacture', 'cModel', 'cMileage', 'cColor', 'cPrice', 'cCondition', 'cStatus', 'actions' ];
-	@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-	@ViewChild(MatSort, {static: true}) sort: MatSort;
+	@ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+	@ViewChild(MatSort, {static: true}) sort?: MatSort;
 	selection = new SelectionModel<DataTableItemModel>(true, []);
 
 	/**
@@ -41,13 +50,13 @@ export class DataTableComponent implements OnInit {
 	 */
 	ngOnInit() {
 		// If the user changes the sort order, reset back to the first page.
-		this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+		this.sort?.sortChange.subscribe(() => (this.paginator && (this.paginator.pageIndex = 0)));
 
 		/* Data load will be triggered in two cases:
 		- when a pagination event occurs => this.paginator.page
 		- when a sort event occurs => this.sort.sortChange
 		**/
-		merge(this.sort.sortChange, this.paginator.page)
+		this.sort?.sortChange && this.paginator?.page && merge(this.sort.sortChange, this.paginator.page)
 			.pipe(
 				tap(() => {
 					this.loadItems();
@@ -69,12 +78,12 @@ export class DataTableComponent implements OnInit {
 	loadItems(firstLoad: boolean = false) {
 		const queryParams = new QueryParamsModel(
 			{},
-			this.sort.direction,
-			this.sort.active,
-			this.paginator.pageIndex,
-			firstLoad ? 6 : this.paginator.pageSize
+			this.sort?.direction,
+			this.sort?.active,
+			this.paginator?.pageIndex,
+			firstLoad ? 6 : this.paginator?.pageSize
 		);
-		this.dataSource.loadItems(queryParams);
+		this.dataSource?.loadItems(queryParams);
 		this.selection.clear();
 	}
 

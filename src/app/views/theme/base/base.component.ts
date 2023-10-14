@@ -1,20 +1,42 @@
 // Angular
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-// RxJS
-import { Observable, Subscription } from 'rxjs';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+
+// User permissions
+import { NgxPermissionsService } from 'ngx-permissions';
 // Object-Path
 import * as objectPath from 'object-path';
+// RxJS
+import {
+  Observable,
+  Subscription,
+} from 'rxjs';
+
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
 // Layout
-import { LayoutConfigService, MenuConfigService, PageConfigService } from '../../../core/_base/layout';
-import { HtmlClassService } from '../html-class.service';
+import {
+  LayoutConfigModel,
+  LayoutConfigService,
+  MenuConfigService,
+  PageConfigService,
+} from '../../../core/_base/layout';
 import { LayoutConfig } from '../../../core/_config/layout.config';
 import { MenuConfig } from '../../../core/_config/menu.config';
 import { PageConfig } from '../../../core/_config/page.config';
-// User permissions
-import { NgxPermissionsService } from 'ngx-permissions';
-import { currentUserPermissions, Permission } from '../../../core/auth';
-import { select, Store } from '@ngrx/store';
+import {
+  currentUserPermissions,
+  Permission,
+} from '../../../core/auth';
 import { AppState } from '../../../core/reducers';
+import { HtmlClassService } from '../html-class.service';
 
 @Component({
   selector: 'kt-base',
@@ -25,11 +47,11 @@ import { AppState } from '../../../core/reducers';
 export class BaseComponent implements OnInit, OnDestroy {
   // Public variables
   selfLayout = 'default';
-  asideSelfDisplay: true;
+  asideSelfDisplay?: true;
   contentClasses = '';
   contentContainerClasses = '';
   subheaderDisplay = true;
-  contentExtended: false;
+  contentExtended?: false;
 
   // Private properties
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -52,7 +74,8 @@ export class BaseComponent implements OnInit, OnDestroy {
     private pageConfigService: PageConfigService,
     private htmlClassService: HtmlClassService,
     private store: Store<AppState>,
-    private permissionsService: NgxPermissionsService) {
+    private permissionsService: NgxPermissionsService
+  ) {
     this.loadRolesWithPermissions();
 
     // register configs by demos
@@ -66,9 +89,12 @@ export class BaseComponent implements OnInit, OnDestroy {
     const subscription = this.layoutConfigService.onConfigUpdated$.subscribe(layoutConfig => {
       // reset body class based on global and page level layout config, refer to html-class.service.ts
       document.body.className = '';
-      this.htmlClassService.setConfig(layoutConfig);
+      layoutConfig && this.htmlClassService.setConfig(layoutConfig as LayoutConfigModel);
     });
     this.unsubscribe.push(subscription);
+
+    
+    this.currentUserPermissions$ = this.store.pipe(select(currentUserPermissions));
   }
 
   /**
@@ -84,8 +110,8 @@ export class BaseComponent implements OnInit, OnDestroy {
     this.selfLayout = objectPath.get(config, 'self.layout');
     this.asideSelfDisplay = objectPath.get(config, 'aside.self.display');
     this.subheaderDisplay = objectPath.get(config, 'subheader.display');
-    this.contentClasses = this.htmlClassService.getClasses('content', true).toString();
-    this.contentContainerClasses = this.htmlClassService.getClasses('content_container', true).toString();
+    this.contentClasses = this.htmlClassService.getClasses('content', true)?.toString() ?? '';
+    this.contentContainerClasses = this.htmlClassService.getClasses('content_container', true)?.toString() ?? '';
     this.contentExtended = objectPath.get(config, 'content.extended');
 
     // let the layout type change
@@ -110,7 +136,6 @@ export class BaseComponent implements OnInit, OnDestroy {
    * NGX Permissions, init roles
    */
   loadRolesWithPermissions() {
-    this.currentUserPermissions$ = this.store.pipe(select(currentUserPermissions));
     const subscription = this.currentUserPermissions$.subscribe(res => {
       if (!res || res.length === 0) {
         return;

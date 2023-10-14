@@ -1,9 +1,11 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
 // Layout
 import { HtmlClassService } from '../html-class.service';
-// Object-Path
-import * as objectPath from 'object-path';
 
 @Component({
   selector: 'kt-footer',
@@ -31,7 +33,7 @@ export class FooterComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
-    this.footerClasses = this.uiClasses.getClasses('footer', true).toString();
-    this.footerContainerClasses = this.uiClasses.getClasses('footer_container', true).toString();
+    this.footerClasses = this.uiClasses.getClasses('footer', true)?.toString() ?? '';
+    this.footerContainerClasses = this.uiClasses.getClasses('footer_container', true)?.toString() ?? '';
   }
 }

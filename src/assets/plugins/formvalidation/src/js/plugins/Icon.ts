@@ -5,11 +5,11 @@
  */
 
 import {
-    DynamicFieldEvent,
-    ElementIgnoredEvent,
-    ElementNotValidatedEvent,
-    ElementValidatedEvent,
-    ElementValidatingEvent,
+  DynamicFieldEvent,
+  ElementIgnoredEvent,
+  ElementNotValidatedEvent,
+  ElementValidatedEvent,
+  ElementValidatingEvent,
 } from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
@@ -62,7 +62,7 @@ export default class Icon extends Plugin<IconOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -71,10 +71,10 @@ export default class Icon extends Plugin<IconOptions> {
     }
 
     public uninstall(): void {
-        this.icons.forEach((icon) => icon.parentNode.removeChild(icon));
+        this.icons.forEach((icon) => icon.parentNode?.removeChild(icon));
         this.icons.clear();
 
-        this.core
+        this.core && this.core
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -88,7 +88,7 @@ export default class Icon extends Plugin<IconOptions> {
             elements.forEach((ele) => {
                 const icon = this.icons.get(ele);
                 if (icon) {
-                    icon.parentNode.removeChild(icon);
+                    icon.parentNode?.removeChild(icon);
                     this.icons.delete(ele);
                 }
             });
@@ -112,32 +112,32 @@ export default class Icon extends Plugin<IconOptions> {
         const i = document.createElement('i');
         i.setAttribute('data-field', field);
         // Append the icon right after the field element
-        ele.parentNode.insertBefore(i, ele.nextSibling);
+        ele.parentNode?.insertBefore(i, ele.nextSibling);
 
         classSet(i, {
             'fv-plugins-icon': true,
         });
         const e = {
             classes: {
-                invalid: this.opts.invalid,
-                valid: this.opts.valid,
-                validating: this.opts.validating,
+                invalid: this.opts?.invalid,
+                valid: this.opts?.valid,
+                validating: this.opts?.validating,
             },
             element: ele,
             field,
             iconElement: i,
         } as IconPlacedEvent;
-        this.core.emit('plugins.icon.placed', e);
-        this.opts.onPlaced(e);
+        this.core && this.core.emit('plugins.icon.placed', e);
+        this.opts?.onPlaced && this.opts.onPlaced(e);
 
         this.icons.set(ele, i);
     }
 
     private onElementValidating(e: ElementValidatingEvent): void {
         const icon = this.setClasses(e.field, e.element, e.elements, {
-            [this.opts.invalid]: false,
-            [this.opts.valid]: false,
-            [this.opts.validating]: true,
+            [this.opts?.invalid ?? '']: false,
+            [this.opts?.valid ?? '']: false,
+            [this.opts?.validating ?? '']: true,
         });
         const evt = {
             element: e.element,
@@ -145,15 +145,15 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'Validating',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
-        this.opts.onSet(evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
+        this.opts?.onSet && this.opts.onSet(evt);
     }
 
     private onElementValidated(e: ElementValidatedEvent): void {
         const icon = this.setClasses(e.field, e.element, e.elements, {
-            [this.opts.invalid]: !e.valid,
-            [this.opts.valid]: e.valid,
-            [this.opts.validating]: false,
+            [this.opts?.invalid ?? '']: !e.valid,
+            [this.opts?.valid ?? '']: e.valid,
+            [this.opts?.validating ?? '']: false,
         });
         const evt = {
             element: e.element,
@@ -161,15 +161,15 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: e.valid ? 'Valid' : 'Invalid',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
-        this.opts.onSet(evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
+        this.opts?.onSet && this.opts.onSet(evt);
     }
 
     private onElementNotValidated(e: ElementNotValidatedEvent): void {
         const icon = this.setClasses(e.field, e.element, e.elements, {
-            [this.opts.invalid]: false,
-            [this.opts.valid]: false,
-            [this.opts.validating]: false,
+            [this.opts?.invalid ?? '']: false,
+            [this.opts?.valid ?? '']: false,
+            [this.opts?.validating ?? '']: false,
         });
         const evt = {
             element: e.element,
@@ -177,15 +177,15 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'NotValidated',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
-        this.opts.onSet(evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
+        this.opts?.onSet && this.opts.onSet(evt);
     }
 
     private onElementIgnored(e: ElementIgnoredEvent): void {
         const icon = this.setClasses(e.field, e.element, e.elements, {
-            [this.opts.invalid]: false,
-            [this.opts.valid]: false,
-            [this.opts.validating]: false,
+            [this.opts?.invalid ?? '']: false,
+            [this.opts?.valid ?? '']: false,
+            [this.opts?.validating ?? '']: false,
         });
         const evt = {
             element: e.element,
@@ -193,8 +193,8 @@ export default class Icon extends Plugin<IconOptions> {
             iconElement: icon,
             status: 'Ignored',
         } as IconSetEvent;
-        this.core.emit('plugins.icon.set', evt);
-        this.opts.onSet(evt);
+        this.core && this.core.emit('plugins.icon.set', evt);
+        this.opts?.onSet && this.opts.onSet(evt);
     }
 
     private setClasses(
@@ -202,16 +202,18 @@ export default class Icon extends Plugin<IconOptions> {
         element: HTMLElement,
         elements: HTMLElement[],
         classes: { [clazz: string]: boolean },
-    ): HTMLElement {
+    ): HTMLElement | undefined {
         const type = element.getAttribute('type');
         const ele = ('radio' === type || 'checkbox' === type) ? elements[0] : element;
 
-        if (this.icons.has(ele)) {
-            const icon = this.icons.get(ele);
-            classSet(icon, classes);
-            return icon;
-        } else {
-            return null;
+        if (!this.icons.has(ele)) {
+            return undefined;
         }
+        const icon = this.icons.get(ele);
+        if (!icon) {
+            return undefined;
+        }
+        classSet(icon, classes);
+        return icon;
     }
 }

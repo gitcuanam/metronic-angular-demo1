@@ -26,7 +26,7 @@ export default class Milligram extends Framework {
         const parent = e.element.parentElement;
         if ('checkbox' === type || 'radio' === type) {
             // Place it after the container of checkbox/radio
-            parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+            parent?.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
 
             classSet(e.iconElement, {
                 'fv-plugins-icon-check': true,

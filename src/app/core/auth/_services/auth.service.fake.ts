@@ -1,19 +1,41 @@
+import {
+  HttpClient,
+  HttpHeaders,
+} from '@angular/common/http';
 // Angular
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-// RxJS
-import {forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, mergeMap} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+
 // Lodash
-import {each, filter, find, some} from 'lodash';
+import {
+  each,
+  filter,
+  find,
+  some,
+} from 'lodash';
+// RxJS
+import {
+  forkJoin,
+  Observable,
+  of,
+} from 'rxjs';
+import {
+  catchError,
+  map,
+  mergeMap,
+} from 'rxjs/operators';
+
 // Environment
-import {environment} from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 // CRUD
-import {HttpUtilsService, QueryParamsModel, QueryResultsModel} from '../../_base/crud';
+import {
+  HttpUtilsService,
+  QueryParamsModel,
+  QueryResultsModel,
+} from '../../_base/crud';
+import { Permission } from '../_models/permission.model';
+import { Role } from '../_models/role.model';
 // Models
-import {User} from '../_models/user.model';
-import {Permission} from '../_models/permission.model';
-import {Role} from '../_models/role.model';
+import { User } from '../_models/user.model';
 
 const API_USERS_URL = 'api/users';
 const API_PERMISSION_URL = 'api/permissions';
@@ -26,7 +48,7 @@ export class AuthService {
   }
 
   // Authentication/Authorization
-  login(email: string, password: string): Observable<User> {
+  login(email: string, password: string): Observable<User | null> {
     if (!email || !password) {
       return of(null);
     }
@@ -52,7 +74,7 @@ export class AuthService {
 
   }
 
-  register(user: User): Observable<any> {
+  register(user: User): Observable<User | null> {
     user.roles = [2]; // Manager
     user.accessToken = 'access-token-' + Math.random();
     user.refreshToken = 'access-token-' + Math.random();
@@ -66,7 +88,7 @@ export class AuthService {
           return res;
         }),
         catchError(err => {
-          return null;
+          return of(null);
         })
       );
   }
@@ -78,7 +100,7 @@ export class AuthService {
           return null;
         }
 
-        const user = find(users, (item: User) => {
+        const user: User | undefined = find(users, (item: User) => {
           return (item.email.toLowerCase() === email.toLowerCase());
         });
 
@@ -93,7 +115,7 @@ export class AuthService {
     );
   }
 
-  getUserByToken(): Observable<User> {
+  getUserByToken(): Observable<User | null> {
     const userToken = localStorage.getItem(environment.authTokenKey);
     if (!userToken) {
       return of(null);
@@ -134,7 +156,7 @@ export class AuthService {
     return this.http.get<User[]>(API_USERS_URL);
   }
 
-  getUserById(userId: number): Observable<User> {
+  getUserById(userId: number): Observable<User | null> {
     if (!userId) {
       return of(null);
     }
@@ -179,9 +201,9 @@ export class AuthService {
 
   getRolePermissions(roleId: number): Observable<Permission[]> {
     const allRolesRequest = this.http.get<Permission[]>(API_PERMISSION_URL);
-    const roleRequest = roleId ? this.getRoleById(roleId) : of(null);
-    return forkJoin(allRolesRequest, roleRequest).pipe(
-      map(res => {
+    const roleRequest = roleId ? this.getRoleById(roleId) : of(new Role());
+    return forkJoin([allRolesRequest, roleRequest]).pipe(
+      map((res) => {
         const allPermissions: Permission[] = res[0];
         const role: Role = res[1];
         if (!allPermissions || allPermissions.length === 0) {
@@ -199,7 +221,7 @@ export class AuthService {
     const root: Permission[] = filter(allPermission, (item: Permission) => !item.parentId);
     each(root, (rootItem: Permission) => {
       rootItem._children = [];
-      rootItem._children = this.collectChildrenPermission(allPermission, rootItem.id, rolePermissionIds);
+      rootItem._children = rootItem.id ? this.collectChildrenPermission(allPermission, rootItem.id, rolePermissionIds) : [];
       rootItem.isSelected = (some(rolePermissionIds, (id: number) => id === rootItem.id));
       result.push(rootItem);
     });
@@ -217,7 +239,7 @@ export class AuthService {
 
     each(_children, (childItem: Permission) => {
       childItem._children = [];
-      childItem._children = this.collectChildrenPermission(allPermission, childItem.id, rolePermissionIds);
+      childItem._children = childItem.id ? this.collectChildrenPermission(allPermission, childItem.id, rolePermissionIds): [];
       childItem.isSelected = (some(rolePermissionIds, (id: number) => id === childItem.id));
       result.push(childItem);
     });

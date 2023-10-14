@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import call from '../utils/call';
 
 export interface CallbackOptions extends ValidateOptions {
@@ -14,7 +19,7 @@ export interface CallbackOptions extends ValidateOptions {
 export default function callback() {
     return {
         validate(input: ValidateInput<CallbackOptions, Localization>): ValidateResult {
-            const response = call(input.options.callback, [input]);
+            const response = input.options?.callback && call(input.options.callback, [input]);
             return ('boolean' === typeof response)
                     ? { valid: response } // Deprecated
                     : response;

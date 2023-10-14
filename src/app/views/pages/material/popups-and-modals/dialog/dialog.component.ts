@@ -1,6 +1,19 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+} from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
+import {
+  BehaviorSubject,
+  Observable,
+} from 'rxjs';
 
 @Component({
 	selector: 'kt-modal3',
@@ -282,18 +295,18 @@ export class DialogComponent implements OnInit {
 	animal2 = '';
 	animalSubject = new BehaviorSubject<string>('');
 	animal$: Observable<string>;
-	animal: string;
-	name: string;
+	animal?: string;
+	name?: string;
 
 	exampleBasic;
 	exampleInjecting;
 	examplHeader;
 
 	constructor(public dialog: MatDialog) {
+		this.animal$ = this.animalSubject.asObservable();
 	}
 
 	ngOnInit() {
-		this.animal$ = this.animalSubject.asObservable();
 		this.animal$.subscribe(result => {
 			this.animal = result;
 		});

@@ -103,7 +103,7 @@ export default class Trigger extends Plugin<TriggerOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.field.removed', this.fieldRemovedHandler);
     }
@@ -115,26 +115,26 @@ export default class Trigger extends Plugin<TriggerOptions> {
         this.timers.forEach((t) => window.clearTimeout(t));
         this.timers.clear();
 
-        this.core
+        this.core && this.core
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.field.removed', this.fieldRemovedHandler);
     }
 
     private prepareHandler(field: string, elements: HTMLElement[]): void {
         elements.forEach((ele) => {
-            let events = [];
+            let events: string[] = [];
 
             switch (true) {
-                case (!!this.opts.event && this.opts.event[field] === false):
+                case (!!this.opts?.event && this.opts?.event[field] === false):
                     events = [];
                     break;
 
-                case (!!this.opts.event && !!this.opts.event[field]):
-                    events = this.opts.event[field].split(' ');
+                case (!!this.opts?.event && !!this.opts?.event[field]):
+                    events = this.opts?.event[field].split(' ');
                     break;
 
-                case ('string' === typeof this.opts.event && this.opts.event !== this.defaultEvent):
-                    events = (this.opts.event as string).split(' ');
+                case ('string' === typeof this.opts?.event && this.opts?.event !== this.defaultEvent):
+                    events = (this.opts?.event as string).split(' ');
                     break;
 
                 default:
@@ -144,7 +144,7 @@ export default class Trigger extends Plugin<TriggerOptions> {
                     // IE10/11 fires the `input` event when focus on the field having a placeholder
                     const event = ('radio' === type || 'checkbox' === type || 'file' === type || 'select' === tagName)
                         ? 'change'
-                        : ((this.ieVersion >= 10 && ele.getAttribute('placeholder') ? 'keyup' : this.defaultEvent));
+                        : ((this.ieVersion && this.ieVersion >= 10 && ele.getAttribute('placeholder') ? 'keyup' : this.defaultEvent));
                     events = [event];
                     break;
             }
@@ -165,17 +165,17 @@ export default class Trigger extends Plugin<TriggerOptions> {
 
     private handleEvent(e: Event, field: string, ele: HTMLElement): void {
         if (this.exceedThreshold(field, ele) &&
-            this.core.executeFilter('plugins-trigger-should-validate', true, [field, ele])
+        this.core && this.core.executeFilter('plugins-trigger-should-validate', true, [field, ele])
         ) {
-            const handler = () => this.core.validateElement(field, ele).then((_) => {
-                this.core.emit('plugins.trigger.executed', {
+            const handler = () => this.core && this.core.validateElement(field, ele).then((_) => {
+                this.core?.emit('plugins.trigger.executed', {
                     element: ele,
                     event: e,
                     field,
                 });
             });
 
-            const delay = this.opts.delay[field] || this.opts.delay;
+            const delay = this.opts?.delay?.[field] || this.opts?.delay;
             if (delay === 0) {
                 handler();
             } else {
@@ -202,20 +202,20 @@ export default class Trigger extends Plugin<TriggerOptions> {
     }
 
     private exceedThreshold(field: string, element: HTMLElement): boolean {
-        const threshold = (this.opts.threshold[field] === 0 || this.opts.threshold === 0)
+        const threshold = (this.opts?.threshold?.[field] === 0 || this.opts?.threshold === 0)
                             ? false
-                            : (this.opts.threshold[field] || this.opts.threshold);
+                            : (this.opts?.threshold?.[field] || this.opts?.threshold);
         if (!threshold) {
             return true;
         }
 
         // List of input type which user can't type in
         const type = element.getAttribute('type');
-        if (['button', 'checkbox', 'file', 'hidden', 'image', 'radio', 'reset', 'submit'].indexOf(type) !== -1) {
+        if (type && ['button', 'checkbox', 'file', 'hidden', 'image', 'radio', 'reset', 'submit'].indexOf(type) !== -1) {
             return true;
         }
 
-        const value = this.core.getElementValue(field, element);
-        return value.length >= threshold;
+        const value = this.core?.getElementValue(field, element);
+        return !!value && value.length >= threshold;
     }
 }

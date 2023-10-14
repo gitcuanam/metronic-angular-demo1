@@ -50,7 +50,7 @@ export class ProductSpecificationsService {
         _prodSpecs.forEach(item => {
           // tslint:disable-next-line
           const _item = Object.assign({}, item);
-          const specName = SPECIFICATIONS_DICTIONARY[_item.specId];
+          const specName = _item.specId ? SPECIFICATIONS_DICTIONARY[_item.specId] : '';
           if (specName) {
             _item._specificationName = specName;
           }
@@ -96,7 +96,7 @@ export class ProductSpecificationsService {
   }
 
   deleteProductSpecifications(ids: number[] = []): Observable<any> {
-    const tasks$ = [];
+    const tasks$: Observable<any>[] = [];
     const length = ids.length;
     // tslint:disable-next-line:prefer-const
     for (let i = 0; i < length; i++) {

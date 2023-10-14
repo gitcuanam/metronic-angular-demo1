@@ -32,26 +32,29 @@ export default class Mailgun extends Plugin<MailgunOptions> {
     }
 
     public install(): void {
-        if (this.opts.suggestion) {
-            this.core.on('plugins.message.displayed', this.messageDisplayedHandler);
+        if (this.opts?.suggestion) {
+            this.core && this.core.on('plugins.message.displayed', this.messageDisplayedHandler);
         }
 
         const aliasOpts: AliasOptions = {
             mailgun: 'remote',
         };
-        this.core
+        if (!this.opts?.field) {
+            return;
+        }
+        this.core && this.core
             .registerPlugin('___mailgunAlias', new Alias(aliasOpts))
             .addField(this.opts.field, {
                 validators: {
                     mailgun: {
                         crossDomain: true,
                         data: {
-                            api_key: this.opts.apiKey,
+                            api_key: this.opts?.apiKey,
                         },
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        message: this.opts.message,
+                        message: this.opts?.message,
                         name: 'address',
                         url: 'https://api.mailgun.net/v3/address/validate',
                         validKey: 'is_valid',
@@ -61,14 +64,14 @@ export default class Mailgun extends Plugin<MailgunOptions> {
     }
 
     public uninstall(): void {
-        if (this.opts.suggestion) {
-            this.core.off('plugins.message.displayed', this.messageDisplayedHandler);
+        if (this.opts?.suggestion) {
+            this.core && this.core.off('plugins.message.displayed', this.messageDisplayedHandler);
         }
-        this.core.removeField(this.opts.field);
+        this.opts?.field && this.core && this.core.removeField(this.opts.field);
     }
 
     private onMessageDisplayed(e: MessageDisplayedEvent): void {
-        if (e.field === this.opts.field && 'mailgun' === e.validator && e.meta && e.meta.did_you_mean) {
+        if (e.field === this.opts?.field && 'mailgun' === e.validator && e.meta && e.meta.did_you_mean) {
             e.messageElement.innerHTML = `Did you mean ${e.meta.did_you_mean}?`;
         }
     }

@@ -1,9 +1,11 @@
 // Angular
 import { Injectable } from '@angular/core';
+
 // Object-Path
 import * as objectPath from 'object-path';
 // RxJS
 import { BehaviorSubject } from 'rxjs';
+
 // Layout
 import { LayoutConfigModel } from '../../core/_base/layout';
 
@@ -27,10 +29,10 @@ export interface AttrType {
 @Injectable()
 export class HtmlClassService {
   // Public properties
-  config: LayoutConfigModel;
-  classes: ClassType;
-  attrs: AttrType;
-  onClassesUpdated$: BehaviorSubject<ClassType>;
+  config?: LayoutConfigModel;
+  classes?: ClassType;
+  attrs?: AttrType;
+  onClassesUpdated$: BehaviorSubject<ClassType | undefined>;
   // Private properties
   private loaded: string[] = [];
 
@@ -93,9 +95,9 @@ export class HtmlClassService {
    * @param path: string
    * @param toString boolean
    */
-  getClasses(path?: string, toString?: boolean): ClassType | string[] | string {
+  getClasses(path?: string, toString?: boolean): ClassType | string[] | string | undefined {
     if (path) {
-      const classes = objectPath.get(this.classes, path) || '';
+      const classes = this.classes ? (objectPath.get(this.classes, path) || '') : '';
       if (toString && Array.isArray(classes)) {
         return classes.join(' ');
       }
@@ -104,8 +106,8 @@ export class HtmlClassService {
     return this.classes;
   }
 
-  getAttributes(path: string): any {
-    return this.attrs[path];
+  getAttributes(path: string): any | undefined {
+    return this.attrs?.[path];
   }
 
   private preInit(layout) {
@@ -125,6 +127,9 @@ export class HtmlClassService {
    * Init Layout
    */
   private initLayout() {
+    if (!this.config) {
+      return;
+    }
     const selfBodyBackgroundImage = objectPath.get(this.config, 'self.body.background-image');
     if (selfBodyBackgroundImage) {
       document.body.style.backgroundImage = `url("${selfBodyBackgroundImage}")`;
@@ -147,6 +152,9 @@ export class HtmlClassService {
    * Init Header
    */
   private initHeader() {
+    if (!this.config || !this.classes) {
+      return;
+    }
     // Fixed header
     const headerSelfFixedDesktop = objectPath.get(this.config, 'header.self.fixed.desktop');
     if (headerSelfFixedDesktop) {
@@ -184,6 +192,9 @@ export class HtmlClassService {
    * Init Subheader
    */
   private initSubheader() {
+    if (!this.config || !this.classes) {
+      return;
+    }
     const subheaderDisplay = objectPath.get(this.config, 'subheader.display');
     if (subheaderDisplay) {
       document.body.classList.add('subheader-enabled');
@@ -216,6 +227,9 @@ export class HtmlClassService {
 
   // Init Content
   private initContent() {
+    if (!this.config || !this.classes) {
+      return;
+    }
     if (objectPath.get(this.config, 'content.fit-top')) {
       objectPath.push(this.classes, 'content', 'pt-0');
     }
@@ -235,6 +249,9 @@ export class HtmlClassService {
    * Init Aside
    */
   private initAside() {
+    if (!this.config) {
+      return;
+    }
     if (objectPath.get(this.config, 'aside.self.display') !== true) {
       return;
     }
@@ -245,7 +262,7 @@ export class HtmlClassService {
     // Fixed Aside
     if (objectPath.get(this.config, 'aside.self.fixed')) {
       document.body.classList.add('aside-fixed');
-      objectPath.push(this.classes, 'aside', 'aside-fixed');
+      this.classes && objectPath.push(this.classes, 'aside', 'aside-fixed');
     } else {
       document.body.classList.add('aside-static');
     }
@@ -268,24 +285,24 @@ export class HtmlClassService {
     // Dropdown Submenu
     const asideMenuDropdown = objectPath.get(this.config, 'aside.menu.dropdown');
     if (asideMenuDropdown) {
-      objectPath.push(this.classes, 'aside_menu', 'aside-menu-dropdown');
+      this.classes && objectPath.push(this.classes, 'aside_menu', 'aside-menu-dropdown');
       // tslint:disable-next-line
-      this.attrs['aside_menu']['data-menu-dropdown'] = '1';
+      this.attrs && (this.attrs['aside_menu']['data-menu-dropdown'] = '1');
     }
 
     // Scrollable Menu
     if (asideMenuDropdown !== true) {
       // tslint:disable-next-line
-      this.attrs['aside_menu']['data-menu-scroll'] = '1';
+      this.attrs && (this.attrs['aside_menu']['data-menu-scroll'] = '1');
     } else {
       // tslint:disable-next-line
-      this.attrs['aside_menu']['data-menu-scroll'] = '0';
+      this.attrs && (this.attrs['aside_menu']['data-menu-scroll'] = '0');
     }
 
     const asideMenuSubmenuDropdownHoverTimout = objectPath.get(this.config, 'aside.menu.submenu.dropdown.hover-timeout');
     if (asideMenuSubmenuDropdownHoverTimout) {
       // tslint:disable-next-line
-      this.attrs['aside_menu']['data-menu-dropdown-timeout'] = asideMenuSubmenuDropdownHoverTimout;
+      this.attrs && (this.attrs['aside_menu']['data-menu-dropdown-timeout'] = asideMenuSubmenuDropdownHoverTimout);
     }
   }
 
@@ -293,11 +310,17 @@ export class HtmlClassService {
    * Init Footer
    */
   private initFooter() {
+    if (!this.config ) {
+      return;
+    }
     // Fixed header
     if (objectPath.get(this.config, 'footer.fixed') === true) {
       document.body.classList.add('footer-fixed');
     }
 
+    if (!this.classes) {
+      return;
+    }
     if (objectPath.get(this.config, 'footer.width') === 'fluid') {
       objectPath.push(this.classes, 'footer_container', 'container-fluid');
     } else {
@@ -309,6 +332,9 @@ export class HtmlClassService {
    * Set the body class name based on page skin options
    */
   private initSkins() {
+    if (!this.config) {
+      return;
+    }
     const headerSelfTheme = objectPath.get(this.config, 'header.self.theme') || '';
     const brandSelfTheme = objectPath.get(this.config, 'brand.self.theme') || '';
     const asideSelfDisplay = objectPath.get(this.config, 'aside.self.display');

@@ -1,15 +1,35 @@
 // Angular
-import { Component, OnInit, Input } from '@angular/core';
-// RxJS
-import { BehaviorSubject, Observable } from 'rxjs';
-// NGRX
-import { Store, select } from '@ngrx/store';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+
 // Lodash
-import { each, find, remove } from 'lodash';
+import {
+  each,
+  find,
+  remove,
+} from 'lodash';
+// RxJS
+import {
+  BehaviorSubject,
+  Observable,
+} from 'rxjs';
+
+// NGRX
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
+// Auth
+import {
+  Role,
+  selectAllRoles,
+} from '../../../../../../core/auth';
 // State
 import { AppState } from '../../../../../../core/reducers';
-// Auth
-import { Role, selectAllRoles } from '../../../../../../core/auth';
 
 @Component({
 	selector: 'kt-user-roles-list',
@@ -19,21 +39,23 @@ export class UserRolesListComponent implements OnInit {
 	// Public properties
 	// Incoming data
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
-	@Input() rolesSubject: BehaviorSubject<number[]>;
+	@Input() rolesSubject?: BehaviorSubject<number[]>;
 
 	// Roles
 	allUserRoles$: Observable<Role[]>;
 	allRoles: Role[] = [];
 	unassignedRoles: Role[] = [];
 	assignedRoles: Role[] = [];
-	roleIdForAdding: number;
+	roleIdForAdding?: number;
 
 	/**
 	 * Component constructor
 	 *
 	 * @param store: Store<AppState>
 	 */
-	constructor(private store: Store<AppState>) {}
+	constructor(private store: Store<AppState>) {
+		this.allUserRoles$ = this.store.pipe(select(selectAllRoles));
+	}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -43,14 +65,13 @@ export class UserRolesListComponent implements OnInit {
 	 * On init
 	 */
 	ngOnInit() {
-		this.allUserRoles$ = this.store.pipe(select(selectAllRoles));
 		this.allUserRoles$.subscribe((res: Role[]) => {
 			each(res, (_role: Role) => {
 				this.allRoles.push(_role);
 				this.unassignedRoles.push(_role);
 			});
 
-			each(this.rolesSubject.value, (roleId: number) => {
+			each(this.rolesSubject?.value, (roleId: number) => {
 				const role = find(this.allRoles, (_role: Role) => {
 					return _role.id === roleId;
 				});
@@ -72,9 +93,9 @@ export class UserRolesListComponent implements OnInit {
 			return;
 		}
 
-		const role = find(this.allRoles, (_role: Role) => {
-			return _role.id === (+this.roleIdForAdding);
-		});
+		const role: Role = find(this.allRoles, (_role: Role) => {
+			return this.roleIdForAdding && _role.id === (+this.roleIdForAdding);
+		}) ?? [];
 
 		if (role) {
 			this.assignedRoles.push(role);
@@ -100,8 +121,8 @@ export class UserRolesListComponent implements OnInit {
 	 * Update roles
 	 */
 	updateRoles() {
-		const _roles = [];
-		each(this.assignedRoles, elem => _roles.push(elem.id));
-		this.rolesSubject.next(_roles);
+		const _roles: number[] = [];
+		each(this.assignedRoles, elem => elem.id !== null && elem.id !== undefined &&  _roles.push(elem.id));
+		this.rolesSubject?.next(_roles);
 	}
 }

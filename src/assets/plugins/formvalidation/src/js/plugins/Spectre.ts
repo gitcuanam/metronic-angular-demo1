@@ -30,8 +30,8 @@ export default class Spectre extends Framework {
                 'fv-plugins-icon-check': true,
             });
             // Place it after the container of checkbox/radio
-            if (hasClass(parent, `form-${type}`)) {
-                parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+            if (parent && hasClass(parent, `form-${type}`)) {
+                parent.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
             }
         }
     }

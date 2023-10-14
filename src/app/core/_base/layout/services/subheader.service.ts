@@ -115,7 +115,7 @@ export class SubheaderService {
       // if breadcrumb has only 1 item
       breadcrumbs.length === 1 &&
       // and breadcrumb title is same as current page title
-      breadcrumbs[0].title.indexOf(objectPath.get(this.pageConfig, 'page.title')) !== -1) {
+      (breadcrumbs[0] as any)?.title?.indexOf(objectPath.get(this.pageConfig, 'page.title')) !== -1) {
       // no need to display on frontend
       breadcrumbs = [];
     }
@@ -149,7 +149,7 @@ export class SubheaderService {
     let url = this.pageConfigService.cleanUrl(this.router.url);
     url = url.replace(new RegExp(/\./, 'g'), '/');
 
-    const breadcrumbs = [];
+    const breadcrumbs: any[] = [];
     const menuPath = this.getPath(menus, url) || [];
     menuPath.forEach(key => {
       menus = menus[key];
@@ -180,7 +180,7 @@ export class SubheaderService {
     if (typeof obj !== 'object') {
       return;
     }
-    const path = [];
+    const path: string[] = [];
     let found = false;
 
     const search = (haystack) => {

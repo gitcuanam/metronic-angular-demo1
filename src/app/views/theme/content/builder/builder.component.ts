@@ -1,8 +1,17 @@
 // Angular
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
+
 // Layout
-import { LayoutConfigModel, LayoutConfigService } from '../../../../core/_base/layout';
+import {
+  LayoutConfigModel,
+  LayoutConfigService,
+} from '../../../../core/_base/layout';
 
 @Component({
   selector: 'kt-builder',
@@ -12,7 +21,7 @@ import { LayoutConfigModel, LayoutConfigService } from '../../../../core/_base/l
 export class BuilderComponent implements OnInit {
   // Public properties
   model: LayoutConfigModel;
-  @ViewChild('form', {static: true}) form: NgForm;
+  @ViewChild('form', {static: true}) form?: NgForm;
 
   /**
    * Component constructor
@@ -21,6 +30,7 @@ export class BuilderComponent implements OnInit {
    * @param el: ElementRef
    */
   constructor(private layoutConfigService: LayoutConfigService, private el: ElementRef) {
+    this.model = this.layoutConfigService.getConfig();
   }
 
   /**
@@ -31,7 +41,6 @@ export class BuilderComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
-    this.model = this.layoutConfigService.getConfig();
     // init code preview examples
     // see /src/assets/js/layout/extended/examples.js
     const elements = this.el.nativeElement.querySelectorAll('.example');

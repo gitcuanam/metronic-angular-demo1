@@ -40,7 +40,9 @@ export const selectCustomersInStore = createSelector(
     customersState => {
       const items: CustomerModel[] = [];
       each(customersState.entities, element => {
-        items.push(element);
+        if (element) {
+          items.push(element);
+        }
       });
       const httpExtension = new HttpExtenstionsModel();
       const result: CustomerModel[] =

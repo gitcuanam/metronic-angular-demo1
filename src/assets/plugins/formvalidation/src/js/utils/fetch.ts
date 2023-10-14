@@ -50,7 +50,7 @@ export default function fetch(url: string, options: FetchOptions): Promise<any> 
             script.async = true;
 
             script.addEventListener('load', () => {
-                script.parentNode.removeChild(script);
+                script.parentNode?.removeChild(script);
             });
             script.addEventListener('error', () => reject);
 

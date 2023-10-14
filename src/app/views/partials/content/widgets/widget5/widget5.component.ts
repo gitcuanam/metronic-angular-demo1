@@ -1,5 +1,10 @@
 // Angular
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+
 // Lodash
 import { shuffle } from 'lodash';
 
@@ -19,7 +24,7 @@ export interface Widget5Data {
 })
 export class Widget5Component implements OnInit {
 	// Public properties
-	@Input() data: Widget5Data[];
+	@Input() data?: Widget5Data[];
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks

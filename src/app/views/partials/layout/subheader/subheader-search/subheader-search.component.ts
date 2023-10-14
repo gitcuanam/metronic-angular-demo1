@@ -1,10 +1,20 @@
 // Angular
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+
 // RxJS
 import { Subscription } from 'rxjs';
+
 // Layout
 import { SubheaderService } from '../../../../../core/_base/layout';
-import { Breadcrumb } from '../../../../../core/_base/layout/services/subheader.service';
+import {
+  Breadcrumb,
+} from '../../../../../core/_base/layout/services/subheader.service';
 
 @Component({
 	selector: 'kt-subheader-search',
@@ -13,8 +23,8 @@ import { Breadcrumb } from '../../../../../core/_base/layout/services/subheader.
 })
 export class SubheaderSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Public properties
-	@Input() fluid: boolean;
-	@Input() clear: boolean;
+	@Input() fluid?: boolean;
+	@Input() clear?: boolean;
 
 	today: number = Date.now();
 	title = '';
@@ -51,7 +61,7 @@ export class SubheaderSearchComponent implements OnInit, OnDestroy, AfterViewIni
 			if (bt) {
 				Promise.resolve(null).then(() => {
 					this.title = bt.title;
-					this.desc = bt.desc;
+					this.desc = bt.desc ?? '';
 				});
 			}
 		}));

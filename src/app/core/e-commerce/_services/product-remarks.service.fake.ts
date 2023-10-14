@@ -78,7 +78,7 @@ export class ProductRemarksService {
   }
 
   deleteProductRemarks(ids: number[] = []): Observable<any> {
-    const tasks$ = [];
+    const tasks$: Observable<ProductRemarkModel>[] = [];
     const length = ids.length;
     // tslint:disable-next-line:prefer-const
     for (let i = 0; i < length; i++) {

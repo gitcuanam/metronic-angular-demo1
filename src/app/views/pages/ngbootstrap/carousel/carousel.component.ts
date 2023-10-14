@@ -1,7 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
-import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
+
+import { map } from 'rxjs/operators';
+
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 const carousel = {
 	beforeCodeTitle: 'Carousel',
@@ -189,11 +195,11 @@ export class CarouselComponent implements OnInit {
 	exampleCarousel: any;
 	exampleGlobalConfigurationOfCarousels: any;
 	exampleNavigationArrowsAndIndicatorsCarousel: any;
-	images: Array<string>;
-	secondImages: Array<string>;
+	images: Array<string> = [];
+	secondImages: Array<string> = [];
 	showNavigationArrows = false;
 	showNavigationIndicators = false;
-	thirdImages: Array<string>;
+	thirdImages: Array<string> = [];
 
 	constructor(private _http: HttpClient, config: NgbCarouselConfig) {
 		// customize default values of carousels used by this component tree

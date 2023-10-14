@@ -29,12 +29,12 @@ export default class Semantic extends Framework {
 
     public install(): void {
         super.install();
-        this.core.on('plugins.message.placed', this.messagePlacedHandler);
+        this.core && this.core.on('plugins.message.placed', this.messagePlacedHandler);
     }
 
     public uninstall(): void {
         super.uninstall();
-        this.core.off('plugins.message.placed', this.messagePlacedHandler);
+        this.core && this.core.off('plugins.message.placed', this.messagePlacedHandler);
     }
 
     protected onIconPlaced(e: IconPlacedEvent): void {
@@ -44,7 +44,7 @@ export default class Semantic extends Framework {
             classSet(e.iconElement, {
                 'fv-plugins-icon-check': true,
             });
-            parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+            parent?.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
         }
     }
 
@@ -69,8 +69,11 @@ export default class Semantic extends Framework {
             // Get the last checkbox
             const last = e.elements[numElements - 1];
             const parent = last.parentElement;
+            if (!parent) {
+                return;
+            }
             if (hasClass(parent, type) && hasClass(parent, 'ui')) {
-                parent.parentElement.insertBefore(e.messageElement, parent.nextSibling);
+                parent.parentElement?.insertBefore(e.messageElement, parent.nextSibling);
             }
         }
     }

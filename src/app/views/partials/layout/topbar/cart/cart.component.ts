@@ -1,5 +1,10 @@
 // Angular
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
   selector: 'kt-cart',
@@ -11,13 +16,13 @@ export class CartComponent implements OnInit, AfterViewInit {
 
   // Set icon class name
   @Input() icon = 'flaticon2-shopping-cart-1';
-  @Input() iconType: '' | 'brand';
+  @Input() iconType?: '' | 'brand';
 
   // Set true to icon as SVG or false as icon class
-  @Input() useSVG: boolean;
+  @Input() useSVG?: boolean;
 
   // Set bg image path
-  @Input() bgImage: string;
+  @Input() bgImage?: string;
 
   /**
    * Component constructor

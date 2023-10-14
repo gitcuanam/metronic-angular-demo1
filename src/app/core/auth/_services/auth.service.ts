@@ -29,7 +29,7 @@ export class AuthService {
     return this.http.get<User>(API_USERS_URL, {headers: httpHeaders});
   }
 
-  register(user: User): Observable<any> {
+  register(user: User): Observable<User | null> {
     let httpHeaders = new HttpHeaders();
     httpHeaders = httpHeaders.set('Content-Type', 'application/json');
     return this.http.post<User>(API_USERS_URL, user, {headers: httpHeaders})
@@ -38,7 +38,7 @@ export class AuthService {
           return res;
         }),
         catchError(err => {
-          return null;
+          return of(null);
         })
       );
   }

@@ -26,15 +26,15 @@ export default class L10n extends Plugin<L10nOptions> {
     }
 
     public install(): void {
-        this.core.registerFilter('validator-message', this.messageFilter);
+        this.core && this.core.registerFilter('validator-message', this.messageFilter);
     }
 
     public uninstall(): void {
-        this.core.deregisterFilter('validator-message', this.messageFilter);
+        this.core && this.core.deregisterFilter('validator-message', this.messageFilter);
     }
 
     private getMessage(locale: string, field: string, validator: string): string {
-        if (this.opts[field] && this.opts[field][validator]) {
+        if (this.opts?.[field] && this.opts[field][validator]) {
             const message = this.opts[field][validator];
             const messageType = typeof message;
 

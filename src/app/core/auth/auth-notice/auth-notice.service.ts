@@ -6,7 +6,7 @@ import { AuthNotice } from './auth-notice.interface';
   providedIn: 'root'
 })
 export class AuthNoticeService {
-  onNoticeChanged$: BehaviorSubject<AuthNotice>;
+  onNoticeChanged$: BehaviorSubject<AuthNotice | null>;
 
   constructor() {
     this.onNoticeChanged$ = new BehaviorSubject(null);

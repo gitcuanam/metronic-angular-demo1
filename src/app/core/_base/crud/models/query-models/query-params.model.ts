@@ -1,10 +1,10 @@
 export class QueryParamsModel {
   // fields
-  filter: any;
-  sortOrder: string; // asc || desc
-  sortField: string;
-  pageNumber: number;
-  pageSize: number;
+  filter?: any;
+  sortOrder?: string; // asc || desc
+  sortField?: string;
+  pageNumber?: number;
+  pageSize?: number;
 
   // constructor overrides
   constructor(filter, sortOrder = 'asc', sortField = '', pageNumber = 0, pageSize = 10) {

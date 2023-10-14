@@ -18,8 +18,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
     // "allowSyntheticDefaultImports": true
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
   },
   "angularCompilerOptions": {
     "strictTemplates": true,

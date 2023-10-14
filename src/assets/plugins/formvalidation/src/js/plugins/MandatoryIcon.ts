@@ -4,10 +4,18 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { ElementNotValidatedEvent, ElementValidatedEvent, ElementValidatingEvent } from '../core/Core';
+import {
+  ElementNotValidatedEvent,
+  ElementValidatedEvent,
+  ElementValidatingEvent,
+} from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
-import { IconOptions, IconPlacedEvent, IconSetEvent } from './Icon';
+import {
+  IconOptions,
+  IconPlacedEvent,
+  IconSetEvent,
+} from './Icon';
 
 export interface MandatoryIconOptions {
     icon: string;
@@ -22,7 +30,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
     };
     // Map the field element with icon
     private icons: Map<HTMLElement, HTMLElement> = new Map();
-    private iconClasses: IconOptions;
+    private iconClasses?: IconOptions;
 
     private elementValidatingHandler: (e: ElementValidatingEvent) => void;
     private elementValidatedHandler: (e: ElementValidatedEvent) => void;
@@ -40,7 +48,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
     }
 
     public install(): void {
-        this.core
+        this.core && this.core
             .on('core.element.validating', this.elementValidatingHandler)
             .on('core.element.validated', this.elementValidatedHandler)
             .on('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -50,7 +58,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
 
     public uninstall(): void {
         this.icons.clear();
-        this.core
+        this.core && this.core
             .off('core.element.validating', this.elementValidatingHandler)
             .off('core.element.validated', this.elementValidatedHandler)
             .off('core.element.notvalidated', this.elementNotValidatedHandler)
@@ -59,20 +67,20 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
     }
 
     protected onIconPlaced(e: IconPlacedEvent): void {
-        const validators = this.core.getFields()[e.field].validators;
-        const elements = this.core.getElements(e.field);
+        const validators = this.core?.getFields()[e.field].validators;
+        const elements = this.core?.getElements(e.field);
         // tslint:disable-next-line:no-string-literal
-        if (validators && validators['notEmpty'] && validators['notEmpty'].enabled !== false && elements.length) {
+        if (validators && validators['notEmpty'] && validators['notEmpty'].enabled !== false && elements?.length) {
             this.icons.set(e.element, e.iconElement);
 
             const eleType = elements[0].getAttribute('type');
             const type = !eleType ? '' : eleType.toLowerCase();
             const elementArray = ('checkbox' === type || 'radio' === type) ? [elements[0]] : elements;
             for (const ele of elementArray) {
-                if (this.core.getElementValue(e.field, ele) === '') {
+                if (this.core?.getElementValue(e.field, ele) === '') {
                     // Add required icon
                     classSet(e.iconElement, {
-                        [this.opts.icon]: true,
+                        ...(this.opts?.icon && { [this.opts.icon]: true}),
                     });
                 }
             }
@@ -82,14 +90,14 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
         // (for example, fa, glyphicon)
         this.iconClasses = e.classes;
 
-        const icons = this.opts.icon.split(' ');
+        const icons = this.opts?.icon.split(' ') ?? [];
         const feedbackIcons = {
             Invalid: this.iconClasses.invalid ? this.iconClasses.invalid.split(' ') : [],
             Valid: this.iconClasses.valid ? this.iconClasses.valid.split(' ') : [],
             Validating: this.iconClasses.validating ? this.iconClasses.validating.split(' ') : [],
         };
         Object.keys(feedbackIcons).forEach((status) => {
-            const classes = [];
+            const classes: string[] = [];
             for (const clazz of icons) {
                 if (feedbackIcons[status].indexOf(clazz) === -1) {
                     classes.push(clazz);
@@ -120,7 +128,7 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
         ) {
             classSet(icon, {
                 [this.removedIcons[status]]: false,
-                [this.opts.icon]: false,
+                ...(this.opts?.icon && { [this.opts.icon]: false}),
             });
         }
     }
@@ -128,9 +136,9 @@ export default class MandatoryIcon extends Plugin<MandatoryIconOptions> {
     private onIconSet(e: IconSetEvent): void {
         // Show the icon when the field is empty after resetting
         const icon = this.icons.get(e.element);
-        if (icon && e.status === 'NotValidated' && this.core.getElementValue(e.field, e.element) === '') {
+        if (icon && e.status === 'NotValidated' && this.core?.getElementValue(e.field, e.element) === '') {
             classSet(icon, {
-                [this.opts.icon]: true,
+                ...(this.opts?.icon && { [this.opts.icon]: true}),
             });
         }
     }

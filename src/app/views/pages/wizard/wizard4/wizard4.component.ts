@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
 	selector: 'kt-wizard4',
@@ -7,7 +13,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 })
 export class Wizard4Component implements OnInit, AfterViewInit {
 
-	@ViewChild('wizard', {static: true}) el: ElementRef;
+	@ViewChild('wizard', {static: true}) el?: ElementRef;
 
 	model: any = {
 		fname: 'John',
@@ -45,7 +51,7 @@ export class Wizard4Component implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		// Initialize form wizard
-		const wizard = new KTWizard(this.el.nativeElement, {
+		const wizard = new KTWizard(this.el?.nativeElement, {
 			startStep: 1
 		});
 

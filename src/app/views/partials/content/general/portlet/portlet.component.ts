@@ -1,15 +1,25 @@
 // Angular
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-// Loading bar
-import { LoadingBarService } from '@ngx-loading-bar/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+
 // RxJS
 import { Observable } from 'rxjs';
-// Portlet
-import { PortletBodyComponent } from './portlet-body.component';
-import { PortletHeaderComponent } from './portlet-header.component';
-import { PortletFooterComponent } from './portlet-footer.component';
+
+// Loading bar
+import { LoadingBarService } from '@ngx-loading-bar/core';
+
 // Layout
 import { LayoutConfigService } from '../../../../../core/_base/layout';
+// Portlet
+import { PortletBodyComponent } from './portlet-body.component';
+import { PortletFooterComponent } from './portlet-footer.component';
+import { PortletHeaderComponent } from './portlet-header.component';
 
 export interface PortletOptions {
 	test?: any;
@@ -22,20 +32,20 @@ export interface PortletOptions {
 })
 export class PortletComponent implements OnInit, AfterViewInit {
 	// Public properties
-	@Input() loading$: Observable<boolean>;
+	@Input() loading$?: Observable<boolean>;
 	// portlet extra options
-	@Input() options: PortletOptions;
+	@Input() options?: PortletOptions;
 	// portlet root classes
-	@Input() class: string;
+	@Input() class?: string;
 
-	@ViewChild('portlet', {static: true}) portlet: ElementRef;
+	@ViewChild('portlet', {static: true}) portlet?: ElementRef;
 
 	// portlet header component template
-	@ViewChild(PortletHeaderComponent, {static: true}) header: PortletHeaderComponent;
+	@ViewChild(PortletHeaderComponent, {static: true}) header?: PortletHeaderComponent;
 	// portlet body component template
-	@ViewChild(PortletBodyComponent, {static: true}) body: PortletBodyComponent;
+	@ViewChild(PortletBodyComponent, {static: true}) body?: PortletBodyComponent;
 	// portlet footer component template
-	@ViewChild(PortletFooterComponent, {static: true}) footer: PortletFooterComponent;
+	@ViewChild(PortletFooterComponent, {static: true}) footer?: PortletFooterComponent;
 
 	/**
 	 * Component constructor

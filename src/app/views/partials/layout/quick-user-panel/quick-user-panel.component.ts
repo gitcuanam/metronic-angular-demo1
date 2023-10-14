@@ -1,11 +1,24 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
 import { Observable } from 'rxjs';
+
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
 // Layout
 import { OffcanvasOptions } from '../../../../core/_base/layout';
+import {
+  currentUser,
+  Logout,
+  User,
+} from '../../../../core/auth';
 import { AppState } from '../../../../core/reducers';
-import { currentUser, Logout, User } from '../../../../core/auth';
 
 @Component({
   selector: 'kt-quick-user-panel',
@@ -24,14 +37,13 @@ export class QuickUserPanelComponent implements OnInit {
   };
 
   constructor(private store: Store<AppState>) {
-
+    this.user$ = this.store.pipe(select(currentUser));
   }
 
   /**
    * On init
    */
   ngOnInit(): void {
-    this.user$ = this.store.pipe(select(currentUser));
   }
 
   /**

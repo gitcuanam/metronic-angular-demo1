@@ -1,5 +1,12 @@
 // Angular
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+
 // Layout config
 import { LayoutConfigService } from '../../../../../core/_base/layout';
 
@@ -14,9 +21,9 @@ import { LayoutConfigService } from '../../../../../core/_base/layout';
 export class Widget12Component implements OnInit {
 
 	// Public properties
-	@Input() data: { labels: string[], datasets: any[] };
+	@Input() data?: { labels: string[], datasets: any[] };
 	@Input() type = 'line';
-	@ViewChild('chart', {static: true}) chart: ElementRef;
+	@ViewChild('chart', {static: true}) chart?: ElementRef;
 
 	constructor(private layoutConfigService: LayoutConfigService) {
 	}
@@ -74,7 +81,7 @@ export class Widget12Component implements OnInit {
 		// For more information about the chartjs, visit this link
 		// https://www.chartjs.org/docs/latest/getting-started/usage.html
 
-		const chart = new Chart(this.chart.nativeElement, {
+		const chart = this.chart ? new Chart(this.chart.nativeElement, {
 			type: this.type,
 			data: this.data,
 			options: {
@@ -158,6 +165,6 @@ export class Widget12Component implements OnInit {
 					}
 				}
 			}
-		});
+		}) : undefined;
 	}
 }

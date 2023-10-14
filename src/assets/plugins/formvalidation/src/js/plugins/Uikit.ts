@@ -29,7 +29,7 @@ export default class Uikit extends Framework {
             classSet(e.iconElement, {
                 'fv-plugins-icon-check': true,
             });
-            parent.parentElement.insertBefore(e.iconElement, parent.nextSibling);
+            parent?.parentElement?.insertBefore(e.iconElement, parent.nextSibling);
         }
     }
 }

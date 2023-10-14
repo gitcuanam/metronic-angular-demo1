@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import call from '../utils/call';
 
 export interface PromiseOptions extends ValidateOptions {
@@ -42,6 +47,9 @@ export default function promise() {
          * @return {Promise<ValidateResult>}
          */
         validate(input: ValidateInput<PromiseOptions, Localization>): Promise<ValidateResult> {
+            if (!input.options?.promise) {
+                return Promise.reject(`input.options?.promise is undefined ${input.options?.promise}`);
+            }
             return call(input.options.promise, [input]) as Promise<ValidateResult>;
         },
     };

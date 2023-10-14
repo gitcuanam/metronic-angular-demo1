@@ -39,10 +39,10 @@ export class PasswordValidation {
 	 * @param AC: AbstractControl
 	 */
 		static MatchPassword(AC: AbstractControl) {
-				const password = AC.get('password').value; // to get value in input tag
-				const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
+				const password = AC.get('password')?.value; // to get value in input tag
+				const confirmPassword = AC.get('confirmPassword')?.value; // to get value in input tag
 				if (password !== confirmPassword) {
-			AC.get('confirmPassword').setErrors( {MatchPassword: true} );
+			AC.get('confirmPassword')?.setErrors( {MatchPassword: true} );
 				} else {
 						return null;
 				}
@@ -56,11 +56,11 @@ export class PasswordValidation {
 })
 export class ChangePasswordComponent implements OnInit {
 	// Public properties
-	@Input() userId: number;
+	@Input() userId?: number;
 	@Input() loadingSubject = new BehaviorSubject<boolean>(false);
 	hasFormErrors = false;
 	viewLoading = false;
-	user: User;
+	user?: User;
 	changePasswordForm: FormGroup;
 
 	/**
@@ -73,7 +73,12 @@ export class ChangePasswordComponent implements OnInit {
 	 */
 	constructor(private fb: FormBuilder, private auth: AuthService, private store: Store<AppState>,
 		// tslint:disable-next-line:align
-		private layoutUtilsService: LayoutUtilsService) {
+		private layoutUtilsService: LayoutUtilsService
+	) {
+		this.changePasswordForm = this.fb.group({
+			password: ['', Validators.required],
+			confirmPassword: ['', Validators.required]
+		});
 	}
 
 	/**
@@ -91,19 +96,11 @@ export class ChangePasswordComponent implements OnInit {
 	 * Load data
 	 */
 	loadData() {
+		if (!this.userId) {
+			return;
+		}
 		this.auth.getUserById(this.userId).subscribe(res => {
-			this.user = res;
-			this.createForm();
-		});
-	}
-
-	/**
-	 * Init form
-	 */
-	createForm() {
-		this.changePasswordForm = this.fb.group({
-			password: ['', Validators.required],
-			confirmPassword: ['', Validators.required]
+			this.user = res ?? undefined;
 		});
 	}
 
@@ -135,10 +132,21 @@ export class ChangePasswordComponent implements OnInit {
 
 			return;
 		}
+		const userId = this.user?.id;
+		if (!userId) {
+			console.error('userId is undefined');
+			console.log(userId);
+			return;
+		}
 
+		if (!this.user) {
+			console.error('user is undefined');
+			console.log(userId);
+			return;
+		}
 		this.user.password = controls.password.value;
 		const updatedUser: Update<User> = {
-			id: this.user.id,
+			id: userId,
 			changes: this.user
 		};
 

@@ -24,7 +24,7 @@ declare var Typed: {
 };
 
 export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
-    private fields: string[];
+    private fields: string[] = [];
 
     constructor(opts?: TypingAnimationOptions) {
         super(opts);
@@ -34,8 +34,8 @@ export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
     }
 
     public install(): void {
-        this.fields = Object.keys(this.core.getFields());
-        if (this.opts.autoPlay) {
+        this.fields = this.core?.getFields ? Object.keys(this.core.getFields()) : [];
+        if (this.opts?.autoPlay) {
             this.play();
         }
     }
@@ -50,19 +50,25 @@ export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
         }
 
         const field = this.fields[fieldIndex];
-        const ele = this.core.getElements(field)[0];
-        const inputType = ele.getAttribute('type');
-        const samples = this.opts.data[field];
+        const ele = this.core?.getElements(field)[0];
+        const inputType = ele?.getAttribute('type');
+        const samples = this.opts?.data[field];
 
         if ('checkbox' === inputType || 'radio' === inputType) {
             (ele as HTMLInputElement).checked = true;
-            ele.setAttribute('checked', 'true');
-            return this.core.revalidateField(field).then((status) => {
+            ele?.setAttribute('checked', 'true');
+            if (!this.core) {
+                return Promise.reject('error creating this.core');
+            }
+            return this.core?.revalidateField(field).then((status) => {
                 return this.animate(fieldIndex + 1);
             });
         } else if (!samples) {
             return this.animate(fieldIndex + 1);
         } else {
+            if (!ele) {
+                return Promise.reject('ele is undefined');
+            }
             return new Promise((resolve) => {
                 return new Typed(ele, {
                     attr: 'value',
@@ -73,7 +79,7 @@ export default class TypingAnimation extends Plugin<TypingAnimationOptions> {
                     },
                     onStringTyped: (arrayPos, self) => {
                         (ele as HTMLInputElement).value = samples[arrayPos];
-                        this.core.revalidateField(field);
+                        this.core?.revalidateField(field);
                     },
                     strings: samples,
                     typeSpeed: 100,

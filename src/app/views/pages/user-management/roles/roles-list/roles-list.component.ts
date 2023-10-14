@@ -1,25 +1,57 @@
-// Angular
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 // Material
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
+// Angular
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+
+import {
+  fromEvent,
+  merge,
+  of,
+  Subscription,
+} from 'rxjs';
 // RXJS
-import { debounceTime, distinctUntilChanged, tap, skip, take, delay } from 'rxjs/operators';
-import { fromEvent, merge, of, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  skip,
+  take,
+  tap,
+} from 'rxjs/operators';
+
 // NGRX
 import { Store } from '@ngrx/store';
-// Services
-import { LayoutUtilsService, MessageType } from '../../../../../core/_base/crud';
-// Models
-import { Role, RolesDataSource, RoleDeleted, RolesPageRequested } from '../../../../../core/auth';
-import { AppState } from '../../../../../core/reducers';
-import { QueryParamsModel } from '../../../../../core/_base/crud';
 
+// Services
+import {
+  LayoutUtilsService,
+  MessageType,
+  QueryParamsModel,
+} from '../../../../../core/_base/crud';
+// Models
+import {
+  Role,
+  RoleDeleted,
+  RolesDataSource,
+  RolesPageRequested,
+} from '../../../../../core/auth';
+import { AppState } from '../../../../../core/reducers';
+import { IMessage } from '../../../apps/e-commerce/products/message.model';
 // Components
-import { RoleEditDialogComponent } from '../role-edit/role-edit.dialog.component';
+import {
+  RoleEditDialogComponent,
+} from '../role-edit/role-edit.dialog.component';
 
 // Table with EDIT item in MODAL
 // ARTICLE for table with sort/filter/paginator
@@ -35,12 +67,12 @@ import { RoleEditDialogComponent } from '../role-edit/role-edit.dialog.component
 })
 export class RolesListComponent implements OnInit, OnDestroy {
 	// Table fields
-	dataSource: RolesDataSource;
+	dataSource?: RolesDataSource;
 	displayedColumns = ['select', 'id', 'title', 'actions'];
-	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-	@ViewChild('sort1', { static: true }) sort: MatSort;
+	@ViewChild(MatPaginator, { static: true }) paginator?: MatPaginator;
+	@ViewChild('sort1', { static: true }) sort?: MatSort;
 	// Filter fields
-	@ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+	@ViewChild('searchInput', { static: true }) searchInput?: ElementRef;
 	// Selection
 	selection = new SelectionModel<Role>(true, []);
 	rolesResult: Role[] = [];
@@ -71,28 +103,28 @@ export class RolesListComponent implements OnInit, OnDestroy {
 	 */
 	ngOnInit() {
 		// If the user changes the sort order, reset back to the first page.
-		const sortSubscription = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-		this.subscriptions.push(sortSubscription);
+		const sortSubscription = this.sort?.sortChange.subscribe(() => (this.paginator && (this.paginator.pageIndex = 0)));
+		sortSubscription && this.subscriptions.push(sortSubscription);
 
 		/* Data load will be triggered in two cases:
 		- when a pagination event occurs => this.paginator.page
 		- when a sort event occurs => this.sort.sortChange
 		**/
-		const paginatorSubscriptions = merge(this.sort.sortChange, this.paginator.page).pipe(
+		const paginatorSubscriptions = !!this.sort?.sortChange && !!this.paginator?.page && merge(this.sort.sortChange, this.paginator.page).pipe(
 			tap(() => {
 				this.loadRolesList();
 			})
 		)
 			.subscribe();
-		this.subscriptions.push(paginatorSubscriptions);
+		paginatorSubscriptions && this.subscriptions.push(paginatorSubscriptions);
 
 		// Filtration, bind to searchInput
-		const searchSubscription = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+		const searchSubscription = this.searchInput?.nativeElement && fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
 			// tslint:disable-next-line:max-line-length
 			debounceTime(150), // The user can type quite quickly in the input box, and that could trigger a lot of server requests. With this operator, we are limiting the amount of server requests emitted to a maximum of one every 150ms
 			distinctUntilChanged(), // This operator will eliminate duplicate values
 			tap(() => {
-				this.paginator.pageIndex = 0;
+				this.paginator && (this.paginator.pageIndex = 0);
 				this.loadRolesList();
 			})
 		)
@@ -129,10 +161,10 @@ export class RolesListComponent implements OnInit, OnDestroy {
 		this.selection.clear();
 		const queryParams = new QueryParamsModel(
 			this.filterConfiguration(),
-			this.sort.direction,
-			this.sort.active,
-			this.paginator.pageIndex,
-			this.paginator.pageSize
+			this.sort?.direction,
+			this.sort?.active,
+			this.paginator?.pageIndex,
+			this.paginator?.pageSize
 		);
 		// Call request from server
 		this.store.dispatch(new RolesPageRequested({ page: queryParams }));
@@ -144,7 +176,7 @@ export class RolesListComponent implements OnInit, OnDestroy {
 	 */
 	filterConfiguration(): any {
 		const filter: any = {};
-		const searchText: string = this.searchInput.nativeElement.value;
+		const searchText = this.searchInput?.nativeElement.value;
 		filter.title = searchText;
 		return filter;
 	}
@@ -163,7 +195,7 @@ export class RolesListComponent implements OnInit, OnDestroy {
 
 		const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
 		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
+			if (!res || !_item.id) {
 				return;
 			}
 
@@ -178,11 +210,11 @@ export class RolesListComponent implements OnInit, OnDestroy {
 	 * Fetch selected rows
 	 */
 	fetchRoles() {
-		const messages = [];
+		const messages: IMessage[] = [];
 		this.selection.selected.forEach(elem => {
 			messages.push({
 				text: `${elem.title}`,
-				id: elem.id.toString(),
+				id: elem.id?.toString(),
 				// status: elem.username
 			});
 		});

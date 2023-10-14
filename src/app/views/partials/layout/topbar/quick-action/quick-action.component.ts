@@ -1,5 +1,10 @@
 // Angular
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
   selector: 'kt-quick-action',
@@ -12,10 +17,10 @@ export class QuickActionComponent implements OnInit, AfterViewInit {
   @Input() icon = 'flaticon2-gear';
 
   // Set true to icon as SVG or false as icon class
-  @Input() useSVG: boolean;
+  @Input() useSVG?: boolean;
 
   // Set bg image path
-  @Input() bgImage: string;
+  @Input() bgImage?: string;
 
   // Set skin color, default to light
   @Input() skin: 'light' | 'dark' = 'light';

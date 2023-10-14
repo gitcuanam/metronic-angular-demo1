@@ -123,8 +123,9 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
 		// sticky portlet header
 		window.onload = () => {
-			const style = getComputedStyle(document.getElementById('kt_header'));
-			this.headerMargin = parseInt(style.height, 0);
+			const ktHeaderEle = document.getElementById('kt_header');
+			const style: CSSStyleDeclaration | undefined = ktHeaderEle ? getComputedStyle(ktHeaderEle) : undefined;
+			this.headerMargin = style?.height ? parseInt(style?.height, 0): 0;
 		};
 	}
 

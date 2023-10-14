@@ -31,7 +31,7 @@ export default function lv(value: string) {
     if (first > 3) {
         // Legal entity
         sum = 0;
-        weight = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6, 1];
+        const weight = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6, 1];
         for (i = 0; i < length; i++) {
             sum += parseInt(v.charAt(i), 10) * weight[i];
         }
@@ -56,7 +56,7 @@ export default function lv(value: string) {
 
         // Check personal code
         sum = 0;
-        weight = [10, 5, 8, 4, 2, 1, 6, 3, 7, 9];
+        const weight = [10, 5, 8, 4, 2, 1, 6, 3, 7, 9];
         for (i = 0; i < length - 1; i++) {
             sum += parseInt(v.charAt(i), 10) * weight[i];
         }

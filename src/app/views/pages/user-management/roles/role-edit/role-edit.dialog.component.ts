@@ -1,26 +1,49 @@
 // Angular
-import { Component, OnInit, Inject, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-// RxJS
-import { Observable, of, Subscription } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
 // Lodash
-import { each, find, some } from 'lodash';
+import {
+  each,
+  find,
+  some,
+} from 'lodash';
+// RxJS
+import {
+  Observable,
+  of,
+  Subscription,
+} from 'rxjs';
+import { delay } from 'rxjs/operators';
+
 // NGRX
 import { Update } from '@ngrx/entity';
-import { Store, select } from '@ngrx/store';
-// State
-import { AppState } from '../../../../../core/reducers';
+import {
+  select,
+  Store,
+} from '@ngrx/store';
+
 // Services and Models
 import {
-	Role,
-	Permission,
-	selectRoleById,
-	RoleUpdated,
-	selectAllPermissions,
-	selectLastCreatedRoleId,
-	RoleOnServerCreated
+  Permission,
+  Role,
+  RoleOnServerCreated,
+  RoleUpdated,
+  selectAllPermissions,
+  selectLastCreatedRoleId,
+  selectRoleById,
 } from '../../../../../core/auth';
-import { delay } from 'rxjs/operators';
+// State
+import { AppState } from '../../../../../core/reducers';
 
 @Component({
 	selector: 'kt-role-edit-dialog',
@@ -29,15 +52,15 @@ import { delay } from 'rxjs/operators';
 })
 export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	// Public properties
-	role: Role;
-	role$: Observable<Role>;
+	role?: Role;
+	role$: Observable<Role | undefined>;
 	hasFormErrors = false;
 	viewLoading = false;
 	loadingAfterSubmit = false;
-	allPermissions$: Observable<Permission[]>;
+	allPermissions$?: Observable<Permission[]>;
 	rolePermissions: Permission[] = [];
 	// Private properties
-	private componentSubscriptions: Subscription;
+	private componentSubscriptions?: Subscription;
 
 	/**
 	 * Component constructor
@@ -48,7 +71,15 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 */
 	constructor(public dialogRef: MatDialogRef<RoleEditDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private store: Store<AppState>) { }
+		private store: Store<AppState>) {
+		if (this.data.roleId) {
+			this.role$ = this.store.pipe(select(selectRoleById(this.data.roleId)));
+		} else {
+			const newRole = new Role();
+			newRole.clear();
+			this.role$ = of(newRole);
+		}
+		}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -58,13 +89,6 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * On init
 	 */
 	ngOnInit() {
-		if (this.data.roleId) {
-			this.role$ = this.store.pipe(select(selectRoleById(this.data.roleId)));
-		} else {
-			const newRole = new Role();
-			newRole.clear();
-			this.role$ = of(newRole);
-		}
 
 		this.role$.subscribe(res => {
 			if (!res) {
@@ -95,17 +119,17 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Load permissions
 	 */
 	loadPermissions() {
-		this.allPermissions$.subscribe(_allPermissions => {
+		this.allPermissions$?.subscribe(_allPermissions => {
 			if (!_allPermissions) {
 				return;
 			}
 
 			const mainPermissions = _allPermissions.filter(el => !el.parentId);
 			mainPermissions.forEach((element: Permission) => {
-				const hasUserPermission = this.role.permissions.some(t => t === element.id);
+				const hasUserPermission = this.role?.permissions?.some(t => t === element.id);
 				const rootPermission = new Permission();
 				rootPermission.clear();
-				rootPermission.isSelected = hasUserPermission;
+				rootPermission.isSelected = !!hasUserPermission;
 				rootPermission._children = [];
 				rootPermission.id = element.id;
 				rootPermission.level = element.level;
@@ -113,10 +137,10 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 				rootPermission.title = element.title;
 				const children = _allPermissions.filter(el => el.parentId && el.parentId === element.id);
 				children.forEach(child => {
-					const hasUserChildPermission = this.role.permissions.some(t => t === child.id);
+					const hasUserChildPermission = this.role?.permissions?.some(t => t === child.id);
 					const childPermission = new Permission();
 					childPermission.clear();
-					childPermission.isSelected = hasUserChildPermission;
+					childPermission.isSelected = !!hasUserChildPermission;
 					childPermission._children = [];
 					childPermission.id = child.id;
 					childPermission.level = child.level;
@@ -134,13 +158,13 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns permissions ids
 	 */
 	preparePermissionIds(): number[] {
-		const result = [];
+		const result: number[] = [];
 		each(this.rolePermissions, (_root: Permission) => {
 			if (_root.isSelected) {
-				result.push(_root.id);
+				_root.id !== undefined && _root.id !== null && result.push(_root.id);
 				each(_root._children, (_child: Permission) => {
 					if (_child.isSelected) {
-						result.push(_child.id);
+						_child.id !== undefined && _child.id !== null  && result.push(_child.id);
 					}
 				});
 			}
@@ -153,11 +177,11 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 */
 	prepareRole(): Role {
 		const _role = new Role();
-		_role.id = this.role.id;
+		_role.id = this.role?.id;
 		_role.permissions = this.preparePermissionIds();
 		// each(this.assignedRoles, (_role: Role) => _user.roles.push(_role.id));
-		_role.title = this.role.title;
-		_role.isCoreRole = this.role.isCoreRole;
+		_role.title = this.role?.title;
+		_role.isCoreRole = this.role?.isCoreRole ?? false;
 		return _role;
 	}
 
@@ -174,7 +198,7 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		}
 
 		const editedRole = this.prepareRole();
-		if (editedRole.id > 0) {
+		if (editedRole && editedRole.id && editedRole.id > 0) {
 			this.updateRole(editedRole);
 		} else {
 			this.createRole(editedRole);
@@ -190,8 +214,14 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 		this.loadingAfterSubmit = true;
 		this.viewLoading = true;
 		/* Server loading imitation. Remove this on real code */
+		const id = this.role?.id;
+		if (!id) {
+			console.error('role id is undefined');
+			console.log(id);
+			return;
+		}
 		const updateRole: Update<Role> = {
-			id: this.role.id,
+			id,
 			changes: _role
 		};
 		this.store.dispatch(new RoleUpdated({
@@ -284,9 +314,9 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns component title
 	 */
 	getTitle(): string {
-		if (this.role && this.role.id) {
+		if (this.role && this.role?.id) {
 			// tslint:disable-next-line:no-string-throw
-			return `Edit role '${this.role.title}'`;
+			return `Edit role '${this.role?.title}'`;
 		}
 
 		// tslint:disable-next-line:no-string-throw
@@ -297,6 +327,6 @@ export class RoleEditDialogComponent implements OnInit, OnDestroy {
 	 * Returns is title valid
 	 */
 	isTitleValid(): boolean {
-		return (this.role && this.role.title && this.role.title.length > 0);
+		return (!!this.role && !!this.role?.title && this.role?.title.length > 0);
 	}
 }

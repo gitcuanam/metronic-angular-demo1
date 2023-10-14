@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 
 export interface RegexpOptions extends ValidateOptions {
     // If specified, flags can have any combination of JavaScript regular expression flags such as:
@@ -23,6 +28,10 @@ export default function regexp() {
          */
         validate(input: ValidateInput<RegexpOptions, Localization>): ValidateResult {
             if (input.value === '') {
+                return { valid: true };
+            }
+
+            if (!input.options?.regexp) {
                 return { valid: true };
             }
 

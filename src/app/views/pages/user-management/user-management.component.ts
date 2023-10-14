@@ -1,14 +1,16 @@
 // Angular
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
-// RxJS
-import { Observable } from 'rxjs';
+
 // NGRX
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+
 // AppState
 import { AppState } from '../../../core/reducers';
-// Auth
-import { Permission } from '../../../core/auth';
 
 const userManagementPermissionId = 2;
 @Component({
@@ -19,7 +21,7 @@ const userManagementPermissionId = 2;
 export class UserManagementComponent implements OnInit {
 	// Public properties
 	// hasUserAccess$: Observable<boolean>;
-	currentUserPermission$: Observable<Permission[]>;
+	// currentUserPermission$: Observable<Permission[]>;
 
 	/**
 	 * Component constructor
@@ -28,17 +30,8 @@ export class UserManagementComponent implements OnInit {
 	 * @param router: Router
 	 */
 	constructor(private store: Store<AppState>, private router: Router) {
-	}
-
-	/**
-	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
-	 */
-
-	/**
-	 * On init
-	 */
-	ngOnInit() {
 		// this.currentUserPermission$ = this.store.pipe(select(currentUserPermissions));
+		// this.hasUserAccess$ = of(false);
 		// this.currentUserPermission$.subscribe(permissions => {
 		// 	if (permissions && permissions.length > 0) {
 		// 		this.hasUserAccess$ =
@@ -50,5 +43,15 @@ export class UserManagementComponent implements OnInit {
 		// 		});
 		// 	}
 		// });
+	}
+
+	/**
+	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
+	 */
+
+	/**
+	 * On init
+	 */
+	ngOnInit() {
 	}
 }

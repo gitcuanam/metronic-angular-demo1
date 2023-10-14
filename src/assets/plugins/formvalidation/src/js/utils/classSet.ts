@@ -23,8 +23,8 @@ function removeClass(element: HTMLElement, classes: string): void {
 }
 
 export default function classSet(element: HTMLElement, classes: { [clazz: string]: boolean }): void {
-    const adding = [];
-    const removing = [];
+    const adding: string[] = [];
+    const removing: string[] = [];
 
     Object.keys(classes).forEach((clazz) => {
         if (clazz) {

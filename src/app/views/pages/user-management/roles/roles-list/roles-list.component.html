@@ -1,7 +1,7 @@
 <kt-portlet>
 	<!-- PORTLET LOADING | Binded to TABLE Datasource -->
 	<!-- See prop => '~/core/_crud/models/data-sources/_base.datasource.ts' (loading$) -->
-	<kt-portlet-header [title]="'Roles list'" [class]="'card-head-lg'" [viewLoading$]="dataSource.loading$">
+	<kt-portlet-header [title]="'Roles list'" [class]="'card-head-lg'" [viewLoading$]="dataSource?.loading$">
 
 		<ng-container ktPortletTools>
 			<button (click)="addRole()" mat-raised-button matTooltip="Create new role" color="primary" type="button">
@@ -22,7 +22,7 @@
 					<div class="col-md-2 kt-margin-bottom-10-mobile">
 						<mat-form-field class="mat-form-field-fluid">
 							<input matInput placeholder="Search user" #searchInput placeholder="Search">
-							<mat-hint align="start">
+							<mat-hint [align]="'start'">
 								<strong>Search</strong> in all fields
 							</mat-hint>
 						</mat-form-field>
@@ -65,7 +65,7 @@
 		<!-- MATERIAL TABLE | Binded to datasources -->
 		<!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
 		<div class="mat-table__wrapper">
-			<mat-table class="lmat-elevation-z8" #table [dataSource]="dataSource" matSort #sort1="matSort"
+			<mat-table *ngIf="dataSource" class="lmat-elevation-z8" #table [dataSource]="dataSource" matSort #sort1="matSort"
 				matSortActive="id" matSortDirection="asc" matSortDisableClear>
 				<!-- Checkbox Column -->
 
@@ -117,18 +117,18 @@
 				<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 			</mat-table>
 
-			<div class="mat-table__message" *ngIf="!dataSource.hasItems">No records found</div>
+			<div class="mat-table__message" *ngIf="!dataSource?.hasItems">No records found</div>
 			<!-- Message for empty data  -->
-			<div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Please wait....</div>
+			<div class="mat-table__message" *ngIf="dataSource?.isPreloadTextViewed$ | async">Please wait....</div>
 		</div>
 
 		<!-- start: BOTTOM -->
 		<div class="mat-table__bottom">
 			<!-- MATERIAL SPINNER | Url: 'https://material.angular.io/components/progress-spinner/overview' -->
-			<mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+			<mat-spinner [diameter]="20" *ngIf="(dataSource && dataSource.loading$) && (dataSource.loading$ | async)"></mat-spinner>
 			<!-- MATERIAL PAGINATOR | Binded to dasources -->
 			<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
-			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.paginatorTotal$ | async"
+			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="(dataSource && dataSource.paginatorTotal$) ? (dataSource.paginatorTotal$ | async) : 0"
 				[showFirstLastButtons]="true"></mat-paginator>
 		</div>
 		<!-- end: BOTTOM -->

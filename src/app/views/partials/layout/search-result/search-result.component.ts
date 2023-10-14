@@ -11,5 +11,5 @@ import {
 })
 export class SearchResultComponent {
   // Public properties
-  @Input() data: any[];
+  @Input() data?: any[];
 }

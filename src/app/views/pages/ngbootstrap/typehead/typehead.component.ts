@@ -1,9 +1,30 @@
-import { Component, ViewChild, OnInit, Injectable, ChangeDetectionStrategy } from '@angular/core';
-import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, merge, of } from 'rxjs';
-import { catchError, tap, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+
+import {
+  merge,
+  Observable,
+  of,
+  Subject,
+} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
+
+import {
+  NgbTypeahead,
+  NgbTypeaheadConfig,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { WikipediaService } from './wikipedia.service';
 
@@ -530,7 +551,7 @@ export class TypeheadComponent implements OnInit {
 	exampleGlobalConfigurationOfTypeaheads;
 	public model: any;
 	model2: any;
-	@ViewChild('instance', {static: true}) instance: NgbTypeahead;
+	@ViewChild('instance', {static: true}) instance?: NgbTypeahead;
 	focus$ = new Subject<string>();
 	click$ = new Subject<string>();
 	model3: any;
@@ -596,7 +617,7 @@ export class TypeheadComponent implements OnInit {
 
 	search2 = (text$: Observable<string>) => {
 		const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-		const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+		const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !!this.instance && this.instance.isPopupOpen()));
 		const inputFocus$ = this.focus$;
 
 		return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(

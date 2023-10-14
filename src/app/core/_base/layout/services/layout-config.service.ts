@@ -14,8 +14,8 @@ const localStorageKey = 'layoutConfigV702';
 @Injectable()
 export class LayoutConfigService {
   // Public properties
-  onConfigUpdated$: Subject<LayoutConfigModel>;
-  layoutConfig: LayoutConfigModel;
+  onConfigUpdated$: Subject<Partial<LayoutConfigModel>>;
+  layoutConfig: Partial<LayoutConfigModel>;
 
   /**
    * Service constructor
@@ -29,7 +29,7 @@ export class LayoutConfigService {
    * Save layout config to the local storage
    * param layoutConfig
    */
-  saveConfig(layoutConfig: LayoutConfigModel): void {
+  saveConfig(layoutConfig: Partial<LayoutConfigModel>): void {
     if (layoutConfig) {
       localStorage.setItem(localStorageKey, JSON.stringify(layoutConfig));
     }
@@ -38,11 +38,12 @@ export class LayoutConfigService {
   /**
    * Get layout config from local storage
    */
-  getSavedConfig(): LayoutConfigModel {
-    const config = localStorage.getItem(localStorageKey);
+  getSavedConfig(): Partial<LayoutConfigModel> {
+    const config = localStorage.getItem(localStorageKey) ?? '{}';
     try {
       return JSON.parse(config);
     } catch (e) {
+      return {}
     }
   }
 
@@ -138,7 +139,7 @@ export class LayoutConfigService {
   /**
    * Reload current layout config to the state of latest saved config
    */
-  reloadConfigs(): LayoutConfigModel {
+  reloadConfigs(): Partial<LayoutConfigModel> {
     this.layoutConfig = this.getSavedConfig();
     this.onConfigUpdated$.next(this.layoutConfig);
     return this.layoutConfig;

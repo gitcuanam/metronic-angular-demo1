@@ -5,11 +5,11 @@
  */
 
 import {
-    DynamicFieldEvent,
-    ElementIgnoredEvent,
-    ValidateResult,
-    ValidatorNotValidatedEvent,
-    ValidatorValidatedEvent,
+  DynamicFieldEvent,
+  ElementIgnoredEvent,
+  ValidateResult,
+  ValidatorNotValidatedEvent,
+  ValidatorValidatedEvent,
 } from '../core/Core';
 import Plugin from '../core/Plugin';
 import classSet from '../utils/classSet';
@@ -60,14 +60,16 @@ export default class Message extends Plugin<MessageOptions> {
      * @param pattern The pattern
      * @return {HTMLElement}
      */
-    public static getClosestContainer(element: HTMLElement, upper: HTMLElement, pattern: RegExp): HTMLElement {
+    public static getClosestContainer(element: HTMLElement, upper: HTMLElement, pattern?: RegExp): HTMLElement {
         let ele = element;
         while (ele) {
             if (ele === upper) {
                 break;
             }
-            ele = ele.parentElement;
-            if (pattern.test(ele.className)) {
+            if (ele.parentElement) {
+                ele = ele.parentElement;
+            }
+            if (pattern?.test(ele.className)) {
                 break;
             }
         }
@@ -101,8 +103,8 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     public install(): void {
-        this.core.getFormElement().appendChild(this.defaultContainer);
-        this.core
+        this.core && this.core.getFormElement().appendChild(this.defaultContainer);
+        this.core && this.core
             .on('core.element.ignored', this.elementIgnoredHandler)
             .on('core.field.added', this.fieldAddedHandler)
             .on('core.field.removed', this.fieldRemovedHandler)
@@ -111,12 +113,12 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     public uninstall(): void {
-        this.core.getFormElement().removeChild(this.defaultContainer);
+        this.core && this.core.getFormElement().removeChild(this.defaultContainer);
 
-        this.messages.forEach((message) => message.parentNode.removeChild(message));
+        this.messages.forEach((message) => message.parentNode?.removeChild(message));
         this.messages.clear();
 
-        this.core
+        this.core && this.core
             .off('core.element.ignored', this.elementIgnoredHandler)
             .off('core.field.added', this.fieldAddedHandler)
             .off('core.field.removed', this.fieldRemovedHandler)
@@ -131,7 +133,7 @@ export default class Message extends Plugin<MessageOptions> {
             elements.forEach((ele) => {
                 const msg = this.messages.get(ele);
                 if (msg) {
-                    msg.parentNode.removeChild(msg);
+                    msg.parentNode?.removeChild(msg);
                     this.messages.delete(ele);
                 }
             });
@@ -151,7 +153,7 @@ export default class Message extends Plugin<MessageOptions> {
         elements.forEach((ele) => {
             if (this.messages.has(ele)) {
                 const container = this.messages.get(ele);
-                container.parentNode.removeChild(container);
+                container?.parentNode?.removeChild(container);
                 this.messages.delete(ele);
             }
         });
@@ -171,14 +173,14 @@ export default class Message extends Plugin<MessageOptions> {
     private prepareElementContainer(field: string, element: HTMLElement, elements: HTMLElement[]): void {
         let container;
         switch (true) {
-            case ('string' === typeof this.opts.container):
-                let selector = this.opts.container as string;
+            case ('string' === typeof this.opts?.container):
+                let selector = this.opts?.container as string;
                 selector = '#' === selector.charAt(0) ? `[id="${selector.substring(1)}"]` : selector;
-                container = (this.core.getFormElement().querySelector(selector) as HTMLElement);
+                container = (this.core && this.core.getFormElement().querySelector(selector) as HTMLElement);
                 break;
 
             default:
-                container = (this.opts.container as ContainerCallback)(field, element);
+                container = (this.opts?.container as ContainerCallback)(field, element);
                 break;
         }
 
@@ -188,7 +190,7 @@ export default class Message extends Plugin<MessageOptions> {
             'fv-plugins-message-container': true,
         });
 
-        this.core.emit('plugins.message.placed', {
+        this.core && this.core.emit('plugins.message.placed', {
             element,
             elements,
             field,
@@ -199,9 +201,10 @@ export default class Message extends Plugin<MessageOptions> {
     }
 
     private getMessage(result: ValidateResult): string {
+        const locale = this.core?.getLocale();
         return (typeof result.message === 'string')
                 ? result.message
-                : result.message[this.core.getLocale()];
+                : (locale ? result.message?.[locale] ?? '' : '');
     }
 
     private onValidatorValidated(e: ValidatorValidatedEvent): void {
@@ -211,20 +214,20 @@ export default class Message extends Plugin<MessageOptions> {
         const element = ('radio' === type || 'checkbox' === type) ? elements[0] : e.element;
         if (this.messages.has(element)) {
             const container = this.messages.get(element);
-            const messageEle = container.querySelector(`[data-field="${e.field}"][data-validator="${e.validator}"]`);
+            const messageEle = container?.querySelector(`[data-field="${e.field}"][data-validator="${e.validator}"]`);
             if (!messageEle && !e.result.valid) {
                 const ele = document.createElement('div');
                 ele.innerHTML = this.getMessage(e.result);
                 ele.setAttribute('data-field', e.field);
                 ele.setAttribute('data-validator', e.validator);
-                if (this.opts.clazz) {
+                if (this.opts?.clazz) {
                     classSet(ele, {
-                        [this.opts.clazz]: true,
+                        [this.opts?.clazz]: true,
                     });
                 }
-                container.appendChild(ele);
+                container?.appendChild(ele);
 
-                this.core.emit('plugins.message.displayed', {
+                this.core && this.core.emit('plugins.message.displayed', {
                     element: e.element,
                     field: e.field,
                     message: e.result.message,
@@ -235,7 +238,7 @@ export default class Message extends Plugin<MessageOptions> {
             } else if (messageEle && !e.result.valid) {
                 // The validator returns new message
                 messageEle.innerHTML = this.getMessage(e.result);
-                this.core.emit('plugins.message.displayed', {
+                this.core && this.core.emit('plugins.message.displayed', {
                     element: e.element,
                     field: e.field,
                     message: e.result.message,
@@ -245,7 +248,7 @@ export default class Message extends Plugin<MessageOptions> {
                 });
             } else if (messageEle && e.result.valid) {
                 // Field is valid
-                container.removeChild(messageEle);
+                container?.removeChild(messageEle);
             }
         }
     }
@@ -257,9 +260,9 @@ export default class Message extends Plugin<MessageOptions> {
         const element = ('radio' === type || 'checkbox' === type) ? elements[0] : e.element;
         if (this.messages.has(element)) {
             const container = this.messages.get(element);
-            const messageEle = container.querySelector(`[data-field="${e.field}"][data-validator="${e.validator}"]`);
+            const messageEle = container?.querySelector(`[data-field="${e.field}"][data-validator="${e.validator}"]`);
             if (messageEle) {
-                container.removeChild(messageEle);
+                container?.removeChild(messageEle);
             }
         }
     }
@@ -271,9 +274,9 @@ export default class Message extends Plugin<MessageOptions> {
         const element = ('radio' === type || 'checkbox' === type) ? elements[0] : e.element;
         if (this.messages.has(element)) {
             const container = this.messages.get(element);
-            const messageElements = [].slice.call(container.querySelectorAll(`[data-field="${e.field}"]`)) as Element[];
+            const messageElements = [].slice.call(container?.querySelectorAll(`[data-field="${e.field}"]`)) as Element[];
             messageElements.forEach((messageEle) => {
-                container.removeChild(messageEle);
+                container?.removeChild(messageEle);
             });
         }
     }

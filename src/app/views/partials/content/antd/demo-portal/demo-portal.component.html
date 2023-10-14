@@ -1,0 +1,17 @@
+fasdasfasdf
+
+<div #domTemplate>This is a dom</div>
+<ng-template #template>This is a template</ng-template>
+
+
+Container goes here:
+<div style="width: 500px; height: 200px; border: 1px black solid;">
+  <ng-container *ngIf="selectedPortal" [cdkPortalOutlet]="selectedPortal"></ng-container>
+</div>
+
+<button (click)="selectedPortal = domPortal">Render dom in portal</button>
+<button (click)="selectedPortal = templatePortal1">Render template in portal</button>
+<button (click)="selectedPortal = component1Portal">Render component in portal</button>
+
+<ng-template #noData></ng-template>
+<ng-template #templateData1>1</ng-template>

@@ -4,7 +4,12 @@
  * (c) 2013 - 2020 Nguyen Huu Phuoc <me@phuoc.ng>
  */
 
-import { Localization, ValidateInput, ValidateOptions, ValidateResult } from '../core/Core';
+import {
+  Localization,
+  ValidateInput,
+  ValidateOptions,
+  ValidateResult,
+} from '../core/Core';
 import fetch from '../utils/fetch';
 
 export interface RemoteOptions extends ValidateOptions {
@@ -54,7 +59,9 @@ export default function remote() {
             if ('string' === typeof data) {
                 data = JSON.parse(data);
             }
-            data[opts.name || input.field] = input.value;
+            if (data) {
+                data[opts.name ?? input.field ?? ''] = input.value;
+            }
 
             // Support dynamic url
             const url = ('function' === typeof opts.url)
@@ -65,12 +72,12 @@ export default function remote() {
                 crossDomain: opts.crossDomain,
                 headers: opts.headers,
                 method: opts.method,
-                params: data,
+                params: data ?? {},
             }).then((response) => {
                 return Promise.resolve({
                     message: response.message,
                     meta: response,
-                    valid: `${response[opts.validKey]}` === 'true',
+                    valid: `${response[opts.validKey ?? '']}` === 'true',
                 });
             }).catch((reason) => {
                 return Promise.reject({
