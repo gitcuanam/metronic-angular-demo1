@@ -13,6 +13,7 @@ Container goes here:
 <button (click)="selectedPortal = templatePortal1">Render template in portal outlet</button>
 <button (click)="selectedPortal = component1Portal">Render component in portal</button>
 <button (click)="selectedPortal = declarativePortal">Render self-rendered template portal in portal outlet</button>
+<button (click)="selectedPortal = declarativePortal2">Render self-rendered component portal in portal outlet</button>
 
 <ng-template #noData></ng-template>
 <ng-template #templateData1>1</ng-template>
@@ -20,6 +21,10 @@ Container goes here:
 
 <ng-template cdkPortal #declarativePortal="cdkPortal" let-title="title">zzz
   <h1>This is a declaratively-created template portal with title: {{ title }}</h1>xxx
+</ng-template>
+
+<ng-template cdkPortal #declarativePortal2="cdkPortal">
+  <app-hello-world [greetingMessage]="'This is a declaratively-created component portal'"></app-hello-world>
 </ng-template>
 
 
