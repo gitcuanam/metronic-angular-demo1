@@ -1,4 +1,6 @@
 import {
+  CdkPortal,
+  CdkPortalOutletAttachedRef,
   ComponentPortal,
   DomPortal,
   Portal,
@@ -37,6 +39,11 @@ export class DemoPortalComponent implements OnInit, AfterViewInit {
   templatePortal1?: TemplatePortal<unknown>;
   @ViewChild('templateData1') templateData1?: TemplateRef<unknown>;
 
+  @ViewChild('declarativePortal') declPortal?: CdkPortal;
+  // @ViewChild('declarativePortalTemplate') declPortalTemplate?: TemplateRef<unknown>;
+
+  @ViewChild('titleTemplate') titleTemplate?: TemplateRef<unknown>
+
   component1Portal?: ComponentPortal<unknown>;
   component1Ref?: ComponentRef<unknown>
 
@@ -52,9 +59,57 @@ export class DemoPortalComponent implements OnInit, AfterViewInit {
 
     // this.component1Ref = this._viewContainerRef.createComponent(HelloWorldComponent)
     this.component1Portal = new ComponentPortal(HelloWorldComponent);
+
+    console.log(this.templatePortal1);
+    console.log(this.declPortal);
+    console.log(this.titleTemplate);
+    // console.log(JSON.stringify(this.titleTemplate));
+    this.logCircularObject(this.titleTemplate);
+
+    const circularReference: {otherData: 123, myself?: object}= {otherData: 123, myself: undefined};
+    circularReference.myself = circularReference;
+    this.logCircularObject(circularReference);
   }
 
+  logCircularObject(circularReference?: object): void {
+    if (!circularReference) {
+      return;
+    }
+    const stringified = JSON.stringify(circularReference, this.getCircularReplacer());
+    console.log(stringified);
+  }
+
+
+
+  getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
+
+
   ngOnInit(): void {
+  }
+
+  onPortalAttached(view?: CdkPortalOutletAttachedRef) : void {
+    console.log('onPortalAttached');
+    console.log(view);
+    view?.onDestroy((params: unknown) => {
+      console.log('destroying view');
+      if (!params) {
+        console.log('destroying cb function has no params');
+      } else {
+        console.log('params of destroying cb function');
+        console.log(params);
+      }
+    });
   }
 
 }
